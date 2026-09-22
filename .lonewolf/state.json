@@ -6,7 +6,7 @@
     "created": "2026-09-22"
   },
   "stack_profile": "astro-node-tailwind",
-  "current_phase": 2,
+  "current_phase": 3,
   "gates": {
     "G0": {
       "name": "Intake",
@@ -20,12 +20,12 @@
     },
     "G2": {
       "name": "Requirements",
-      "status": "pending",
-      "approved_at": null
+      "status": "approved",
+      "approved_at": "2026-09-22T22:46:27Z"
     },
     "G3": {
       "name": "Design",
-      "status": "locked",
+      "status": "pending",
       "approved_at": null
     },
     "G4": {
@@ -45,9 +45,9 @@
     }
   },
   "counters": {
-    "FR": 0,
-    "NFR": 0,
-    "US": 0,
+    "FR": 53,
+    "NFR": 28,
+    "US": 13,
     "ADR": 0,
     "ENT": 0,
     "SCR": 0,
@@ -72,6 +72,18 @@
     "docs/01-planning/mvp-scope.md": {
       "status": "approved",
       "version": 1
+    },
+    "docs/02-requirements/functional-requirements.md": {
+      "status": "approved",
+      "version": 2
+    },
+    "docs/02-requirements/non-functional-requirements.md": {
+      "status": "approved",
+      "version": 2
+    },
+    "docs/02-requirements/user-stories.md": {
+      "status": "approved",
+      "version": 2
     }
   }
 }

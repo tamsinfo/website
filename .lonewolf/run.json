@@ -1,37 +1,87 @@
 {
   "schema_version": 1,
-  "run_id": "phase-1-2026-09-22T20:28:48Z",
-  "phase": 1,
-  "command": "/lonewolf:plan",
-  "started": "2026-09-22T20:28:48Z",
+  "run_id": "phase-2-2026-09-22T22:03:39Z",
+  "phase": 2,
+  "command": "/lonewolf:requirements",
+  "started": "2026-09-22T22:03:39Z",
   "status": "complete",
   "steps": [
     {
-      "step": "strategy-interview",
+      "step": "functional-interview",
       "status": "complete",
       "artifacts": [
-        ".lonewolf/interviews/01-strategy.md"
+        ".lonewolf/interviews/02-functional.md"
       ]
     },
     {
-      "step": "project-charter",
+      "step": "non-functional-interview",
       "status": "complete",
       "artifacts": [
-        "docs/01-planning/project-charter.md"
+        ".lonewolf/interviews/02-non-functional.md"
       ]
     },
     {
-      "step": "scope-interview",
+      "step": "write-requirements",
       "status": "complete",
       "artifacts": [
-        ".lonewolf/interviews/01-scope.md"
+        "docs/02-requirements/functional-requirements.md",
+        "docs/02-requirements/user-stories.md",
+        "docs/02-requirements/non-functional-requirements.md"
       ]
     },
     {
-      "step": "mvp-scope",
+      "step": "audit-1",
+      "status": "complete",
+      "agents": [
+        {
+          "agent": "requirements-auditor",
+          "tasks": [],
+          "branch": null,
+          "status": "returned",
+          "artifacts": [
+            ".lonewolf/audit-requirements.md"
+          ]
+        }
+      ]
+    },
+    {
+      "step": "audit-1-user-questions",
       "status": "complete",
       "artifacts": [
-        "docs/01-planning/mvp-scope.md"
+        ".lonewolf/interviews/02-functional.md"
+      ]
+    },
+    {
+      "step": "fix-audit-1",
+      "status": "complete",
+      "artifacts": [
+        "docs/02-requirements/functional-requirements.md",
+        "docs/02-requirements/non-functional-requirements.md",
+        "docs/02-requirements/user-stories.md"
+      ]
+    },
+    {
+      "step": "audit-2",
+      "status": "complete",
+      "agents": [
+        {
+          "agent": "requirements-auditor",
+          "tasks": [],
+          "branch": null,
+          "status": "returned",
+          "artifacts": [
+            ".lonewolf/audit-requirements.md"
+          ]
+        }
+      ]
+    },
+    {
+      "step": "fix-audit-2",
+      "status": "complete",
+      "artifacts": [
+        "docs/02-requirements/functional-requirements.md",
+        "docs/02-requirements/non-functional-requirements.md",
+        "docs/02-requirements/user-stories.md"
       ]
     }
   ]
