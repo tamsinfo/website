@@ -1,0 +1,21 @@
+# Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Dependencies
+node_modules/
+
+# Build output and generated files
+dist/
+.astro/
+
+# Test output
+coverage/
+test-results/
+playwright-report/
+
+# OS and editor noise
+.DS_Store

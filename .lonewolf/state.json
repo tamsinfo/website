@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "project": {
+    "name": "TAMS Infotech Website",
+    "slug": "tams-infotech-website",
+    "created": "2026-09-22"
+  },
+  "stack_profile": "astro-node-tailwind",
+  "current_phase": 1,
+  "gates": {
+    "G0": {
+      "name": "Intake",
+      "status": "approved",
+      "approved_at": "2026-09-22T20:27:57Z"
+    },
+    "G1": {
+      "name": "Planning",
+      "status": "pending",
+      "approved_at": null
+    },
+    "G2": {
+      "name": "Requirements",
+      "status": "locked",
+      "approved_at": null
+    },
+    "G3": {
+      "name": "Design",
+      "status": "locked",
+      "approved_at": null
+    },
+    "G4": {
+      "name": "Development",
+      "status": "locked",
+      "approved_at": null
+    },
+    "G5": {
+      "name": "Testing",
+      "status": "locked",
+      "approved_at": null
+    },
+    "G6": {
+      "name": "Release",
+      "status": "locked",
+      "approved_at": null
+    }
+  },
+  "counters": {
+    "FR": 0,
+    "NFR": 0,
+    "US": 0,
+    "ADR": 0,
+    "ENT": 0,
+    "SCR": 0,
+    "TASK": 0,
+    "TC": 0,
+    "VULN": 0,
+    "AMD": 0
+  },
+  "artifacts": {
+    "docs/00-intake/project-brief.md": {
+      "status": "approved",
+      "version": 1
+    },
+    "docs/00-intake/tech-stack.md": {
+      "status": "approved",
+      "version": 1
+    }
+  }
+}
