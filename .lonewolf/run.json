@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "run_id": "phase-1-2026-09-22T20:28:48Z",
+  "phase": 1,
+  "command": "/lonewolf:plan",
+  "started": "2026-09-22T20:28:48Z",
+  "status": "complete",
+  "steps": [
+    {
+      "step": "strategy-interview",
+      "status": "complete",
+      "artifacts": [
+        ".lonewolf/interviews/01-strategy.md"
+      ]
+    },
+    {
+      "step": "project-charter",
+      "status": "complete",
+      "artifacts": [
+        "docs/01-planning/project-charter.md"
+      ]
+    },
+    {
+      "step": "scope-interview",
+      "status": "complete",
+      "artifacts": [
+        ".lonewolf/interviews/01-scope.md"
+      ]
+    },
+    {
+      "step": "mvp-scope",
+      "status": "complete",
+      "artifacts": [
+        "docs/01-planning/mvp-scope.md"
+      ]
+    }
+  ]
+}
