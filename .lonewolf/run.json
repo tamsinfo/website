@@ -12,6 +12,20 @@
       "artifacts": [
         "docs/04-development/implementation-plan.md"
       ]
+    },
+    {
+      "step": "wave-0",
+      "status": "in-progress",
+      "agents": [
+        {
+          "agent": "backend-developer",
+          "tasks": [
+            "TASK-001"
+          ],
+          "branch": "feature/foundation",
+          "status": "dispatched"
+        }
+      ]
     }
   ]
 }
