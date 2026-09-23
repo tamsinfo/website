@@ -8,6 +8,13 @@ import { defineConfig } from "astro/config";
 // ADR-014: origin checking is off, so a cross-origin form POST reaches the 415 check.
 // ADR-002: staticHeaders writes each prerendered route's CSP to dist/_headers.json,
 // which the adapter sends and server.ts reuses as the fallback policy.
+// ADR-002 and G4 revision request 1: under `astro dev`, Vite injects an inline script and
+// runtime <style> tags that Astro cannot hash, so an enforced CSP blocks them and no
+// stylesheet applies. The policy is therefore applied everywhere except the dev server.
+// Both conditions must hold to drop it, so `astro build` always emits the full policy,
+// even when NODE_ENV is set to "development" in the environment.
+const IS_DEV_SERVER = process.env["NODE_ENV"] === "development" && process.argv.includes("dev");
+
 export default defineConfig({
   output: "static",
   trailingSlash: "never",
@@ -16,24 +23,26 @@ export default defineConfig({
   adapter: node({ mode: "standalone", staticHeaders: true, bodySizeLimit: 65536 }),
   security: {
     checkOrigin: false,
-    csp: {
-      algorithm: "SHA-256",
-      directives: [
-        "default-src 'self'",
-        "frame-ancestors 'none'",
-        "base-uri 'self'",
-        "form-action 'self'",
-        "object-src 'none'",
-        "connect-src 'self' https://cloudflareinsights.com",
-      ],
-      scriptDirective: {
-        resources: [
-          "'self'",
-          "https://challenges.cloudflare.com",
-          "https://static.cloudflareinsights.com",
-        ],
-      },
-    },
+    csp: IS_DEV_SERVER
+      ? false
+      : {
+          algorithm: "SHA-256",
+          directives: [
+            "default-src 'self'",
+            "frame-ancestors 'none'",
+            "base-uri 'self'",
+            "form-action 'self'",
+            "object-src 'none'",
+            "connect-src 'self' https://cloudflareinsights.com",
+          ],
+          scriptDirective: {
+            resources: [
+              "'self'",
+              "https://challenges.cloudflare.com",
+              "https://static.cloudflareinsights.com",
+            ],
+          },
+        },
   },
   vite: { plugins: [tailwindcss()] },
 });
