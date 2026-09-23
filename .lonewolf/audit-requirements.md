@@ -1,7 +1,7 @@
 ---
 artifact: audit-requirements
 phase: 2
-status: draft
+status: stale
 version: 2
 updated: 2026-09-22
 owner: requirements-auditor

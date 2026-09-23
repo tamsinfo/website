@@ -1,7 +1,7 @@
 ---
 artifact: data-model
 phase: 3
-status: draft
+status: stale
 version: 1
 updated: 2026-09-22
 owner: system-architect

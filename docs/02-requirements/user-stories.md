@@ -1,7 +1,7 @@
 ---
 artifact: user-stories
 phase: 2
-status: approved
+status: stale
 version: 2
 updated: 2026-09-22
 owner: functional-requirements-analyst

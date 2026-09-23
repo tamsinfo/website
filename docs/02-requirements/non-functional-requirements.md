@@ -1,8 +1,8 @@
 ---
 artifact: non-functional-requirements
 phase: 2
-status: approved
-version: 2
+status: in-review
+version: 3
 updated: 2026-09-22
 owner: nfr-analyst
 depends_on:
