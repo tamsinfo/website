@@ -169,7 +169,7 @@
     },
     {
       "step": "architect-amend-patch",
-      "status": "in-progress",
+      "status": "complete",
       "agents": [
         {
           "agent": "system-architect",
@@ -178,6 +178,29 @@
             "AMD-002",
             "AMD-003"
           ],
+          "branch": null,
+          "status": "returned",
+          "artifacts": [
+            "docs/03-design/system-architecture.md",
+            "docs/03-design/api-contract.yaml",
+            "docs/03-design/data-model.md"
+          ]
+        }
+      ]
+    },
+    {
+      "step": "parallel-design-deploy",
+      "status": "in-progress",
+      "agents": [
+        {
+          "agent": "ui-ux-designer",
+          "tasks": [],
+          "branch": null,
+          "status": "dispatched"
+        },
+        {
+          "agent": "cicd-architect",
+          "tasks": [],
           "branch": null,
           "status": "dispatched"
         }

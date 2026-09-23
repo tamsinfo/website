@@ -1,7 +1,8 @@
 # artifact: api-contract
 # phase: 3
-# status: stale
-# version: 1
+# status: draft
+# version: 2
+# amended_by: AMD-001 (200 body carries reference, FR-054); AMD-002 and AMD-003 need no API change
 # updated: 2026-09-22
 # owner: system-architect
 # depends_on:
@@ -13,7 +14,7 @@
 openapi: 3.0.3
 info:
   title: TAMS Infotech Website API
-  version: 1.0.0
+  version: 1.1.0
   description: |
     Server operations of the TAMS Infotech website V1. Pages are HTML and are not
     described here, except where noted. The system has no accounts, so every
@@ -43,7 +44,7 @@ paths:
       summary: Submit one contact enquiry and email it to the sales mailbox.
       security: []
       description: |
-        Implements FR-027, FR-028, FR-030 to FR-035, FR-042, FR-050, FR-053, and
+        Implements FR-027, FR-028, FR-030 to FR-035, FR-042, FR-050, FR-053, FR-054, and
         NFR-005, NFR-007, NFR-017, NFR-018.
 
         **Check order (FR-053).** The server evaluates these checks in order and
@@ -66,7 +67,11 @@ paths:
            Turnstile token passes Siteverify within 3 seconds, else 403
            `SPAM_CHECK_FAILED`. A missing token is a Turnstile failure, not a field
            error. The server does not call Siteverify when an earlier check fails.
-        7. The SMTP relay accepts the message within 8 seconds, else 502 `SEND_FAILED`.
+        7. The server generates the enquiry reference (FR-054), then the SMTP relay
+           accepts the message within 8 seconds, else 502 `SEND_FAILED`. The email
+           subject is `Website enquiry <Reference>: <Interest> — <Company>` (FR-031) and
+           the first body line is `Reference: <Reference>` (FR-032). A 502 after
+           generation does not carry the reference.
 
         **Field normalization.** For `name`, `company`, `workEmail`, `phone`, and
         `message` the server trims leading and trailing whitespace, then counts Unicode
@@ -99,7 +104,7 @@ paths:
               turnstileToken: XXXX.DUMMY.TOKEN.XXXX
       responses:
         '200':
-          description: The SMTP relay accepted the enquiry email (FR-030). The page shows the thank-you state (FR-036).
+          description: The SMTP relay accepted the enquiry email (FR-030). The body carries the enquiry reference (FR-054). The page shows the thank-you state with that reference (FR-036).
           content:
             application/json:
               schema:
@@ -279,16 +284,32 @@ components:
           example: XXXX.DUMMY.TOKEN.XXXX
     ContactAccepted:
       type: object
-      description: Success body (FR-030). The page already holds the values it echoes (FR-036).
-      required: [status]
+      description: |
+        Success body (FR-030, FR-054). Amended by AMD-001. The page shows `reference` in
+        the thank-you "Reference" row (FR-036). It shows the trimmed Work email and the
+        Interest it already holds; the body does not echo them.
+      required: [status, reference]
       additionalProperties: false
       properties:
         status:
           type: string
           enum: [sent]
           example: sent
+        reference:
+          type: string
+          description: |
+            Enquiry reference `TAMS-<YYYY>-<XXXX>` (FR-054). `YYYY` is the year in
+            Asia/Kolkata at submission. `XXXX` is 4 characters drawn with a
+            cryptographically secure random source from
+            `23456789ABCDEFGHJKLMNPQRSTUVWXYZ`. Returned only in this 200 body. Never
+            stored. Not unique; clients MUST NOT use it as a key.
+          pattern: '^TAMS-\d{4}-[2-9A-HJ-NP-Z]{4}$'
+          minLength: 14
+          maxLength: 14
+          example: TAMS-2026-7K3Q
       example:
         status: sent
+        reference: TAMS-2026-7K3Q
     ErrorCode:
       type: string
       description: |

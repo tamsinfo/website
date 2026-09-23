@@ -1,8 +1,8 @@
 ---
 artifact: system-architecture
 phase: 3
-status: stale
-version: 1
+status: draft
+version: 2
 updated: 2026-09-22
 owner: system-architect
 depends_on:
@@ -17,6 +17,10 @@ depends_on:
 ---
 
 # System Architecture: TAMS Infotech Website V1
+
+> Version 2 amended by AMD-001 (enquiry reference, FR-054), AMD-002 ("Send another
+> message", FR-055), and AMD-003 (NFR-011 CSP allows Cloudflare Web Analytics). ADR-013
+> accepted by the user.
 
 This document designs within the approved profile `astro-node-tailwind`. The profile
 defines no variants. It selects no new technology. Design input also comes from the
@@ -44,6 +48,7 @@ flowchart LR
   mailbox[(Sales mailbox)]
   gmaps[Google Maps embed<br/>www.google.com]
   monitor[Uptime monitor<br/>user-operated]
+  cfwa[Cloudflare Web Analytics<br/>static.cloudflareinsights.com<br/>cloudflareinsights.com]
 
   visitor -->|HTTPS| cf -->|HTTP, origin locked to Cloudflare| wrapper
   wrapper --> adapter
@@ -53,6 +58,7 @@ flowchart LR
   ssr -->|POST siteverify, 3 s timeout| turnstile
   ssr -->|SMTP, 8 s timeout| smtp --> mailbox
   visitor -.->|only after Load map click| gmaps
+  visitor -->|beacon.min.js, beacon POST| cfwa
   monitor -->|GET /health every 5 min| cf
 ```
 
@@ -66,6 +72,7 @@ External dependencies:
 | SMTP relay | outbound from server | Enquiry delivery | FR-030, NFR-028 |
 | Google Maps embed | browser, on request | Office map | FR-017, FR-019 |
 | Uptime monitor | inbound | `/health` probe | NFR-008 |
+| Cloudflare Web Analytics | browser | Beacon script injected by Cloudflare; reports page views (AMD-003) | NFR-011 |
 | Container registry and host | operations | Image by git SHA | NFR-009, NFR-024 |
 
 ---
@@ -84,7 +91,7 @@ profile section 1. `.astro` files hold markup, props, and wiring only.
 | C-03 | Adapter | `@astrojs/node` standalone (dependency) | Serve `dist/client`, apply per-route CSP from `_headers.json`, 301 trailing slashes, route to on-demand code | Configured in `astro.config.ts` only. |
 | C-04 | Health endpoint | `src/pages/health.ts` | Answer `GET /health` with 200 | No dependency on SMTP or configuration. |
 | C-05 | Contact endpoint | `src/pages/api/contact.ts` | Wire `POST /api/contact` and `ALL` to C-06; convert its result to a `Response` | No logic. |
-| C-06 | Contact pipeline | `src/lib/contact-pipeline.ts` | Run the FR-053 check order and return one typed outcome | Calls C-07 to C-14 in order. |
+| C-06 | Contact pipeline | `src/lib/contact-pipeline.ts` | Run the FR-053 check order and return one typed outcome | Calls C-07 to C-14 and C-17 in order. Generates the reference (C-17) only after validation and Turnstile pass. |
 | C-07 | Body reader | `src/lib/request-body.ts` | Check media type; read at most 65,536 bytes; parse JSON | Returns `Result<unknown, "UNSUPPORTED_MEDIA_TYPE" \| "PAYLOAD_TOO_LARGE" \| "VALIDATION_FAILED">`. |
 | C-08 | Client IP resolver | `src/lib/client-ip.ts` | Return `CF-Connecting-IP`, else the socket peer address | FR-050. |
 | C-09 | Rate limiter | `src/lib/rate-limiter.ts` | Record a hit and report whether the IP exceeds 5 per 10 minutes | In-memory, ADR-005. |
@@ -92,9 +99,10 @@ profile section 1. `.astro` files hold markup, props, and wiring only.
 | C-11 | Calling codes | `src/lib/calling-codes.ts` | Map an ISO country to a calling code; list every calling code | Server-only. ADR-006. |
 | C-12 | Runtime configuration | `src/lib/runtime-config.ts` | Read and check every environment variable at first use | ADR-015. |
 | C-13 | Turnstile verifier | `src/lib/turnstile-verify.ts` | Call Siteverify with a 3 s timeout; return pass or fail | ADR-007. |
-| C-14 | Enquiry email | `src/lib/enquiry-email.ts` | Compose subject, body, and headers from a valid submission | Pure. FR-031 to FR-033. |
+| C-14 | Enquiry email | `src/lib/enquiry-email.ts` | Compose subject, body, and headers from a valid submission and its reference | Pure. FR-031 to FR-033. Takes the reference as input. |
 | C-15 | SMTP sender | `src/lib/smtp-sender.ts` | Send one composed message with an 8 s deadline | The only module that imports Nodemailer. ADR-004. |
 | C-16 | Outcome log | `src/lib/outcome-log.ts` | Write one JSON line to standard output per contact request | NFR-017, NFR-018. |
+| C-17 | Enquiry reference | `src/lib/enquiry-reference.ts` | Generate one `TAMS-<YYYY>-<XXXX>` reference (ENT-007) | FR-054. `YYYY` from `Asia/Kolkata`; `XXXX` from `crypto.randomInt` over `23456789ABCDEFGHJKLMNPQRSTUVWXYZ`. `Math.random` forbidden. Takes a `Date` for tests. Added by AMD-001. |
 
 ### 2.2 Page tier
 
@@ -108,7 +116,7 @@ profile section 1. `.astro` files hold markup, props, and wiring only.
 | C-25 | Footer | `src/components/SiteFooter.astro` | Footer links |
 | C-26 | Prerendered pages | `src/pages/**/*.astro` except `contact.astro` | One page per route in FR-001 to FR-009, FR-046, FR-047 |
 | C-27 | Contact page | `src/pages/contact.astro` | On-demand render with dial-code prefill and Turnstile site key |
-| C-28 | Contact form client | `src/lib/contact-form-client.ts` | Client validation, submit, 15 s timeout, state rendering |
+| C-28 | Contact form client | `src/lib/contact-form-client.ts` | Client validation, submit, 15 s timeout, state rendering, thank-you rows (Reference from the 200 body, Sent to from the trimmed Work email held client-side), "Send another message" reset (FR-055) |
 | C-29 | Turnstile client | `src/lib/turnstile-client.ts` | Render the widget explicitly; expose the current token |
 | C-30 | Map loader | `src/lib/map-loader-client.ts` | Replace the placeholder with the embed iframe on click |
 | C-31 | Global styles | `src/styles/global.css` | Tailwind import, `@theme` tokens, font imports |
@@ -125,7 +133,7 @@ profile section 1. `.astro` files hold markup, props, and wiring only.
 | `/industries/{6 slugs}` | prerendered, Should | FR-047 |
 | 404 page (`src/pages/404.astro`) | prerendered | FR-009 |
 | `/contact` | on-demand | FR-005, FR-024 |
-| `/api/contact` | on-demand | FR-027 to FR-042, FR-048 to FR-050, FR-053 |
+| `/api/contact` | on-demand | FR-027 to FR-042, FR-048 to FR-050, FR-053, FR-054 |
 | `/health` | on-demand | NFR-010 |
 
 Total: 16 prerendered Must pages, 14 prerendered Should pages, 3 on-demand routes.
@@ -162,7 +170,9 @@ JavaScript (FR-024 requires it in the HTML response). `output: "server"` for all
 1. `astro.config.ts` MUST enable Astro CSP (`security.csp`) with `algorithm: "SHA-256"`,
    directives `default-src 'self'`, `frame-ancestors 'none'`, `base-uri 'self'`,
    `form-action 'self'`, `object-src 'none'`, and `scriptDirective.resources`
-   `['self', 'https://challenges.cloudflare.com']`.
+   `['self', 'https://challenges.cloudflare.com', 'https://static.cloudflareinsights.com']`,
+   and directive `connect-src 'self' https://cloudflareinsights.com` exactly (NFR-011,
+   amended by AMD-003).
 2. The adapter MUST run with `staticHeaders: true`. The build then writes each
    prerendered route's CSP to `dist/_headers.json`, and the adapter sets it as a
    response header on the static file.
@@ -194,9 +204,13 @@ natively; the proof ran it with no flag. This deviates from the profile toolchai
 "Run the built server". The CI/CD architect MUST use `node server.ts` in the
 Dockerfile. `package.json` MUST keep `"type": "module"`. The image MUST contain
 `server.ts`, `src/lib/http-hardening.ts`, `dist/`, `package.json`, and production
-`node_modules`. Cloudflare Rocket Loader, Email Address Obfuscation, and automatic Web
-Analytics injection MUST be off. They inject scripts or rewrite HTML that this policy
-does not allow. The user owns that Cloudflare setting.
+`node_modules`. Cloudflare Rocket Loader and Email Address Obfuscation MUST be off. They
+inject scripts or rewrite HTML that this policy does not allow. Cloudflare Web Analytics
+automatic injection stays ON (AMD-003): the injected `<script defer
+src="https://static.cloudflareinsights.com/beacon.min.js">` is an external script
+allowed by origin, not an inline script, so it needs no hash; its beacon posts to
+`https://cloudflareinsights.com`, allowed by `connect-src`. The user owns these
+Cloudflare settings.
 **Rejected alternatives.** `<meta http-equiv>` CSP (NFR-012 forbids meta-only
 `frame-ancestors`). Cloudflare Transform Rules for headers (moves a MUST requirement into
 unversioned dashboard state). Adapter `middleware` mode with a custom server (more code
@@ -262,6 +276,27 @@ No response contained `'unsafe-inline'` or `'unsafe-eval'`. No HTML contained a
 `/`, `/about`, and `/contact`. Every Astro-processed script hash appeared in the header.
 Both `is:inline` probe scripts were absent from the header (rule 5).
 
+**AMD-003 re-proof** (same build directory, 2026-09-22 ~18:15 PDT). After adding the
+Web Analytics origin to `scriptDirective.resources` and the `connect-src` directive,
+`bunx astro build` succeeded and `probe.sh` returned the same status codes as before.
+Observed (hashes elided):
+
+```text
+GET /about -> 200
+Content-Security-Policy: default-src 'self';frame-ancestors 'none';base-uri 'self';form-action 'self';object-src 'none';connect-src 'self' https://cloudflareinsights.com;frame-src 'none'; script-src 'self' https://challenges.cloudflare.com https://static.cloudflareinsights.com ... ; style-src 'self' ... ;
+
+GET /contact -> 200
+content-security-policy: default-src 'self';frame-ancestors 'none';base-uri 'self';form-action 'self';object-src 'none';connect-src 'self' https://cloudflareinsights.com;frame-src https://challenges.cloudflare.com https://www.google.com; script-src 'self' https://challenges.cloudflare.com https://static.cloudflareinsights.com ... ; style-src 'self' ... ;
+
+GET /unknown -> 404 and GET /api/contact -> 405
+Content-Security-Policy: ... connect-src 'self' https://cloudflareinsights.com;frame-src 'none'; script-src 'self' https://challenges.cloudflare.com https://static.cloudflareinsights.com ...
+```
+
+No response contained `'unsafe-inline'` or `'unsafe-eval'`. All four `_headers.json`
+entries carried one identical policy (rule 6). The proof did not run through the
+Cloudflare proxy, so the injected beacon itself was not observed; Phase 5 MUST confirm
+in a browser on the production host that the console shows no CSP violation.
+
 Baseline without the wrapper (`node dist/server/entry.mjs`): `/about` carried the CSP
 but no `Referrer-Policy`, and `/about/index.html` and `/index.html` returned 200.
 
@@ -299,7 +334,7 @@ Proof, `curl -s --path-as-is -o /dev/null -w '%{http_code} loc=%{redirect_url}'`
 ### ADR-004: Send mail with Nodemailer, one transport per message, 8-second deadline
 
 **Status:** accepted
-**Drivers:** FR-030, FR-031, FR-033, FR-034, FR-035, NFR-005, NFR-017, NFR-028
+**Drivers:** FR-030, FR-031, FR-032, FR-033, FR-034, FR-035, FR-054, NFR-005, NFR-017, NFR-028
 **Decision.** C-15 MUST use `nodemailer@^10.0.10` as a runtime dependency. It MUST NOT
 add `@types/nodemailer`; version 10 ships its own types. C-15 MUST create one transport
 per message with `connectionTimeout: 8000`, `greetingTimeout: 8000`, `socketTimeout:
@@ -314,6 +349,14 @@ vulnerabilities. A scratch send produced
 `Subject: =?UTF-8?Q?Website_enquiry=3A_Services_=E2=80=94_Ca?=...` for a subject with
 an em dash and accents. Every FR-031 subject contains an em dash, so every subject is
 encoded. One transport per message avoids stale pooled connections at this volume.
+**Message composition (amended by AMD-001).** C-14 MUST set the subject to
+`Website enquiry <Reference>: <Interest> — <Company>` (FR-031), for example
+`Website enquiry TAMS-2026-7K3Q: Products — Acme Steel`. The plain-text body MUST list
+Reference first, then Name, Company, Work email, Phone, Interest, Message, and Submitted
+(FR-032). C-06 generates the reference (C-17) after validation and Turnstile pass and
+before calling C-14; it MUST return the reference in the 200 body only when C-15
+reports success (FR-054). The reference is never written to the outcome log or any
+store.
 **Consequences.** C-15 MUST NOT log the Nodemailer error object. It MUST map every
 failure to `SEND_FAILED`. The envelope recipient MUST be the sales mailbox only (FR-035).
 **Rejected alternatives.** A hand-written SMTP client (STARTTLS, AUTH, and dot-stuffing
@@ -472,7 +515,7 @@ semantics for assistive technology).
 
 ### ADR-013: Use `--breakpoint-xl` (1280 px) as the desktop breakpoint
 
-**Status:** proposed; the user MUST confirm at Gate G3
+**Status:** accepted (user decision, 2026-09-22 ~18:15 PDT: 1280 px, `--breakpoint-xl`; below 1280 px renders the Mobile layout)
 **Drivers:** FR-010, NFR-020, mvp-scope S-3
 **Decision.** Desktop layout MUST apply at viewport width >= `--breakpoint-xl` (1280 px),
 through Tailwind's `xl:` variant. Below it, the Mobile layout applies.
@@ -563,11 +606,13 @@ sequenceDiagram
   P->>T: 6b. siteverify (3 s)
   T-->>P: success true/false
   P->>P: fail or timeout -> 403
-  P->>S: 7. send (8 s deadline)
+  P->>P: 6c. generate reference TAMS-YYYY-XXXX (C-17, CSPRNG)
+  P->>S: 7. send (8 s deadline); subject and first body line carry reference
   S-->>P: accepted / error
   P->>L: one JSON line {time, outcome[, detail]}
-  P-->>B: 200 {status: sent} or error {code}
-  B->>B: 200 -> thank-you state, focus heading; else message per code
+  P-->>B: 200 {status: sent, reference} or error {code} (no reference)
+  B->>B: 200 -> thank-you state (Reference, Sent to = trimmed Work email), focus heading; else message per code
+  B->>B: "Send another message" -> reset form per FR-024/FR-025, turnstile.reset(), focus Name (FR-055)
 ```
 
 ### 4.2 Contact page render
@@ -677,7 +722,7 @@ Bun. The runtime stage needs no Bun. No volume is needed.
 | NFR-008 | `/health` (C-04); user-run monitor | User monitor |
 | NFR-009 | Stateless image; redeploy previous SHA tag | Timed drill |
 | NFR-010 | C-04 returns 200 with no dependency on config or SMTP | curl |
-| NFR-011 | Astro CSP with hashes, `staticHeaders`, server-entry fallback (ADR-002) | Proven |
+| NFR-011 | Astro CSP with hashes, `staticHeaders`, server-entry fallback (ADR-002). `script-src` = `'self'`, Turnstile, `https://static.cloudflareinsights.com`, hashes; `connect-src` = `'self' https://cloudflareinsights.com` exactly. Rocket Loader and Email Address Obfuscation off; Web Analytics auto-injection on (user-owned, AMD-003) | Proven (re-proof after AMD-003); beacon check in Phase 5 |
 | NFR-026 | Per-page `frame-src` directive (ADR-002 rule 3) | Proven |
 | NFR-012 | `frame-ancestors 'none'` in the CSP header on every page | Proven |
 | NFR-013 | C-01 sets `Referrer-Policy` on every response | Proven |
@@ -721,28 +766,29 @@ Every NFR has a mechanism. NFR-028 also depends on the user's relay configuratio
 | FR-028 | C-13 | `submitContactEnquiry` |
 | FR-048, FR-029 | C-29 | none: browser widget |
 | FR-030 | C-15 | `submitContactEnquiry` |
-| FR-031 to FR-033 | C-14 | `submitContactEnquiry` |
+| FR-031, FR-032 | C-14 (subject and body carry the reference; ADR-004) | `submitContactEnquiry` |
+| FR-033 | C-14 | `submitContactEnquiry` |
+| FR-054 | C-17, C-06, C-14 | `submitContactEnquiry` (200 `reference`) |
 | FR-034 | C-06 (no persistence), C-16 | `submitContactEnquiry` |
 | FR-035 | C-14, C-15 | `submitContactEnquiry` |
-| FR-036 to FR-041, FR-049 | C-28 | consumes `submitContactEnquiry` |
+| FR-036 | C-28 (Reference row from the 200 `reference`; Sent to row from the trimmed Work email held client-side) | consumes `submitContactEnquiry` |
+| FR-037 to FR-041, FR-049 | C-28 | consumes `submitContactEnquiry` |
+| FR-055 | C-28 (reset to FR-024 prefill and FR-025 unselected Interest, focus Name), C-29 (`turnstile.reset()` for a fresh token) | none: browser only |
 | FR-042 | C-09 | `submitContactEnquiry` |
 | FR-050 | C-08 | `submitContactEnquiry` |
 | FR-053 | C-06 | `submitContactEnquiry` |
 | FR-043 to FR-045 | C-20, C-21 | none |
 | FR-046, FR-047 | C-26, C-22 | none |
 
-`getHealth` serves NFR-008 and NFR-010. Every FR from FR-001 to FR-053 appears above.
+`getHealth` serves NFR-008 and NFR-010. Every FR from FR-001 to FR-055 appears above.
 
 ---
 
 ## 8. Open items for Gate G3
 
-* **Thank-you design fields.** The "Contact — Thank You" design shows "Sent to"
-  (`ops@northaid.example`), "Topic" (`Services`), "Reference" (`TAMS-2026-0412`), and a
-  "Send another message" control. "Sent to" MUST show the visitor's trimmed Work email.
-  "Topic" MUST show the chosen Interest. The browser already holds both, so the 200
-  response does not carry them. No FR defines "Reference" or "Send another message".
-  See the `BLOCKED:` questions in the Phase 3 report.
-* **ADR-013** is proposed. The user MUST confirm 1280 px.
-* **Cloudflare settings** (ADR-002): Rocket Loader, Email Address Obfuscation, and
-  automatic Web Analytics injection MUST be off.
+* **Thank-you design fields.** Resolved by AMD-001 and AMD-002. "Sent to" shows the
+  trimmed Work email and "Topic" the chosen Interest, both held client-side. "Reference"
+  shows the 200 `reference` (FR-054). "Send another message" follows FR-055.
+* **ADR-013** accepted by the user (1280 px).
+* **Cloudflare settings** (ADR-002, AMD-003): Rocket Loader and Email Address
+  Obfuscation MUST be off; Web Analytics automatic injection stays on. User-owned.
