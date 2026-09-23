@@ -99,3 +99,12 @@ avoid reopening G3 tonight; design-system.md MUST be updated in a later amendmen
 **Decision (user, 2026-09-22):** Between `--breakpoint-xl` and `--breakpoint-2xl` the header
 uses 40 px gutters and tighter gaps; at ≥ 1440 px it matches the design exactly.
 **Status:** accepted deviation
+
+### Schedule note SN-001: Charter G-1 deadline missed
+
+**Recorded:** 2026-09-22 22:53 PDT by the orchestrator.
+**Fact:** Charter goal G-1 (deployable by 2026-09-22 22:00 PDT; fallback 2026-09-24 00:00 PDT)
+was missed. A usage-limit pause stopped all agents from ~19:15 to 22:50 PDT. At 22:51 the
+Must pages, Phase 5, and Gate G6 remained.
+**Decision (user):** Continue the full gated process; V1 deploys when G6 passes. No
+requirement changed.

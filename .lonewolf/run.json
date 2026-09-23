@@ -65,7 +65,7 @@
           ],
           "branch": "feature/site-shell",
           "status": "dispatched",
-          "note": "fix review findings"
+          "note": "fix review findings; first attempt killed by rate limit ~19:15, resumed 22:52"
         }
       ],
       "reviews": [
