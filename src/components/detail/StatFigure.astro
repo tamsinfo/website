@@ -1,0 +1,24 @@
+---
+/**
+ * StatFigure — one large figure beside its explanation, in a bordered surface card
+ * (Connected Factory outcome band). Figure 132px on Desktop, 56px on Mobile.
+ *
+ * Props:
+ *   value: string   The figure, e.g. "85%".
+ *   text: string    The sentence the figure belongs to; read after the figure.
+ */
+interface Props {
+  value: string;
+  text: string;
+}
+
+const { value, text } = Astro.props;
+---
+
+<p
+  class="flex flex-col gap-6 rounded-lg border border-border bg-surface p-6 xl:flex-row xl:items-center xl:gap-10 xl:p-10"
+>
+  <span class="shrink-0 font-display text-56/none font-medium tracking-display text-primary xl:text-132/none">
+    {value}
+  </span>{" "}<span class="grow basis-0 text-17/body text-text-muted xl:max-w-190">{text}</span>
+</p>

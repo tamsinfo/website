@@ -1,0 +1,65 @@
+---
+/**
+ * StepGrid — numbered step tiles, five per row on Desktop and stacked on Mobile
+ * (Gate Entry cycles, Production Process flow). Optional lead-in sentence with one
+ * emphasised word, and an optional solid / dashed legend.
+ *
+ * Props:
+ *   block: StepGridBlock   See src/lib/detail-page.ts.
+ */
+import type { StepGridBlock } from "../../lib/detail-page";
+
+interface Props {
+  block: StepGridBlock;
+}
+
+const { block } = Astro.props;
+---
+
+{
+  block.intro !== undefined && (
+    <p class="text-17/body text-text-muted">
+      {block.intro.before}
+      <strong class="font-semibold text-text">{block.intro.emphasis}</strong>
+      {block.intro.after}
+    </p>
+  )
+}
+<div class="flex flex-col gap-4">
+  <ol class="flex flex-col gap-4 xl:grid xl:grid-cols-5">
+    {
+      block.steps.map((step, index) => (
+        <li
+          class:list={[
+            "flex flex-col gap-3 rounded-md border border-border bg-surface p-5",
+            step.dashed === true && "border-dashed",
+          ]}
+        >
+          <span class="flex size-6.5 shrink-0 items-center justify-center rounded-full bg-primary font-mono text-12 leading-4 font-semibold text-white">
+            {index + 1}
+          </span>
+          <p class="min-h-10.5 text-15/snug font-semibold text-text">{step.title}</p>
+          <p class="text-13/snug text-text-muted">{step.detail}</p>
+        </li>
+      ))
+    }
+  </ol>
+  {
+    block.legend !== undefined && (
+      <ul class="flex flex-wrap items-center gap-6">
+        <li class="flex items-center gap-2">
+          <span class="h-0 w-5.5 shrink-0 border-t border-border" aria-hidden="true" />
+          <span class="font-mono text-11 leading-3.5 tracking-label text-text-muted uppercase">
+            {block.legend.solid}
+          </span>
+        </li>
+        <li class="flex items-center gap-2">
+          <span class="h-0 w-5.5 shrink-0 border-t border-dashed border-border" aria-hidden="true" />
+          <span class="font-mono text-11 leading-3.5 tracking-label text-text-muted uppercase">
+            {block.legend.dashed}
+          </span>
+        </li>
+      </ul>
+    )
+  }
+</div>

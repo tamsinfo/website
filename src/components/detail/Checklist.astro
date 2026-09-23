@@ -1,0 +1,39 @@
+---
+/**
+ * Checklist — tick list with hairline dividers (deliverables, assessment, features).
+ * The tick path is transcribed from the snapshot; it is decorative.
+ *
+ * Props:
+ *   items: string[]
+ *   tone: "light" | "dark"   Primary tick on light sections, accent-inverse on dark.
+ */
+import type { BlockTone } from "../../lib/detail-page";
+import { dividerClasses, strongTextClasses, tickClasses } from "../../lib/detail-classes";
+
+interface Props {
+  items: readonly string[];
+  tone: BlockTone;
+}
+
+const { items, tone } = Astro.props;
+---
+
+<ul class="flex flex-col">
+  {
+    items.map((item) => (
+      <li class:list={["flex items-start gap-4 border-b py-5 last:border-b-0", dividerClasses(tone)]}>
+        <svg
+          class:list={["size-4.5 shrink-0", tickClasses(tone)]}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke-width="2.5"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path d="M4.5 12.5l5 5L20 7" />
+        </svg>
+        <span class:list={["grow basis-0 text-17/body", strongTextClasses(tone)]}>{item}</span>
+      </li>
+    ))
+  }
+</ul>

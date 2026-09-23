@@ -1,0 +1,36 @@
+---
+/**
+ * BulletColumns — bordered cards side by side, each a mono label over a dotted list
+ * with hairline dividers (Vendor Portal "two audiences" diagram). Stacked on Mobile.
+ *
+ * Props:
+ *   columns: { label: string; items: string[] }[]
+ */
+import type { BulletColumn } from "../../lib/detail-page";
+
+interface Props {
+  columns: readonly BulletColumn[];
+}
+
+const { columns } = Astro.props;
+---
+
+<div class="flex flex-col gap-6 xl:flex-row">
+  {
+    columns.map((column) => (
+      <div class="flex flex-col gap-4 rounded-lg border border-border bg-surface p-6 xl:grow xl:basis-0 xl:p-8">
+        <p class="font-mono text-11 leading-3.5 font-medium tracking-wider text-text-subtle uppercase">
+          {column.label}
+        </p>
+        <ul class="flex flex-col">
+          {column.items.map((item) => (
+            <li class="flex items-start gap-4 border-b border-border py-4 last:border-b-0">
+              <span class="mt-2 size-1.25 shrink-0 rounded-full bg-primary" aria-hidden="true" />
+              <span class="grow basis-0 text-15/body text-text">{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
+</div>

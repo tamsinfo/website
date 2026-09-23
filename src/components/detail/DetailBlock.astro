@@ -1,0 +1,84 @@
+---
+/**
+ * DetailBlock — renders one block of a detail section by its kind. Text blocks
+ * (lead, paragraph, callout, caption, link) render here; structured blocks delegate
+ * to their own component.
+ *
+ * Props:
+ *   block: DetailBlock   See src/lib/detail-page.ts.
+ *   tone: "light" | "dark"   From the section background.
+ */
+import TextLink from "../TextLink.astro";
+import type { BlockTone, DetailBlock as DetailBlockData } from "../../lib/detail-page";
+import {
+  accentBarClasses,
+  leadClasses,
+  mutedTextClasses,
+  panelClasses,
+  paragraphClasses,
+  strongTextClasses,
+} from "../../lib/detail-classes";
+import ArchitectureDiagram from "./ArchitectureDiagram.astro";
+import BulletColumns from "./BulletColumns.astro";
+import CardRows from "./CardRows.astro";
+import Checklist from "./Checklist.astro";
+import ChipGroups from "./ChipGroups.astro";
+import DetailTable from "./DetailTable.astro";
+import FaqList from "./FaqList.astro";
+import NumberedDetails from "./NumberedDetails.astro";
+import OperationRows from "./OperationRows.astro";
+import ProcessRail from "./ProcessRail.astro";
+import StatFigure from "./StatFigure.astro";
+import StepGrid from "./StepGrid.astro";
+
+interface Props {
+  block: DetailBlockData;
+  tone: BlockTone;
+}
+
+const { block, tone } = Astro.props;
+---
+
+{block.kind === "lead" && <p class={leadClasses(block.size, block.measure, tone)}>{block.text}</p>}
+{block.kind === "paragraph" && <p class={paragraphClasses(tone)}>{block.text}</p>}
+{
+  block.kind === "callout" && (
+    <div class:list={["flex gap-6 rounded-lg p-6 xl:p-8", panelClasses(tone)]}>
+      <div class:list={["w-0.75 shrink-0 rounded-full", accentBarClasses(tone)]} aria-hidden="true" />
+      <div class="flex grow basis-0 flex-col gap-3">
+        {block.title !== undefined && (
+          <p class:list={["text-16 leading-5 font-semibold", strongTextClasses(tone)]}>{block.title}</p>
+        )}
+        <p class:list={["text-15/body", mutedTextClasses(tone)]}>{block.text}</p>
+      </div>
+    </div>
+  )
+}
+{
+  block.kind === "caption" && (
+    <p class="flex items-start gap-4">
+      <span class="mt-2.5 h-px w-6 shrink-0 bg-primary" aria-hidden="true" />
+      <span class="grow basis-0 text-13/body text-text-subtle xl:max-w-190">{block.text}</span>
+    </p>
+  )
+}
+{
+  block.kind === "link" && (
+    <TextLink href={block.href} tone={tone}>
+      {block.label}
+    </TextLink>
+  )
+}
+{block.kind === "rail" && <ProcessRail steps={block.steps} />}
+{block.kind === "stepGrid" && <StepGrid block={block} />}
+{block.kind === "comparisonTable" && <DetailTable block={block} {tone} />}
+{block.kind === "attributeTable" && <DetailTable block={block} {tone} />}
+{block.kind === "checklist" && <Checklist items={block.items} {tone} />}
+{block.kind === "cards" && <CardRows block={block} {tone} />}
+{block.kind === "chipGroups" && <ChipGroups groups={block.groups} />}
+{block.kind === "operations" && <OperationRows rows={block.rows} />}
+{block.kind === "numberedDetails" && <NumberedDetails items={block.items} />}
+{block.kind === "bulletColumns" && <BulletColumns columns={block.columns} />}
+{block.kind === "architecture" && <ArchitectureDiagram block={block} />}
+{block.kind === "stat" && <StatFigure value={block.value} text={block.text} />}
+{block.kind === "faq" && <FaqList items={block.items} {tone} />}

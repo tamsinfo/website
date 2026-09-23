@@ -1,0 +1,35 @@
+---
+/**
+ * DetailPage — the shared template for every Services, Products, Solutions, and
+ * Industries page (ui-specification.md section 5, SCR-007 to SCR-031).
+ * Order: Hero with breadcrumb, body sections in snapshot order, ClosingCta.
+ * BaseLayout supplies the header, footer, and FR-043 to FR-045 metadata.
+ * States: populated only (ui-specification.md section 2); every page is prerendered.
+ *
+ * Props:
+ *   entry: DetailRouteEntry   From detailRoutes() in src/lib/detail-page.ts.
+ */
+import ClosingCta from "../ClosingCta.astro";
+import Hero from "../Hero.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { type DetailRouteEntry, detailBreadcrumb } from "../../lib/detail-page";
+import DetailSection from "./DetailSection.astro";
+
+interface Props {
+  entry: DetailRouteEntry;
+}
+
+const { entry } = Astro.props;
+const { page } = entry;
+---
+
+<BaseLayout heading={page.title} description={page.intro} route={entry.route}>
+  <Hero
+    eyebrow={page.eyebrow}
+    title={page.title}
+    intro={page.intro}
+    breadcrumb={detailBreadcrumb(entry.family, page)}
+  />
+  {page.sections.map((section) => <DetailSection {section} />)}
+  <ClosingCta />
+</BaseLayout>

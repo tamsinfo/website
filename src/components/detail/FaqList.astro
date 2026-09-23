@@ -1,0 +1,49 @@
+---
+/**
+ * FaqList — "Questions we get asked" list. Every snapshot captures each answer
+ * open with a minus marker and no collapsed state, so every answer is always shown
+ * and the marker is decorative: no disclosure control is invented.
+ * Questions are <h3> (ui-specification.md section 0).
+ *
+ * Props:
+ *   items: { question: string; answer: string }[]
+ *   tone: "light" | "dark"
+ */
+import Icon from "../Icon.astro";
+import { type BlockTone, type FaqItem, faqIndex } from "../../lib/detail-page";
+import { dividerClasses, mutedTextClasses, strongTextClasses } from "../../lib/detail-classes";
+
+interface Props {
+  items: readonly FaqItem[];
+  tone: BlockTone;
+}
+
+const { items, tone } = Astro.props;
+const divider = dividerClasses(tone);
+---
+
+<ol class:list={["flex flex-col border-t", divider]}>
+  {
+    items.map((item, index) => (
+      <li class:list={["flex flex-col gap-4 border-b py-6 last:border-b-0", divider]}>
+        <div class="flex items-start gap-6">
+          <span class="w-9 shrink-0 pt-2 font-mono text-12 leading-4 text-text-subtle" aria-hidden="true">
+            {faqIndex(index)}
+          </span>
+          <h3
+            class:list={[
+              "grow basis-0 font-display text-18/heading font-medium tracking-snug xl:text-22/heading",
+              strongTextClasses(tone),
+            ]}
+          >
+            {item.question}
+          </h3>
+          <span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-slate-900" aria-hidden="true">
+            <Icon name="minus" class="size-3.5 text-text-inverse" />
+          </span>
+        </div>
+        <p class:list={["text-15/body xl:max-w-205 xl:pl-15", mutedTextClasses(tone)]}>{item.answer}</p>
+      </li>
+    ))
+  }
+</ol>
