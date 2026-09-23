@@ -38,7 +38,7 @@
     },
     {
       "step": "wave-1",
-      "status": "in-progress",
+      "status": "complete",
       "agents": [
         {
           "agent": "backend-developer",
@@ -85,10 +85,45 @@
           "branch": "feature/contact-endpoint",
           "commit": "d51f4a4",
           "gates": "pass (273 tests with .claude excluded)"
+        },
+        {
+          "branch": "feature/site-shell",
+          "commit": "d5598b6",
+          "gates": "pass (322 tests)"
         }
       ],
       "defects_out_of_scope": [
         "Vitest has no config excluding .claude/worktrees; local gate on main double-counts tests from live agent worktrees (CI unaffected)."
+      ]
+    },
+    {
+      "step": "wave-2",
+      "status": "in-progress",
+      "agents": [
+        {
+          "agent": "frontend-developer",
+          "tasks": [
+            "TASK-004"
+          ],
+          "branch": "feature/core-pages",
+          "status": "dispatched"
+        },
+        {
+          "agent": "frontend-developer",
+          "tasks": [
+            "TASK-005"
+          ],
+          "branch": "feature/contact-page",
+          "status": "dispatched"
+        },
+        {
+          "agent": "frontend-developer",
+          "tasks": [
+            "TASK-006"
+          ],
+          "branch": "feature/services-products",
+          "status": "dispatched"
+        }
       ]
     }
   ]
