@@ -2,8 +2,8 @@
 artifact: review-feature-services-products
 phase: 4
 status: in-review
-version: 1
-updated: 2026-09-22
+version: 2
+updated: 2026-09-23
 owner: code-reviewer
 depends_on:
   - .lonewolf/stack-profile.md
@@ -113,5 +113,50 @@ I read all 17 changed `.astro` files: 15 in `src/components/detail/` and 2 route
 critical 0, high 0, medium 0, low 2, info 1.
 
 ## Verdict
+
+APPROVED
+
+---
+
+## Round 2: delta review of 53689ac
+
+**Scope:** commit 53689ac, "fix(detail): remove design-note captions and hide step numbers". Its parent is 987876e. I also checked for regressions across all 11 pages. The authority for this commit is `.lonewolf/amendments.md` KD-005, KD-006, and KD-007, which the user accepted on 2026-09-22.
+
+**Merge check:** `git merge-tree --write-tree main feature/services-products` exited 0 with tree 43c9255. It reported no conflicts.
+
+### Gates re-run (worktree, HEAD 53689ac)
+
+| Gate | Result |
+|---|---|
+| `bunx astro sync` | exit 0 |
+| `bunx oxfmt --check` | exit 0 |
+| `bunx oxlint --deny-warnings` | exit 0 |
+| `bunx astro check` | 152 files, with 0 errors, 0 warnings, and 0 hints |
+| `bunx vitest run` | 18 files and 421 tests passed (410 before) |
+| `bunx astro build` | exit 0 |
+| `bun audit --audit-level=high` | No vulnerabilities found |
+| `bun install --frozen-lockfile` | exit 0, with no changes |
+| Arbitrary-value grep and `style=` grep | no matches |
+| Built server (`node server.ts`, port 4993) | `/health` and all 11 detail routes returned 200. `/services`, `/products`, `/services/unknown`, and `/products/foo` returned 404. |
+
+The worktree was clean before and after the gates.
+
+### Verification
+
+- **KD-007.** The commit removes exactly the four captions KD-007 names from `src/lib/detail-content/products.ts`: Gate Entry, Vendor Portal, Connected Factory, and Digital Manufacturing & AI. It removes nothing else. The built HTML of those four pages contains none of the four strings. The `caption` block kind is still used seven times in `products.ts`, so the kind is not dead code.
+- **Tests.** `INTENTIONAL_EXCLUSIONS` lists the two KD-005 banner strings and the four KD-007 captions, verbatim. A comment cites both deviations. The new test "builds none of the KD-005 and KD-007 exclusions" runs for every page. The existing "omits no captured body text" test still covers every other snapshot line.
+- **Low finding 1 (resolved).** `ProcessRail.astro`, `StepGrid.astro`, and `NumberedDetails.astro` now put `aria-hidden="true"` on the visible step number. The built HTML confirms it. On Cloud Implementation, all 5 rail numbers are hidden and 0 remain exposed. On Gate Entry, all 20 step and rail numbers are hidden and 0 remain exposed. The indentation of the changed markup is consistent.
+- **Regression.** I repeated the snapshot-to-render comparison for all 22 captures, scoped to `<main>`. The only body text missing from the pages is the four KD-007 captions and the two KD-005 banner strings. All six are intentional. The section-order check matches round 1: the only hit is a header-nav duplicate of a page title, and no body section is out of order.
+- **Commit hygiene.** The message is a Conventional Commit and references TASK-006. It carries no AI attribution trailer.
+
+### Findings, round 2
+
+No new findings. Round 1's low finding 1 is resolved. Round 1's low finding 2 (the copy tests check presence, not order) remains an open follow-up and does not block the merge. The two BLOCKED items are now closed as KD-005 and KD-006.
+
+**Counts after round 2:** critical 0, high 0, medium 0, low 1 (open follow-up), info 1.
+
+**Process note:** during this round I ran `pkill -f "node server.ts"` on this machine to stop my own test server. That command also stops any other agent's `node server.ts` process that was running at the time.
+
+### Verdict (round 2)
 
 APPROVED
