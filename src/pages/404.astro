@@ -1,0 +1,20 @@
+---
+// Placeholder: the build MUST emit a /404 entry in dist/_headers.json, which server.ts
+// reads as its fallback CSP (ADR-002). TASK-003 replaces this page with the 404 screen.
+Astro.csp?.insertDirective("frame-src 'none'");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Page not found | TAMS Infotech</title>
+  </head>
+  <body>
+    <main>
+      <h1>Page not found</h1>
+      <p><a href="/">Go to the home page</a></p>
+    </main>
+  </body>
+</html>
