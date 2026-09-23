@@ -21,7 +21,7 @@
             "TASK-001"
           ],
           "branch": "fix/dev-csp",
-          "status": "dispatched",
+          "status": "returned",
           "commits": 1,
           "note": "fix round 2"
         }
@@ -30,7 +30,7 @@
         {
           "agent": "code-reviewer",
           "branch": "fix/dev-csp",
-          "status": "CHANGES REQUESTED (HIGH-1: --mode dev build drops CSP)"
+          "status": "APPROVED (round 2)"
         }
       ]
     }

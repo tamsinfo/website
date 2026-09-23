@@ -2,7 +2,7 @@
 artifact: review-fix-dev-csp
 phase: 4
 status: in-review
-version: 1
+version: 2
 updated: 2026-09-23
 owner: code-reviewer
 depends_on:
@@ -101,3 +101,44 @@ No other findings.
 
 Gate-blind files: none. The only changed file, `astro.config.ts`, is covered by oxfmt,
 oxlint, and astro check.
+
+---
+
+## Round 2: commit 7970b07 (`main..fix/dev-csp` = 9941a60, 7970b07)
+
+**Verdict: APPROVED**
+
+The new commit removes the `NODE_ENV`/argv check. It adds an inline integration,
+`devServerWithoutCsp`, whose `astro:config:setup` hook calls
+`updateConfig({ security: { csp: false } })` only when Astro passes `command === "dev"`.
+The ADR-002 `security.csp` block is back to main's exact text. The diff against main now
+only adds the integration, its import, the comment, and `integrations: [devServerWithoutCsp]`.
+
+**HIGH-1: resolved.** Each build ran from a clean `dist/` in a fresh `git archive` copy of
+the branch. Each resulting `_headers.json` was compared byte for byte with main's:
+
+| Build | Result |
+|---|---|
+| `astro build` | exit 0, identical to main |
+| `NODE_ENV=development astro build --mode dev` | exit 0, identical to main |
+| `NODE_ENV=development astro build --mode development` | exit 0, identical to main |
+| `NODE_ENV=development astro build dev` (extra positional) | exit 0, identical to main |
+
+**Served headers.** The branch build was served with `node server.ts` on 4991. The CSP
+headers (nonces normalised) for `/` 200, `/about` 200, `/contact` 200, and `/nope` 404
+were identical to main. `/health` returned 200.
+
+**Dev.** Under `astro dev` on 4991, `/` and `/contact` returned 200 with no CSP header and
+no CSP meta tag. `updateConfig` with `csp: false` does override the object policy, as round 1
+expected.
+
+**Comment.** Present at `astro.config.ts:12-16`, and it is accurate: the policy turns off
+only for Astro's `dev` command, and every other command keeps it.
+
+**Gate (round-2 copy):** `astro sync` exit 0; `oxfmt --check` exit 0; `oxlint --deny-warnings`
+exit 0; `astro check` 0 errors, 0 warnings, 0 hints; `vitest run` 651 of 651 passed; `astro build`
+exit 0 with `dist/server/entry.mjs`; server health 200 and `/` 200; `bun audit` no
+vulnerabilities; `bun install --frozen-lockfile` exit 0; arbitrary-value and `style=` greps
+0 matches.
+
+No new findings. Gate-blind files: none (only `astro.config.ts` changed).
