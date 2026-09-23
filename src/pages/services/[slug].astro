@@ -1,0 +1,26 @@
+---
+/**
+ * SCR-007 to SCR-010 — Services detail pages (FR-006, US-002).
+ * One prerendered page per SERVICE_ROUTES entry. Any other slug, and "/services"
+ * itself, has no page and falls through to the 404 page (FR-006 edge cases).
+ * Content: src/lib/detail-content/services.ts, transcribed per snapshot.
+ */
+import DetailPage from "../../components/detail/DetailPage.astro";
+import { SERVICES_FAMILY } from "../../lib/detail-content/services";
+import { type DetailRouteEntry, detailRoutes } from "../../lib/detail-page";
+
+export function getStaticPaths() {
+  return detailRoutes(SERVICES_FAMILY).map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: DetailRouteEntry;
+}
+
+const { entry } = Astro.props;
+---
+
+<DetailPage {entry} />
