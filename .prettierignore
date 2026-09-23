@@ -1,0 +1,6 @@
+# Oxfmt reads this file by default. It holds no Prettier configuration.
+# Phase 0 to 3 artifacts are frozen at their gates; formatting them would change
+# approved documents, so the formatter skips them.
+docs/
+.lonewolf/
+deploy/
