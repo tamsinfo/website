@@ -1,8 +1,8 @@
 ---
 artifact: user-stories
 phase: 2
-status: stale
-version: 2
+status: approved
+version: 3
 updated: 2026-09-22
 owner: functional-requirements-analyst
 depends_on:
@@ -77,7 +77,7 @@ each returns HTTP 200 with a page that matches its screen.
 **I want** to send a message from the Contact page
 **So that** the sales team follows up with me
 
-**Covers:** FR-005, FR-024, FR-030, FR-035, FR-036, FR-040
+**Covers:** FR-005, FR-024, FR-030, FR-035, FR-036, FR-040, FR-054, FR-055
 
 **AC-004.1** Given a prospect on `/contact` with every field valid and a passing
 Turnstile token, when they select "Send message", then the server responds 200 and the
@@ -103,6 +103,14 @@ form shows in its initial state: Phone pre-filled per FR-024 and Interest unsele
 
 **AC-004.8** Given a successful submission, when the thank-you state shows, then keyboard
 focus is on the thank-you heading.
+
+**AC-004.9** Given a successful submission, when the thank-you state shows, then its
+Reference row shows the `reference` from the 200 body, matching `^TAMS-\d{4}-[2-9A-HJ-NP-Z]{4}$`,
+and its Sent to row shows the submitted Work email.
+
+**AC-004.10** Given the thank-you state, when the prospect activates "Send another
+message", then the form shows in its initial state, the URL is unchanged, and focus is
+on Name.
 
 ### US-005: Correct invalid input
 
@@ -266,13 +274,14 @@ run, then both return no matches.
 **I want** each enquiry as one clearly labeled email I can reply to directly
 **So that** I respond to the prospect within one working day
 
-**Covers:** FR-030, FR-031, FR-032, FR-033, FR-034
+**Covers:** FR-030, FR-031, FR-032, FR-033, FR-034, FR-054
 
-**AC-010.1** Given a valid submission from Acme Steel with Interest "Products", when the
-email arrives, then its subject is `Website enquiry: Products — Acme Steel`.
+**AC-010.1** Given a valid submission from Acme Steel with Interest "Products" that
+receives reference `TAMS-2026-7K3Q`, when the email arrives, then its subject is
+`Website enquiry TAMS-2026-7K3Q: Products — Acme Steel`.
 
-**AC-010.2** Given a valid submission, when the email arrives, then the body lists Name,
-Company, Work email, Phone, Interest, Message, and Submitted in that order, with
+**AC-010.2** Given a valid submission, when the email arrives, then the body lists
+Reference, Name, Company, Work email, Phone, Interest, Message, and Submitted in that order, with
 Submitted in `YYYY-MM-DD HH:mm IST`.
 
 **AC-010.3** Given a valid submission, when the sales team member selects Reply, then the

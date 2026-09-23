@@ -148,6 +148,19 @@
         "docs/03-design/paper-snapshot/MANIFEST.md"
       ],
       "paper_calls_total": 79
+    },
+    {
+      "step": "amend-001-003-phase2-edits",
+      "status": "complete",
+      "artifacts": [
+        "docs/02-requirements/functional-requirements.md",
+        "docs/02-requirements/non-functional-requirements.md",
+        "docs/02-requirements/user-stories.md"
+      ]
+    },
+    {
+      "step": "await-G2-reapproval",
+      "status": "complete"
     }
   ]
 }

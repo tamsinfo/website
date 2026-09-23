@@ -1,7 +1,7 @@
 ---
 artifact: functional-requirements
 phase: 2
-status: in-review
+status: approved
 version: 3
 updated: 2026-09-22
 owner: functional-requirements-analyst
@@ -655,7 +655,8 @@ to the sales mailbox.
 **Source:** docs/01-planning/mvp-scope.md#scope-contact-form
 **Stories:** US-010
 
-**Requirement.** The email subject MUST be `Website enquiry: <Interest> — <Company>`.
+**Requirement.** The email subject MUST be `Website enquiry <Reference>: <Interest> — <Company>`.
+Amended by AMD-001.
 
 **Behaviour.** `<Interest>` and `<Company>` MUST be the trimmed field values. A subject
 with non-ASCII characters MUST be encoded per RFC 2047.
@@ -671,8 +672,8 @@ with non-ASCII characters MUST be encoded per RFC 2047.
 **Source:** docs/01-planning/mvp-scope.md#scope-contact-form
 **Stories:** US-010
 
-**Requirement.** The email body MUST be plain text listing, in order: Name, Company,
-Work email, Phone, Interest, Message, and Submitted.
+**Requirement.** The email body MUST be plain text listing, in order: Reference, Name,
+Company, Work email, Phone, Interest, Message, and Submitted. Amended by AMD-001.
 
 **Behaviour.** Submitted MUST be the server time in the `Asia/Kolkata` zone, formatted
 `YYYY-MM-DD HH:mm IST`. An empty Phone MUST appear as `Not provided`.
@@ -735,7 +736,9 @@ database, a cache, or a log.
 **Requirement.** After an HTTP 200 response, the page MUST replace the contact form
 with the "Contact — Thank You" design, in place, without navigating.
 
-**Behaviour.** The URL MUST NOT change. Focus MUST move to the thank-you heading.
+**Behaviour.** The URL MUST NOT change. Focus MUST move to the thank-you heading. The
+"Reference" row MUST show the reference from the response (FR-054). The "Sent to" row
+MUST show the visitor's trimmed Work email. Amended by AMD-001.
 
 **Edge cases.**
 - Visitor reloads the page: the form MUST show in its initial state per FR-024 and FR-025.
@@ -888,6 +891,43 @@ check. NFR-018 logs the outcome of the first failing check.
 **Edge cases.**
 - Oversized body with a bad method: the server MUST respond 405.
 - Invalid fields from a rate-limited IP address: the server MUST respond 429.
+
+### FR-054: Generate an enquiry reference
+
+**Status:** draft
+**Priority:** must
+**Source:** docs/01-planning/mvp-scope.md#scope-contact
+**Stories:** US-004, US-010
+
+**Requirement.** For each submission that the server accepts for sending, the server
+MUST generate one reference of the form `TAMS-<YYYY>-<XXXX>`.
+
+**Behaviour.** `<YYYY>` MUST be the year in the `Asia/Kolkata` zone at submission.
+`<XXXX>` MUST be 4 characters drawn with a cryptographically secure random source from
+`23456789ABCDEFGHJKLMNPQRSTUVWXYZ`. The HTTP 200 body MUST carry the reference. The
+server MUST NOT store references. Added by AMD-001.
+
+**Edge cases.**
+- Two submissions MAY receive the same reference. References are not unique
+  identifiers.
+- Submission rejected before sending: the server MUST NOT return a reference.
+- SMTP failure after generation: the server MUST NOT return the reference.
+
+### FR-055: Reset the form with "Send another message"
+
+**Status:** draft
+**Priority:** must
+**Source:** docs/01-planning/mvp-scope.md#scope-contact
+**Stories:** US-004
+
+**Requirement.** Activating the "Send another message" control in the thank-you state
+MUST return the contact form, in place, to its initial state per FR-024 and FR-025.
+
+**Behaviour.** The URL MUST NOT change. Focus MUST move to the Name field. The page MUST
+obtain a fresh Turnstile token before the next submission. Added by AMD-002.
+
+**Edge cases.**
+- JavaScript disabled: the thank-you state cannot occur (FR-041), so none applies.
 
 ---
 

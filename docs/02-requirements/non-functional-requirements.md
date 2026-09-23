@@ -1,7 +1,7 @@
 ---
 artifact: non-functional-requirements
 phase: 2
-status: in-review
+status: approved
 version: 3
 updated: 2026-09-22
 owner: nfr-analyst
@@ -218,8 +218,9 @@ within 1 second.
 **Source:** docs/01-planning/mvp-scope.md#scope-contact-form
 
 **Requirement.** Every HTML response MUST carry a `Content-Security-Policy` response
-header whose `script-src` allows only the site origin and
-`https://challenges.cloudflare.com`.
+header whose `script-src` allows only the site origin, `https://challenges.cloudflare.com`,
+and `https://static.cloudflareinsights.com`. Its `connect-src` MUST allow only the site
+origin and `https://cloudflareinsights.com`. Amended by AMD-003.
 
 **Measurement:** Header present on every page route, including prerendered pages. The
 `script-src` directive lists no other origin and contains neither `'unsafe-eval'` nor
@@ -227,6 +228,9 @@ header whose `script-src` allows only the site origin and
 
 **Edge cases.**
 - Inline scripts that Astro emits: the policy MUST allow them by hash only.
+- Cloudflare Web Analytics: the user keeps automatic injection on. Rocket Loader and
+  Email Address Obfuscation MUST stay off, because they inject scripts the policy blocks.
+  The user owns these Cloudflare settings.
 - Prerendered pages: Phase 3 MUST record an ADR naming how response headers reach
   static files, and MUST prove it on a test build before Gate G3.
 
