@@ -1,0 +1,86 @@
+---
+/**
+ * HomeHero — SCR-001 section 2: the Home hero with its two CTAs and the five-stat
+ * rail. Differs from the shared Hero: no breadcrumb, a larger watermark with the
+ * home.jsx geometry, the CTAs beside the intro, and the stat rail below.
+ *
+ * Props: none. Copy comes from src/lib/home-content.ts.
+ */
+import Button from "../Button.astro";
+import Eyebrow from "../Eyebrow.astro";
+import { HOME_HERO, HOME_STATS, PRODUCTS_SECTION_HREF } from "../../lib/home-content";
+import { DISCOVERY_CALL_HREF } from "../../lib/site-routes";
+---
+
+<section
+  aria-labelledby="home-hero-heading"
+  class="relative w-full overflow-clip bg-surface-inverse px-5 pt-24 font-sans xl:px-20"
+>
+  {/* home.jsx watermark: 760px at top -120 / left 920 of 1440; mobile 380px at
+    top -60 / left 164 of 390. */}
+  <svg
+    class="pointer-events-none absolute -top-15 -right-38.5 size-95 opacity-35 xl:-top-30 xl:-right-60 xl:size-190"
+    viewBox="0 0 760 760"
+    fill="none"
+    stroke-width="1.5"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      class="stroke-border-inverse-strong"
+      d="M380 20L690 200V560L380 740L70 560V200L380 20Z"></path>
+    <path
+      class="stroke-border-inverse-strong"
+      d="M380 140L586 260V500L380 620L174 500V260L380 140Z"></path>
+    <path
+      class="stroke-accent-inverse"
+      d="M380 260L482 320V440L380 500L278 440V320L380 260Z"></path>
+    <path class="stroke-border-inverse-strong" d="M0 380h278M482 380h278"></path>
+    <path class="stroke-border-inverse" d="M0 300h174M586 300h174M0 460h174M586 460h174"></path>
+  </svg>
+  <div class="relative mx-auto flex w-full max-w-wide flex-col">
+    <div class="flex flex-col gap-6">
+      <Eyebrow tone="dark">{HOME_HERO.eyebrow}</Eyebrow>
+      <h1
+        id="home-hero-heading"
+        class="font-display text-34/display font-medium tracking-tighter text-text-inverse xl:max-w-255 xl:text-72/display"
+      >
+        {HOME_HERO.title}
+      </h1>
+    </div>
+    <div
+      class="flex flex-col gap-6 pt-12 pb-16 xl:flex-row xl:items-end xl:justify-between xl:gap-20"
+    >
+      <p
+        class="text-17/body tracking-snug text-text-inverse-muted xl:w-155 xl:shrink-0 xl:text-18/body"
+      >
+        {HOME_HERO.intro}
+      </p>
+      <div class="flex flex-col gap-3 xl:shrink-0 xl:flex-row xl:items-center">
+        <Button href={DISCOVERY_CALL_HREF} variant="inverse" size="xl" arrow block>
+          {HOME_HERO.primaryCta}
+        </Button>
+        <Button href={PRODUCTS_SECTION_HREF} variant="outline-inverse" size="xl" block>
+          {HOME_HERO.secondaryCta}
+        </Button>
+      </div>
+    </div>
+    <ul class="flex flex-col gap-5 border-t border-border-inverse pt-6 pb-12 xl:flex-row xl:gap-0 xl:pt-10">
+      {
+        HOME_STATS.map((stat) => (
+          <li class="flex flex-col gap-2 xl:grow xl:basis-0 xl:px-8 xl:first:pl-0 xl:last:pr-0 xl:not-first:border-l xl:not-first:border-border-inverse">
+            <p
+              class:list={[
+                "font-display text-26/none font-medium tracking-tighter xl:text-40/none",
+                stat.accent ? "text-accent-inverse" : "text-text-inverse",
+              ]}
+            >
+              {stat.value}
+            </p>
+            <p class="text-14/snug text-text-inverse-muted">{stat.label}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

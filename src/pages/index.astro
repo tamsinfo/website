@@ -1,0 +1,200 @@
+---
+/**
+ * SCR-001 — Home (FR-001, FR-043 to FR-045, US-001).
+ * Source: docs/03-design/paper-snapshot/desktop/home.jsx (read to line 1085) and
+ * mobile/home.jsx. Prerendered.
+ * States: populated only. The page has no loading, empty, error, or unauthorized
+ * state (ui-specification.md sections 0 and 2).
+ */
+import ClosingCta from "../components/ClosingCta.astro";
+import Icon from "../components/Icon.astro";
+import Section from "../components/Section.astro";
+import ChallengeTable from "../components/home/ChallengeTable.astro";
+import ConnectedManufacturing from "../components/home/ConnectedManufacturing.astro";
+import FeatureCard from "../components/home/FeatureCard.astro";
+import HeadingRow from "../components/home/HeadingRow.astro";
+import HomeHero from "../components/home/HomeHero.astro";
+import OutlinePill from "../components/home/OutlinePill.astro";
+import ProcessRail from "../components/home/ProcessRail.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import {
+  CHALLENGES_SECTION,
+  HOME_HERO,
+  INDUSTRIES_SECTION,
+  INDUSTRY_TILES,
+  PROCESS_SECTION,
+  PRODUCTS_SECTION,
+  PRODUCTS_SECTION_HREF,
+  PRODUCTS_SECTION_ID,
+  PRODUCT_TILES,
+  SERVICES_SECTION,
+  SERVICE_TILES,
+  SOLUTIONS_SECTION,
+  SOLUTION_TILES,
+} from "../lib/home-content";
+import { PAGE_ROUTES } from "../lib/site-routes";
+import { PROCESS_INTRO } from "../lib/process-steps";
+
+/* Home sections keep 96px vertical rhythm on Mobile too (mobile/home.jsx py-24). */
+const sectionPadding = "py-24";
+---
+
+<BaseLayout heading={HOME_HERO.title} description={HOME_HERO.intro} route={PAGE_ROUTES.home.path}>
+  <HomeHero />
+
+  <Section tone="bg" padding="none" class={sectionPadding} labelledby="challenges-heading">
+    <HeadingRow
+      id="challenges-heading"
+      eyebrow={CHALLENGES_SECTION.eyebrow}
+      title={CHALLENGES_SECTION.title}
+      aside={CHALLENGES_SECTION.aside}
+    />
+    <ChallengeTable />
+  </Section>
+
+  <Section tone="sunk" padding="none" class={sectionPadding} labelledby="services-heading">
+    <HeadingRow id="services-heading" eyebrow={SERVICES_SECTION.eyebrow} title={SERVICES_SECTION.title}>
+      <OutlinePill slot="action" href={SERVICES_SECTION.allHref}>
+        {SERVICES_SECTION.allLabel}
+      </OutlinePill>
+    </HeadingRow>
+    <ul class="grid grid-cols-1 gap-6 xl:grid-cols-4">
+      {
+        SERVICE_TILES.map((tile, index) => (
+          <li class="flex">
+            <FeatureCard
+              variant="service"
+              index={String(index + 1).padStart(2, "0")}
+              title={tile.title}
+              body={tile.body}
+              href={tile.href}
+              class="grow"
+            />
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <Section
+    id={PRODUCTS_SECTION_ID}
+    tone="bg"
+    padding="none"
+    class={sectionPadding}
+    labelledby="products-heading"
+  >
+    <HeadingRow
+      id="products-heading"
+      eyebrow={PRODUCTS_SECTION.eyebrow}
+      title={PRODUCTS_SECTION.title}
+      titleClass="xl:max-w-205"
+      aside={PRODUCTS_SECTION.aside}
+    />
+    <ul class="grid grid-cols-1 gap-6 xl:grid-cols-4">
+      {
+        PRODUCT_TILES.map((tile) => (
+          <li class="flex">
+            <FeatureCard
+              variant="product"
+              glyph={tile.glyph}
+              title={tile.title}
+              body={tile.body}
+              href={tile.href}
+              class="grow"
+            />
+          </li>
+        ))
+      }
+      <li class="flex">
+        <div
+          class="flex grow flex-col justify-between gap-5 rounded-lg bg-surface-inverse p-6 xl:p-8"
+        >
+          <div class="flex flex-col gap-3">
+            <p
+              class="font-mono text-11 font-medium uppercase leading-3.5 tracking-wider text-accent-inverse"
+            >
+              {PRODUCTS_SECTION.ctaEyebrow}
+            </p>
+            <p
+              class="font-display text-17/snug font-medium tracking-snug text-text-inverse xl:text-20/snug"
+            >
+              {PRODUCTS_SECTION.ctaTitle}
+            </p>
+          </div>
+          <a
+            href={PRODUCTS_SECTION_HREF}
+            class="inline-flex h-11.5 w-full shrink-0 items-center justify-center gap-2 rounded-full bg-limestone-100 px-5 font-sans text-15 font-semibold leading-4.5 text-slate-900 hover:bg-bg-sunk"
+          >
+            {PRODUCTS_SECTION.ctaLabel}
+            <Icon name="arrow-right" class="size-3.75" />
+          </a>
+        </div>
+      </li>
+    </ul>
+  </Section>
+
+  <ConnectedManufacturing />
+
+  <Section tone="bg" padding="none" class={sectionPadding} labelledby="solutions-heading">
+    <HeadingRow
+      id="solutions-heading"
+      eyebrow={SOLUTIONS_SECTION.eyebrow}
+      title={SOLUTIONS_SECTION.title}
+    >
+      <OutlinePill slot="action" href={SOLUTIONS_SECTION.allHref}>
+        {SOLUTIONS_SECTION.allLabel}
+      </OutlinePill>
+    </HeadingRow>
+    <ul class="grid grid-cols-1 gap-6 xl:grid-cols-4">
+      {
+        SOLUTION_TILES.map((tile) => (
+          <li class="flex">
+            <FeatureCard
+              variant="solution"
+              title={tile.title}
+              body={tile.body}
+              href={tile.href}
+              class="grow"
+            />
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <Section tone="sunk" padding="none" class={sectionPadding} labelledby="industries-heading">
+    <HeadingRow
+      id="industries-heading"
+      eyebrow={INDUSTRIES_SECTION.eyebrow}
+      title={INDUSTRIES_SECTION.title}
+      aside={INDUSTRIES_SECTION.aside}
+    />
+    <ul class="grid grid-cols-1 gap-6 xl:grid-cols-3">
+      {
+        INDUSTRY_TILES.map((tile) => (
+          <li class="flex">
+            <FeatureCard
+              variant="industry"
+              title={tile.title}
+              body={tile.body}
+              href={tile.href}
+              class="grow"
+            />
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <Section tone="bg" padding="none" class={sectionPadding} labelledby="process-heading">
+    <HeadingRow
+      id="process-heading"
+      eyebrow={PROCESS_SECTION.eyebrow}
+      title={PROCESS_SECTION.title}
+      aside={PROCESS_INTRO}
+    />
+    <ProcessRail />
+  </Section>
+
+  <ClosingCta />
+</BaseLayout>

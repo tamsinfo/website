@@ -1,0 +1,134 @@
+---
+/**
+ * ConnectedManufacturing — SCR-001 section 6, "From ERP to the shop floor": two dark
+ * feature cards with stat callouts and Explore links, then the six-node data-flow
+ * diagram. The diagram is decorative (aria-hidden); its label and caption stay in the
+ * accessibility tree (ui-specification.md SCR-001 Accessibility).
+ *
+ * Props: none. Copy comes from src/lib/home-content.ts.
+ */
+import Glyph from "./Glyph.astro";
+import HeadingRow from "./HeadingRow.astro";
+import Icon from "../Icon.astro";
+import Section from "../Section.astro";
+import TextLink from "../TextLink.astro";
+import {
+  CONNECTED_FEATURES,
+  CONNECTED_SECTION,
+  FLOW_SAP_LABEL,
+  FLOW_SOURCE_NODES,
+  FLOW_TAMS_NODE,
+} from "../../lib/home-content";
+
+const { factory, ai } = CONNECTED_FEATURES;
+const featureCard =
+  "flex flex-col justify-between gap-8 rounded-lg bg-surface-inverse-raised p-6 xl:grow xl:basis-0 xl:p-8";
+const featureTitle =
+  "font-display text-20/heading font-semibold tracking-snug text-text-inverse xl:text-26/heading";
+const statRow = "flex items-center border-y border-border-inverse py-5";
+const flowNode =
+  "flex h-26 flex-col items-center justify-center gap-3 rounded-md px-3 xl:basis-0";
+const flowLabel = "text-center font-sans text-13/snug font-semibold";
+/* Mobile stacks the flow vertically, so its arrows turn to point down. */
+const flowArrow = "flex h-8 shrink-0 items-center justify-center xl:h-auto xl:w-8";
+---
+
+<Section
+  tone="inverse"
+  padding="none"
+  class="py-24"
+  innerClass="flex flex-col gap-8 xl:gap-16"
+  labelledby="connected-heading"
+>
+  <HeadingRow
+    id="connected-heading"
+    tone="dark"
+    eyebrow={CONNECTED_SECTION.eyebrow}
+    title={CONNECTED_SECTION.title}
+    aside={CONNECTED_SECTION.aside}
+    asideClass="text-17/body xl:w-115"
+  />
+  <div class="flex flex-col gap-6 xl:flex-row">
+    <article class={featureCard}>
+      <div class="flex flex-col gap-4">
+        <h3 class={featureTitle}>{factory.title}</h3>
+        <p class="text-15/body text-text-inverse-muted">{factory.body}</p>
+      </div>
+      <p class:list={[statRow, "gap-5"]}>
+        <span
+          class="shrink-0 font-display text-16/none font-medium tracking-tighter text-accent-inverse xl:text-48/none"
+        >
+          {factory.statValue}
+        </span>
+        <span class="text-14/snug text-text-inverse-muted">{factory.statLabel}</span>
+      </p>
+      <TextLink href={factory.href} tone="dark">{factory.linkLabel}</TextLink>
+    </article>
+    <article class={featureCard}>
+      <div class="flex flex-col gap-4">
+        <h3 class={featureTitle}>{ai.title}</h3>
+        <p class="text-15/body text-text-inverse-muted">{ai.body}</p>
+      </div>
+      <p class:list={[statRow, "gap-3"]}>
+        <span
+          class="inline-flex h-7 shrink-0 items-center gap-2 rounded-full bg-success-soft px-3 text-13 font-semibold leading-4 text-success-on"
+        >
+          <span class="size-1.5 shrink-0 rounded-full bg-success" aria-hidden="true"></span>
+          {ai.statusLabel}
+        </span>
+        <span class="text-14/snug text-text-inverse-muted">{ai.statusDetail}</span>
+      </p>
+      <TextLink href={ai.href} tone="dark">{ai.linkLabel}</TextLink>
+    </article>
+  </div>
+  <figure class="flex flex-col gap-6">
+    <p
+      class="font-mono text-11 font-medium uppercase leading-3.5 tracking-wider text-text-subtle"
+    >
+      {CONNECTED_SECTION.flowLabel}
+    </p>
+    <div class="flex flex-col xl:flex-row" aria-hidden="true">
+      {
+        FLOW_SOURCE_NODES.map((node) => (
+          <>
+            <div class:list={[flowNode, "border border-border-inverse-strong xl:grow-20"]}>
+              <Glyph name={node.glyph} class="size-5 text-text-inverse-muted" />
+              <p class:list={[flowLabel, "text-text-inverse"]}>{node.label}</p>
+            </div>
+            <div class={flowArrow}>
+              <Icon
+                name="arrow-right"
+                class:list={[
+                  "size-4 rotate-90 xl:rotate-0",
+                  node === FLOW_SOURCE_NODES.at(-1) ? "text-accent-inverse" : "text-slate-600",
+                ]}
+              />
+            </div>
+          </>
+        ))
+      }
+      <div
+        class:list={[
+          flowNode,
+          "border border-accent-inverse bg-surface-inverse-raised xl:grow-23",
+        ]}
+      >
+        <Glyph name={FLOW_TAMS_NODE.glyph} class="size-5 text-accent-inverse" />
+        <p class:list={[flowLabel, "text-accent-inverse"]}>{FLOW_TAMS_NODE.label}</p>
+      </div>
+      <div class={flowArrow}>
+        <Icon name="arrow-right" class="size-4 rotate-90 text-accent-inverse xl:rotate-0" />
+      </div>
+      <div class:list={[flowNode, "bg-limestone-100 xl:grow-16"]}>
+        <p
+          class="font-display text-19 font-bold leading-6 tracking-tight text-slate-900 xl:text-24 xl:leading-7.5"
+        >
+          {FLOW_SAP_LABEL}
+        </p>
+      </div>
+    </div>
+    <figcaption class="font-sans text-13/snug text-text-subtle">
+      {CONNECTED_SECTION.flowCaption}
+    </figcaption>
+  </figure>
+</Section>

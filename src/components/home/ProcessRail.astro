@@ -1,0 +1,40 @@
+---
+/**
+ * ProcessRail — the seven-step numbered rail on Home ("How we work") and About
+ * ("Our process"). Desktop: one row, each step's number joined to the next by a
+ * hairline. Mobile: the same steps stacked.
+ *
+ * Props: none. Steps come from src/lib/process-steps.ts.
+ *
+ * The visible numbers are aria-hidden because the ordered list already conveys the
+ * position of each step to assistive technology.
+ */
+import { PROCESS_STEPS } from "../../lib/process-steps";
+
+const lastIndex = PROCESS_STEPS.length - 1;
+---
+
+<ol class="flex flex-col gap-6 xl:flex-row xl:items-start xl:gap-0">
+  {
+    PROCESS_STEPS.map((step, index) => (
+      <li class="flex flex-col gap-4 xl:grow xl:basis-0">
+        <div class="flex items-center">
+          <span
+            class:list={[
+              "flex size-9 shrink-0 items-center justify-center rounded-full font-mono text-13 font-semibold leading-4 text-white",
+              index === lastIndex ? "bg-slate-900" : "bg-primary",
+            ]}
+            aria-hidden="true"
+          >
+            {index + 1}
+          </span>
+          {index !== lastIndex && <span class="h-px grow basis-0 bg-border" aria-hidden="true" />}
+        </div>
+        <div class:list={["flex flex-col gap-2", index !== lastIndex && "pr-6"]}>
+          <h3 class="font-sans text-15/snug font-semibold text-text">{step.title}</h3>
+          <p class="font-sans text-13/snug text-text-subtle">{step.detail}</p>
+        </div>
+      </li>
+    ))
+  }
+</ol>
