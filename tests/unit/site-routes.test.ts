@@ -31,11 +31,18 @@ describe("hrefFor (FR-012)", () => {
     }
   });
 
-  it("returns '#' for every Solutions and Industries route until they ship", () => {
+  it("returns the real route for every Solutions and Industries page (TASK-007)", () => {
     for (const route of [...SOLUTION_ROUTES, ...INDUSTRY_ROUTES]) {
-      expect(route.ships).toBe(false);
-      expect(hrefFor(route)).toBe("#");
+      expect(route.ships).toBe(true);
+      expect(route.path).not.toBeNull();
+      expect(hrefFor(route)).toBe(route.path);
+      expect(hrefFor(route)).not.toBe("#");
     }
+  });
+
+  it("keeps the family index destinations at '#': no index page exists", () => {
+    expect(hrefFor(PLACEHOLDER_ROUTES.allSolutions)).toBe("#");
+    expect(hrefFor(PLACEHOLDER_ROUTES.allIndustries)).toBe("#");
   });
 });
 
@@ -47,7 +54,7 @@ describe("route inventory (system-architecture.md section 2.3)", () => {
     expect(INDUSTRY_ROUTES).toHaveLength(6);
   });
 
-  it("ships every Must page", () => {
+  it("ships every Must page and every Solutions and Industries page", () => {
     const shipped = allRoutes()
       .filter((route) => route.ships)
       .map((route) => route.path);
@@ -60,9 +67,11 @@ describe("route inventory (system-architecture.md section 2.3)", () => {
         "/privacy",
         ...SERVICE_ROUTES.map((route) => route.path),
         ...PRODUCT_ROUTES.map((route) => route.path),
+        ...SOLUTION_ROUTES.map((route) => route.path),
+        ...INDUSTRY_ROUTES.map((route) => route.path),
       ]),
     );
-    expect(shipped).toHaveLength(16);
+    expect(shipped).toHaveLength(30);
   });
 
   it("uses unique ids and paths", () => {
@@ -87,14 +96,17 @@ describe("navigation data", () => {
     ]);
   });
 
-  it("points every Solutions and Industries dropdown link at '#'", () => {
-    for (const item of PRIMARY_NAV) {
-      if (item.kind !== "menu") continue;
-      if (item.key === "solutions" || item.key === "industries") {
-        expect(item.links.every((link) => link.href === "#")).toBe(true);
-      } else {
-        expect(item.links.every((link) => link.href.startsWith(`/${item.key}/`))).toBe(true);
-      }
+  it("points every dropdown link, Solutions and Industries included, at its own route", () => {
+    const menus = PRIMARY_NAV.filter((item) => item.kind === "menu");
+    expect(menus.map((item) => item.key)).toEqual([
+      "services",
+      "solutions",
+      "products",
+      "industries",
+    ]);
+    for (const item of menus) {
+      expect(item.links.length).toBeGreaterThan(0);
+      expect(item.links.every((link) => link.href.startsWith(`/${item.key}/`))).toBe(true);
     }
   });
 

@@ -32,7 +32,12 @@ import {
   type LegalValue,
 } from "../../src/lib/privacy-content";
 import { PROCESS_STEPS } from "../../src/lib/process-steps";
-import { PRODUCT_ROUTES, SERVICE_ROUTES } from "../../src/lib/site-routes";
+import {
+  INDUSTRY_ROUTES,
+  PRODUCT_ROUTES,
+  SERVICE_ROUTES,
+  SOLUTION_ROUTES,
+} from "../../src/lib/site-routes";
 
 describe("SCR-003 Careers open roles (FR-004)", () => {
   it("lists no role, so the table renders its empty state", () => {
@@ -85,12 +90,16 @@ describe("SCR-001 Home content (FR-001, FR-012)", () => {
     expect(CONNECTED_FEATURES.ai.href).toBe("/products/digital-manufacturing-ai");
   });
 
-  it("links unshipped solutions, industries, and the index pills to '#'", () => {
-    expect(SOLUTION_TILES).toHaveLength(8);
-    expect(INDUSTRY_TILES).toHaveLength(6);
-    for (const tile of [...SOLUTION_TILES, ...INDUSTRY_TILES]) {
-      expect(tile.href).toBe("#");
-    }
+  it("links every solution and industry tile to its shipped route (TASK-007)", () => {
+    expect(SOLUTION_TILES.map((tile) => tile.href)).toEqual(
+      SOLUTION_ROUTES.map((route) => route.path),
+    );
+    expect(INDUSTRY_TILES.map((tile) => tile.href)).toEqual(
+      INDUSTRY_ROUTES.map((route) => route.path),
+    );
+  });
+
+  it("links the family index pills to '#': no index page exists", () => {
     expect(SERVICES_SECTION.allHref).toBe("#");
     expect(SOLUTIONS_SECTION.allHref).toBe("#");
   });

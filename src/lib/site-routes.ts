@@ -134,80 +134,80 @@ export const PRODUCT_ROUTES: readonly SiteRoute[] = [
   },
 ];
 
-/** FR-046 (should), SCR-018 to SCR-025. Unshipped until TASK-007. */
+/** FR-046 (should), SCR-018 to SCR-025. Shipped by TASK-007. */
 export const SOLUTION_ROUTES: readonly SiteRoute[] = [
-  { id: "rise-with-sap", label: "RISE with SAP", path: "/solutions/rise-with-sap", ships: false },
-  { id: "grow-with-sap", label: "GROW with SAP", path: "/solutions/grow-with-sap", ships: false },
-  { id: "sap-btp", label: "SAP BTP", path: "/solutions/sap-btp", ships: false },
+  { id: "rise-with-sap", label: "RISE with SAP", path: "/solutions/rise-with-sap", ships: true },
+  { id: "grow-with-sap", label: "GROW with SAP", path: "/solutions/grow-with-sap", ships: true },
+  { id: "sap-btp", label: "SAP BTP", path: "/solutions/sap-btp", ships: true },
   {
     id: "sap-business-ai",
     label: "SAP Business AI",
     path: "/solutions/sap-business-ai",
-    ships: false,
+    ships: true,
   },
   {
     id: "industry-specific-sap-solutions",
     label: "Industry-specific SAP solutions",
     path: "/solutions/industry-specific-sap-solutions",
-    ships: false,
+    ships: true,
   },
   {
     id: "sap-analytics-and-reporting",
     label: "SAP Analytics and Reporting",
     path: "/solutions/sap-analytics-and-reporting",
-    ships: false,
+    ships: true,
   },
   {
     id: "sap-integration-suite",
     label: "SAP Integration Suite",
     path: "/solutions/sap-integration-suite",
-    ships: false,
+    ships: true,
   },
   {
     id: "sap-automation-and-workflow",
     label: "SAP Automation and Workflow",
     path: "/solutions/sap-automation-and-workflow",
-    ships: false,
+    ships: true,
   },
 ];
 
-/** FR-047 (should), SCR-026 to SCR-031. Unshipped until TASK-007. */
+/** FR-047 (should), SCR-026 to SCR-031. Shipped by TASK-007. */
 export const INDUSTRY_ROUTES: readonly SiteRoute[] = [
   {
     id: "automotive",
     label: "SAP for automotive and auto components",
     path: "/industries/automotive",
-    ships: false,
+    ships: true,
   },
   {
     id: "metals-and-steel",
     label: "SAP for metals and steel",
     path: "/industries/metals-and-steel",
-    ships: false,
+    ships: true,
   },
   {
     id: "mill-products",
     label: "SAP for mill products",
     path: "/industries/mill-products",
-    ships: false,
+    ships: true,
   },
   {
     id: "pharmaceuticals",
     label: "SAP for pharmaceuticals",
     path: "/industries/pharmaceuticals",
-    ships: false,
+    ships: true,
   },
   {
     id: "engineering-and-fabrication",
     label: "SAP for engineering and fabrication",
     path: "/industries/engineering-and-fabrication",
-    ships: false,
+    ships: true,
   },
   {
     id: "consumer-durables",
     label: "SAP for consumer durables",
     path: "/industries/consumer-durables",
-    ships: false,
+    ships: true,
   },
 ];
 

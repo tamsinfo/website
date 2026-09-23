@@ -1,0 +1,26 @@
+---
+/**
+ * SCR-018 to SCR-025 — Solutions detail pages (FR-046, US-013).
+ * One prerendered page per SOLUTION_ROUTES entry. Any other slug, and "/solutions"
+ * itself, has no page and falls through to the 404 page (FR-046 edge cases).
+ * Content: src/lib/detail-content/solutions.ts, transcribed per snapshot.
+ */
+import DetailPage from "../../components/detail/DetailPage.astro";
+import { SOLUTIONS_FAMILY } from "../../lib/detail-content/solutions";
+import { type DetailRouteEntry, detailRoutes } from "../../lib/detail-page";
+
+export function getStaticPaths() {
+  return detailRoutes(SOLUTIONS_FAMILY).map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: DetailRouteEntry;
+}
+
+const { entry } = Astro.props;
+---
+
+<DetailPage {entry} />
