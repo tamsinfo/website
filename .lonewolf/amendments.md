@@ -65,3 +65,15 @@ Phase 0–3 artifacts in `docs/`, `.lonewolf/`, and `deploy/`, which MUST NOT be
 `.lonewolf/`, `deploy/`) as a deviation, 2026-09-22. No gate reopened. The profile
 wording SHOULD be corrected in a later amendment.
 **Status:** accepted deviation
+
+### Known deviation KD-002: SMTP timeout does not abort an in-flight send
+
+**Raised by:** code-reviewer, review of feature/contact-endpoint (TASK-002), medium finding
+**Artifact:** docs/03-design/system-architecture.md, ADR-004 (assumes `transport.close()` stops a send)
+**Problem:** In nodemailer 10.0.10, `close()` does not abort an in-flight SMTP session. After
+the 8 s deadline returns 502, a slow relay can still deliver the email; a retry then produces
+a duplicate in the sales mailbox.
+**Decision:** Treated as the same duplicate-email outcome the user accepted in audit round 1
+(Q4, FR-039 edge case). Recorded by the orchestrator 2026-09-22; the user may route it to
+`/lonewolf:amend` against ADR-004 instead.
+**Status:** accepted deviation (pending user objection)

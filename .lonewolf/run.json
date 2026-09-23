@@ -46,7 +46,8 @@
             "TASK-002"
           ],
           "branch": "feature/contact-endpoint",
-          "status": "dispatched"
+          "status": "returned",
+          "commits": 4
         },
         {
           "agent": "frontend-developer",
@@ -55,6 +56,13 @@
           ],
           "branch": "feature/site-shell",
           "status": "dispatched"
+        }
+      ],
+      "reviews": [
+        {
+          "agent": "code-reviewer",
+          "branch": "feature/contact-endpoint",
+          "status": "APPROVED"
         }
       ]
     }
