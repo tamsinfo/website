@@ -174,7 +174,16 @@
             "TASK-007"
           ],
           "branch": "feature/solutions-industries",
-          "status": "dispatched"
+          "status": "returned",
+          "commits": 4,
+          "blocked": 2
+        }
+      ],
+      "reviews": [
+        {
+          "agent": "code-reviewer",
+          "branch": "feature/solutions-industries",
+          "status": "APPROVED; author fix round (KD-010) dispatched"
         }
       ]
     }

@@ -129,3 +129,31 @@ requirement changed.
 **Problem:** Four captions read like notes left in the design: Gate Entry "Both diagrams share the same component"; Digital Manufacturing & AI "…and the page says so"; Connected Factory "no vendor is named on the site"; Vendor Portal "Two audiences, one diagram…".
 **Decision (user, 2026-09-22):** Remove these four captions. The user will reconcile the Paper design.
 **Status:** accepted deviation
+
+### Known deviation KD-008: SCR-022 industry pills rendered as text links
+
+**Raised by:** frontend-developer, TASK-007 (BLOCKED 1)
+**Problem:** The design draws six outlined pill links; the TASK-006 detail template has no pill-link block.
+**Decision (user, 2026-09-23):** Accept text links with arrows (correct targets) for V1; add a pill-link block to the template later.
+**Status:** accepted deviation
+
+### Known deviation KD-009: SCR-023 "First build" layout
+
+**Raised by:** frontend-developer, TASK-007 (BLOCKED 2)
+**Problem:** The design places the intro beside the heading and draws the second card row as two one-third cards with an empty slot; the template renders the intro below and two half-width cards.
+**Decision (user, 2026-09-23):** Accept for V1; extend the template later.
+**Status:** accepted deviation
+
+### Known deviation KD-010: Four more design-note captions removed
+
+**Raised by:** frontend-developer, TASK-007 (possible designer-note text)
+**Captions:** Business AI "SAP Business AI across the value chain. Almost all of this is available today — …"; Business AI "Four steps, in this order. The entitlement check comes before the demo, …"; Integration "An integration without an error path is not finished. …"; Automation "Four tests before building. …".
+**Decision (user, 2026-09-23):** Remove all four (same treatment as KD-007).
+**Status:** accepted deviation
+
+### Known deviation KD-011: Template size limits on detail pages (pending user review at G4)
+
+**Raised by:** frontend-developer and code-reviewer, TASK-006/TASK-007
+**Problem:** The shared detail template cannot reproduce some drawn sizes exactly: BTP attribute label column 300 px (renders 280 px); rail step titles with detail text 16 px on Integration, Automation, Connected Factory (render 15 px); section headings drawn 900–980 px wide (render at the template's 760 px); hero H1s drawn 1050–1150 px (Hero caps at 1000 px); Automation's two-line minimum title height.
+**Decision:** Recorded by the orchestrator for the user's review at Gate G4; no code change requested.
+**Status:** pending user review
