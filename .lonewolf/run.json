@@ -23,6 +23,14 @@
             "TASK-001"
           ],
           "branch": "feature/foundation",
+          "status": "returned",
+          "commits": 4
+        }
+      ],
+      "reviews": [
+        {
+          "agent": "code-reviewer",
+          "branch": "feature/foundation",
           "status": "dispatched"
         }
       ]

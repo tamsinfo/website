@@ -19,3 +19,6 @@ playwright-report/
 
 # OS and editor noise
 .DS_Store
+
+# Agent worktrees
+.claude/

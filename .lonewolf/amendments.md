@@ -54,3 +54,14 @@ docs/03-design/data-model.md, docs/03-design/api-contract.yaml. Gates G2 and G3.
 **Approved by:** user, 2026-09-23T01:11:58Z
 **Resolution.** Resolved 2026-09-23T01:38:32Z. NFR-011 amended; ADR-002 CSP adds Cloudflare Insights origins (re-proven on the scratch build). Regenerated: docs/02-requirements/functional-requirements.md v3, docs/02-requirements/non-functional-requirements.md v3, docs/02-requirements/user-stories.md v3 (G2 re-approved 2026-09-23T01:13:20Z); docs/03-design/system-architecture.md v2, docs/03-design/api-contract.yaml v2, docs/03-design/data-model.md v2 (G3 approved 2026-09-23T01:38:32Z). .lonewolf/audit-requirements.md remains stale (auditor report, not regenerated).
 **Status:** resolved
+
+### Known deviation KD-001: `.prettierignore` scopes the oxfmt gate
+
+**Raised by:** backend-developer, during TASK-001 (BLOCKED question 1)
+**Artifact:** .lonewolf/stack-profile.md, sections 1, 7, and 8 (`bunx oxfmt --check`)
+**Problem:** The bare gate also formats Markdown, YAML, and JSX. It fails on the frozen
+Phase 0–3 artifacts in `docs/`, `.lonewolf/`, and `deploy/`, which MUST NOT be rewritten.
+**Decision:** The user accepted a `.prettierignore` (ignore paths only: `docs/`,
+`.lonewolf/`, `deploy/`) as a deviation, 2026-09-22. No gate reopened. The profile
+wording SHOULD be corrected in a later amendment.
+**Status:** accepted deviation
