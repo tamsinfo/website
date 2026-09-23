@@ -1,0 +1,32 @@
+---
+/**
+ * FormField — label, control slot, and error line for one Contact form field
+ * (design-system.md 7.2 to 7.4, SCR-004 states A and B).
+ *
+ * Props:
+ *   field: FieldName   Contract field name; also the control's id suffix.
+ *   label: string      Visible label and the control's accessible name.
+ *   class?: string
+ * Slot: the control. It MUST carry id={`contact-${field}`} and name={field}.
+ *
+ * The error <p> starts hidden and empty. contact-form-client.ts fills it and links
+ * it with aria-describedby (FR-037).
+ */
+import type { FieldName } from "../../lib/contact-validation";
+import { errorIdFor } from "../../lib/contact-form-state";
+import { FIELD_ERROR_CLASS, LABEL_CLASS } from "../../lib/contact-ui-classes";
+
+interface Props {
+  field: FieldName;
+  label: string;
+  class?: string;
+}
+
+const { field, label, class: className } = Astro.props;
+---
+
+<div class:list={["flex min-w-0 grow basis-0 flex-col gap-2", className]}>
+  <label for={`contact-${field}`} class={LABEL_CLASS}>{label}</label>
+  <slot />
+  <p id={errorIdFor(field)} class={FIELD_ERROR_CLASS} hidden></p>
+</div>

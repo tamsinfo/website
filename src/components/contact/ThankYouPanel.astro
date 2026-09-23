@@ -1,0 +1,77 @@
+---
+/**
+ * ThankYouPanel — SCR-004 state D (FR-036, FR-054, FR-055, design-system.md 7.17).
+ * Source: desktop/contact-thank-you.jsx and mobile/contact-thank-you.jsx.
+ *
+ * Renders hidden with empty values. contact-form-client.ts shows it after a 200,
+ * fills Sent to (trimmed Work email), Topic (Interest), and Reference (200 body),
+ * and moves focus to the heading. The snapshot's demo values are not shipped.
+ */
+import Eyebrow from "../Eyebrow.astro";
+import { buttonClasses } from "../../lib/ui-classes";
+
+const rows = [
+  { key: "sentTo", label: "Sent to" },
+  { key: "topic", label: "Topic" },
+  { key: "reference", label: "Reference" },
+] as const;
+---
+
+<div
+  data-thank-you
+  hidden
+  class="flex flex-col gap-6 rounded-lg border border-border bg-surface p-6 xl:p-10"
+>
+  <div
+    class="flex size-(--size-icon-xl) shrink-0 items-center justify-center rounded-full bg-primary text-white"
+  >
+    <svg
+      class="size-6.5"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="3"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d="M4.5 12.5l5 5L20 7"></path>
+    </svg>
+  </div>
+  <div class="flex flex-col gap-4">
+    <Eyebrow>Message sent</Eyebrow>
+    <h1
+      data-thank-you-heading
+      tabindex="-1"
+      class="font-display text-26/heading font-medium tracking-tighter text-text xl:text-34/heading"
+    >
+      That is with us.
+    </h1>
+    <p class="font-sans text-16/body text-text-muted">
+      A consultant will reply within one working day — not a salesperson. If we are not the
+      right fit for what you need, we will say so on that first call.
+    </p>
+  </div>
+  <dl class="flex flex-col">
+    {
+      rows.map((row) => (
+        <div class="flex flex-col items-start gap-2 border-b border-border py-4 last:border-b-0 xl:flex-row xl:items-center xl:gap-6">
+          <dt class="shrink-0 font-mono text-11 uppercase leading-3.5 tracking-label text-text-subtle xl:w-30">
+            {row.label}
+          </dt>
+          <dd
+            data-thank-you-value={row.key}
+            class="min-w-0 grow basis-0 font-sans text-15 font-medium leading-4.5 wrap-anywhere text-text"
+          />
+        </div>
+      ))
+    }
+  </dl>
+  <div class="flex flex-col gap-4 xl:flex-row xl:items-center">
+    <button data-send-another type="button" class={buttonClasses("outline", "lg", true)}>
+      Send another message
+    </button>
+    <p class="font-sans text-14/snug text-text-subtle">
+      Wrong address, or forgot something? Send another and we will merge the two.
+    </p>
+  </div>
+</div>

@@ -1,0 +1,78 @@
+---
+/**
+ * MapCard — office map placeholder and on-request embed (design-system.md 7.16,
+ * FR-017 to FR-019, ADR-010). Source: desktop/contact.jsx and mobile/contact.jsx.
+ *
+ * The placeholder makes no network request. Without JavaScript the "Load map"
+ * button stays inert. map-loader-client.ts swaps [data-map-frame]'s content for
+ * the Google embed iframe at the same --spacing-map-height, so nothing shifts.
+ */
+---
+
+<div class="flex flex-col overflow-clip rounded-lg border border-border bg-surface">
+  <div
+    data-map-frame
+    class="relative flex h-map-height shrink-0 items-center justify-center overflow-clip bg-bg-sunk"
+  >
+    <svg
+      class="absolute inset-0 size-full"
+      viewBox="0 0 560 220"
+      preserveAspectRatio="xMinYMin slice"
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        class="text-limestone-300"
+        stroke="currentColor"
+        stroke-width="2"
+        d="M0 70h560M0 150h560M120 0v220M300 0v220M430 0v220"></path>
+      <path class="text-slate-400" stroke="currentColor" stroke-width="3" d="M0 110h560M200 0v220"
+      ></path>
+      <g class="text-limestone-300" fill="currentColor">
+        <rect x="140" y="24" width="42" height="30"></rect>
+        <rect x="330" y="22" width="70" height="34"></rect>
+        <rect x="450" y="168" width="60" height="30"></rect>
+        <rect x="24" y="170" width="70" height="28"></rect>
+      </g>
+    </svg>
+    <div class="relative flex flex-col items-center gap-4">
+      <svg class="size-8.5" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path
+          class="text-primary"
+          fill="currentColor"
+          d="M12 21s7-5.5 7-11a7 7 0 10-14 0c0 5.5 7 11 7 11z"></path>
+        <circle class="text-white" fill="currentColor" cx="12" cy="10" r="2.6"></circle>
+      </svg>
+      <button
+        data-map-load
+        type="button"
+        class="inline-flex h-10 shrink-0 items-center justify-center rounded-full bg-slate-900 px-5 font-sans text-14 font-semibold leading-4.5 text-text-inverse"
+      >
+        Load map
+      </button>
+    </div>
+  </div>
+  <div class="flex items-center gap-3 border-t border-border px-6 py-4">
+    <svg
+      class="size-4 shrink-0 text-text-subtle"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.6"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d="M12 3l8 3v6c0 4.4-3.2 7.9-8 9-4.8-1.1-8-4.6-8-9V6l8-3z"></path>
+    </svg>
+    <p class="font-sans text-13/snug text-text-subtle">
+      The map loads only when you choose to, so no third-party cookies are set before then.
+    </p>
+  </div>
+</div>
+
+<script>
+  import { initMapLoader } from "../../lib/map-loader-client";
+
+  initMapLoader();
+</script>

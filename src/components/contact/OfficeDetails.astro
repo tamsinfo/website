@@ -1,0 +1,54 @@
+---
+/**
+ * OfficeDetails — SCR-004 left column, constant across every form state (FR-005).
+ * Source: desktop/contact.jsx and mobile/contact.jsx. Visible without JavaScript.
+ */
+import Eyebrow from "../Eyebrow.astro";
+import Icon from "../Icon.astro";
+import MapCard from "./MapCard.astro";
+
+const LABEL_CLASS =
+  "font-mono text-11 font-medium uppercase leading-3.5 tracking-label-wide text-text-subtle";
+const VALUE_CLASS = "font-sans text-17 font-semibold leading-5.5 xl:text-18";
+---
+
+<div class="flex min-w-0 grow basis-0 flex-col gap-6 xl:gap-10">
+  <div class="flex flex-col gap-5">
+    <Eyebrow>Office</Eyebrow>
+    <h2
+      class="font-display text-24/heading font-semibold tracking-tight text-text xl:text-32/heading"
+    >
+      TAMS Infotech Pvt. Ltd.
+    </h2>
+    <p class="flex items-center gap-3 font-sans text-17/body text-text-muted">
+      <Icon name="pin" class="size-4.5 text-text-subtle" />
+      Bengaluru, Karnataka, India
+    </p>
+  </div>
+  <dl class="flex flex-col gap-6 border-y border-border py-6 xl:flex-row xl:gap-12">
+    <div class="flex grow basis-0 flex-col gap-2">
+      <dt class={LABEL_CLASS}>Phone</dt>
+      <dd class:list={[VALUE_CLASS, "text-text"]}>
+        <a href="tel:+918041301039">+91 80 4130 1039</a>
+      </dd>
+    </div>
+    <div class="flex grow basis-0 flex-col gap-2">
+      <dt class={LABEL_CLASS}>Email</dt>
+      <dd class:list={[VALUE_CLASS, "text-primary"]}>
+        <a href="mailto:sales@tamsinfotech.com">sales@tamsinfotech.com</a>
+      </dd>
+    </div>
+  </dl>
+  <div class="flex flex-col gap-4">
+    <h3
+      class="font-display text-20/heading font-semibold tracking-snug text-text xl:text-26/heading"
+    >
+      What happens next
+    </h3>
+    <p class="font-sans text-16/body text-text-muted xl:max-w-130">
+      You get a reply within one working day. The first call is with a consultant, not a
+      salesperson. If we are not the right fit for what you need, we will say so on that call.
+    </p>
+  </div>
+  <MapCard />
+</div>
