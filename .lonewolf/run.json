@@ -64,6 +64,16 @@
           "branch": "feature/contact-endpoint",
           "status": "APPROVED"
         }
+      ],
+      "merged": [
+        {
+          "branch": "feature/contact-endpoint",
+          "commit": "d51f4a4",
+          "gates": "pass (273 tests with .claude excluded)"
+        }
+      ],
+      "defects_out_of_scope": [
+        "Vitest has no config excluding .claude/worktrees; local gate on main double-counts tests from live agent worktrees (CI unaffected)."
       ]
     }
   ]
