@@ -64,7 +64,7 @@
             "TASK-003"
           ],
           "branch": "feature/site-shell",
-          "status": "dispatched",
+          "status": "returned",
           "note": "fix review findings; first attempt killed by rate limit ~19:15, resumed 22:52"
         }
       ],
@@ -77,7 +77,7 @@
         {
           "agent": "code-reviewer",
           "branch": "feature/site-shell",
-          "status": "CHANGES REQUESTED"
+          "status": "APPROVED (round 2)"
         }
       ],
       "merged": [

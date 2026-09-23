@@ -2,7 +2,7 @@
 artifact: review-feature-site-shell
 phase: 4
 status: in-review
-version: 1
+version: 2
 updated: 2026-09-22
 owner: code-reviewer
 depends_on:
@@ -17,6 +17,7 @@ depends_on:
   - docs/02-requirements/functional-requirements.md
   - docs/02-requirements/non-functional-requirements.md
   - docs/04-development/implementation-plan.md
+  - .lonewolf/amendments.md
 ---
 
 # Review: feature/site-shell (TASK-003)
@@ -133,6 +134,54 @@ the Fontsource face names plus generic fallbacks. Per ADR-008 that is a binding,
 - **Commits:** Conventional format, `Refs: TASK-003`, no AI attribution trailers.
 - **Gate-blind `.astro` files, checked by hand:** all 19 changed `.astro` files. I grepped for arbitrary values, `style=`, `set:html`, `any`, and `console`, and found none. `interface Props` is present where props exist. Each component has its props catalogue comment. Indentation is consistent. The raw-value findings are reported above.
 
-## Verdict
+## Verdict (round 1)
 
 CHANGES REQUESTED — 2 blocking findings
+
+---
+
+# Re-review (round 2): fix commits e605bd4, b9dc82c, 009d695
+
+I reviewed `67575cb..009d695` only, plus any regressions.
+
+## Gates re-run (worktree, profile order)
+
+The following all exit 0:
+- `bunx astro sync`
+- `bunx oxfmt --check`
+- `bunx oxlint --deny-warnings`
+- `bunx astro check`: 0 errors, 0 warnings, 0 hints
+- `bunx vitest run`: 8 files, 187 tests, up 13 from the new `nav-menu-state.test.ts`
+- `bunx astro build`
+- `bun audit --audit-level=high`: no vulnerabilities
+
+Checks 10 and 11 still find no matches. The compiled CSS now carries `--spacing:4px`.
+`package.json` and `bun.lock` are unchanged. The working tree is clean.
+Check 7 (running the server) and browser walkthroughs were not performed, the same as round 1.
+
+## Disposition of round-1 findings
+
+- **High 1 (multiplier values), resolved by KD-003.** The user accepted the deviation. `global.css` now declares
+  `--spacing: 4px` in the derived-token block, and the comment cites KD-003. Numeric utilities now derive
+  from a declared token. design-system.md still needs a follow-up amendment, as KD-003 itself notes.
+- **High 2 (a click-opened menu stays open on pointer leave), fixed.** The decisions moved into a pure reducer,
+  `src/lib/nav-menu-state.ts`. A trigger click with `detail > 0` records source `pointer`, and `pointer-leave` closes
+  a pointer-opened menu whatever element has focus. A keyboard-opened menu (`detail === 0`) stays open until
+  `focus-leave` (FR-014). Escape closes the visible panel, suppresses hover, and returns focus to the trigger. `close`
+  enforces one open menu at a time and the outside-click close. `aria-expanded` now tracks what is actually shown
+  (`isMenuVisible`). No regressions found against FR-013, FR-014, FR-015 or ADR-012. The no-JS CSS rules are unchanged.
+- **Medium (header spacing at 1280 to 1439px), resolved by KD-004.** Documented in `SiteHeader.astro` and `DesktopNav.astro`.
+- **Low (404 watermark offset), withdrawn. My round-1 finding was wrong.** The `desktop/not-found.jsx:75` SVG is 620px wide at
+  left 960 in a 1440px frame, so it ends 140px past the edge, which is `-right-35`. It sits at top -90, which is `-top-22.5`. Mobile
+  (`mobile/not-found.jsx:29`, 380px wide at left 150 in 390px) also gives 140px, so `-right-35` is correct. The 404 is correct.
+  The desktop default in `HexWatermark.astro` (`xl:-right-45`) differs, but the 404 always overrides it. Any later
+  page that relies on the default should check its own snapshot.
+- **Low (lowercased hex), unchanged.** Informational only.
+
+## New findings
+
+None.
+
+## Verdict
+
+APPROVED
