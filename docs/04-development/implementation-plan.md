@@ -1,7 +1,7 @@
 ---
 artifact: implementation-plan
 phase: 4
-status: draft
+status: in-review
 version: 1
 updated: 2026-09-22
 owner: orchestrator

@@ -30,7 +30,7 @@
     },
     "G4": {
       "name": "Development",
-      "status": "pending",
+      "status": "in-review",
       "approved_at": null
     },
     "G5": {
@@ -114,7 +114,7 @@
       "version": 1
     },
     "docs/04-development/implementation-plan.md": {
-      "status": "draft",
+      "status": "in-review",
       "version": 1
     }
   }

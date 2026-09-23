@@ -4,7 +4,7 @@
   "phase": 4,
   "command": "/lonewolf:build",
   "started": "2026-09-23T01:40:02Z",
-  "status": "in-progress",
+  "status": "complete",
   "steps": [
     {
       "step": "decompose",
@@ -166,7 +166,7 @@
     },
     {
       "step": "wave-3",
-      "status": "in-progress",
+      "status": "complete",
       "agents": [
         {
           "agent": "frontend-developer",
@@ -185,7 +185,19 @@
           "branch": "feature/solutions-industries",
           "status": "APPROVED (round 2)"
         }
+      ],
+      "merged": [
+        {
+          "branch": "feature/solutions-industries",
+          "commit": "af64663",
+          "gates": "pass (651 tests)"
+        }
       ]
+    },
+    {
+      "step": "integration-check",
+      "status": "complete",
+      "note": "ops implemented+called; error codes aligned (3 non-user-facing fall back per ui-spec 7.1); docker image on main runs uid 1000 with ADR-002 headers; no secrets in dist/client"
     }
   ]
 }
