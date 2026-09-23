@@ -161,6 +161,27 @@
     {
       "step": "await-G2-reapproval",
       "status": "complete"
+    },
+    {
+      "step": "recover",
+      "status": "complete",
+      "note": "runstate flagged branchless Phase 3 agents as redispatch; ground truth: snapshot and architect artifacts present. Repaired counters ADR 0->15, ENT 0->6."
+    },
+    {
+      "step": "architect-amend-patch",
+      "status": "in-progress",
+      "agents": [
+        {
+          "agent": "system-architect",
+          "tasks": [
+            "AMD-001",
+            "AMD-002",
+            "AMD-003"
+          ],
+          "branch": null,
+          "status": "dispatched"
+        }
+      ]
     }
   ]
 }
