@@ -55,7 +55,17 @@
             "TASK-003"
           ],
           "branch": "feature/site-shell",
-          "status": "dispatched"
+          "status": "returned",
+          "commits": 4
+        },
+        {
+          "agent": "frontend-developer",
+          "tasks": [
+            "TASK-003"
+          ],
+          "branch": "feature/site-shell",
+          "status": "dispatched",
+          "note": "fix review findings"
         }
       ],
       "reviews": [
@@ -63,6 +73,11 @@
           "agent": "code-reviewer",
           "branch": "feature/contact-endpoint",
           "status": "APPROVED"
+        },
+        {
+          "agent": "code-reviewer",
+          "branch": "feature/site-shell",
+          "status": "CHANGES REQUESTED"
         }
       ],
       "merged": [

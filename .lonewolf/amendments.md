@@ -77,3 +77,25 @@ a duplicate in the sales mailbox.
 (Q4, FR-039 edge case). Recorded by the orchestrator 2026-09-22; the user may route it to
 `/lonewolf:amend` against ADR-004 instead.
 **Status:** accepted deviation (pending user objection)
+
+### Known deviation KD-003: Meridian 4 px grid unit declared as `--spacing`
+
+**Raised by:** code-reviewer, review of feature/site-shell (TASK-003), high finding 1
+**Artifact:** docs/03-design/design-system.md §3 and §4A; FR-011
+**Problem:** The Paper design uses many 4 px-grid sizes with no named token (52 px heights,
+340 px column, 18 px line heights, 760 px widths). Tailwind multiplier classes (`h-13`,
+`w-85`, `leading-4.5`) compute from Tailwind's default `--spacing`, which is not a Meridian token.
+**Decision (user, 2026-09-22):** Declare Meridian's own grid unit `--spacing: 4px` (equal to
+`--spacing-1`) as a derived token in `src/styles/global.css` §4A block, so multiplier
+utilities are token-derived and the design is reproduced exactly. Recorded as a deviation to
+avoid reopening G3 tonight; design-system.md MUST be updated in a later amendment.
+**Status:** accepted deviation
+
+### Known deviation KD-004: Desktop header spacing at 1280–1439 px
+
+**Raised by:** code-reviewer, review of feature/site-shell (TASK-003), medium finding
+**Artifact:** docs/03-design/ui-specification.md (header), Paper desktop header (1440 px)
+**Problem:** The designed header row (~1,300 px) does not fit within 80 px gutters at 1280 px.
+**Decision (user, 2026-09-22):** Between `--breakpoint-xl` and `--breakpoint-2xl` the header
+uses 40 px gutters and tighter gaps; at ≥ 1440 px it matches the design exactly.
+**Status:** accepted deviation
