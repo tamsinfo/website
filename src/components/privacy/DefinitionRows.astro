@@ -1,0 +1,34 @@
+---
+/**
+ * DefinitionRows — label/value rows of the privacy draft ("Legal entity", "Hosting
+ * and infrastructure" ...) as a <dl> (ui-specification.md SCR-005 item 4).
+ * Desktop: 260px mono label beside the value. Mobile: label above value
+ * (privacy.jsx / mobile/privacy.jsx).
+ *
+ * Props:
+ *   rows: DefinitionRow[]
+ */
+import LegalValueText from "./LegalValueText.astro";
+import type { DefinitionRow } from "../../lib/privacy-content";
+
+interface Props {
+  rows: readonly DefinitionRow[];
+}
+
+const { rows } = Astro.props;
+---
+
+<dl class="flex flex-col">
+  {
+    rows.map((row) => (
+      <div class="flex flex-col gap-2 border-b border-border py-4 last:border-b-0 xl:flex-row xl:items-start xl:gap-8">
+        <dt class="font-mono text-10 uppercase leading-3 tracking-label text-text-subtle xl:w-65 xl:shrink-0 xl:text-11 xl:leading-3.5">
+          {row.term}
+        </dt>
+        <dd class="flex flex-col xl:grow xl:basis-0">
+          <LegalValueText value={row.value} />
+        </dd>
+      </div>
+    ))
+  }
+</dl>

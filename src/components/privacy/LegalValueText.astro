@@ -1,0 +1,33 @@
+---
+/**
+ * LegalValueText — one value from the privacy draft: plain text, or an amber
+ * "to confirm" marker shown as inline text (ui-specification.md SCR-005
+ * Accessibility: the marker is content, not a tooltip).
+ *
+ * The marker reuses the shared Chip "warning" tokens, but sizes by padding (py-1.5
+ * around the 12px line gives the captured 24px) instead of a fixed height, because
+ * the longest markers wrap on a 360px screen and a fixed height would clip them.
+ *
+ * Props:
+ *   value: LegalValue
+ *   textClass?: string   Type and colour for plain text. Default "text-15/body text-text".
+ */
+import type { LegalValue } from "../../lib/privacy-content";
+
+interface Props {
+  value: LegalValue;
+  textClass?: string;
+}
+
+const { value, textClass = "text-15/body text-text" } = Astro.props;
+---
+
+{
+  value.kind === "confirm" ? (
+    <span class="inline-flex self-start rounded-full bg-warning-soft px-3 py-1.5 font-mono text-10 font-semibold uppercase leading-3 tracking-label text-warning-on">
+      {value.text}
+    </span>
+  ) : (
+    <span class:list={["font-sans", textClass]}>{value.text}</span>
+  )
+}
