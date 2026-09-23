@@ -60,7 +60,9 @@ const wayfinding = [
   <section
     class="relative w-full overflow-clip bg-surface-inverse px-5 py-16 font-sans xl:px-20 xl:py-24"
   >
-    <HexWatermark class="-top-10 -right-35 size-95 xl:-top-22.5 xl:size-155" />
+    {/* Offsets from not-found.jsx: desktop left 960 of 1440 at 620 wide, mobile left 150 of
+      390 at 380 wide; both leave the drawing 140px past the right edge (-right-35). */}
+    <HexWatermark class="-top-10 -right-35 size-95 xl:-top-22.5 xl:-right-35 xl:size-155" />
     <div class="relative mx-auto flex w-full max-w-wide flex-col gap-6">
       <Eyebrow tone="dark">Page not found</Eyebrow>
       <p

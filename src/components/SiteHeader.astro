@@ -8,6 +8,10 @@
  *   pathname: string   The current path (Astro.url.pathname). Drives the
  *                      highlighted item, the Mobile page badge, and aria-current.
  *
+ * KD-004 (user decision, 2026-09-22): the captured desktop row (~1,300px) does not fit
+ * inside 80px gutters at 1280px, so between xl and 2xl the row uses 40px gutters and
+ * tighter gaps. At >= 2xl (1440px) it matches the design exactly (px-20, gap-10, gap-5).
+ *
  * The search icon is decorative only: no in-scope screen has search results
  * (design-system.md section 7.12).
  */

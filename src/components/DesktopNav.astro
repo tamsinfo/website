@@ -11,6 +11,9 @@
  * single-column link list. The list shows on :hover / :focus-within with no
  * JavaScript (global.css `menu-open` variant); nav-menu-client.ts adds click,
  * outside-click, and Escape handling.
+ *
+ * KD-004: item gap is gap-5 between xl and 2xl so the header row fits at 1280px, and
+ * the design's gap-6 from 2xl (1440px).
  */
 import Icon from "./Icon.astro";
 import { PRIMARY_NAV, isCurrentHref, type NavKey } from "../lib/site-routes";
