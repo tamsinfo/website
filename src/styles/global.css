@@ -1,0 +1,262 @@
+/*
+ * C-31 Global styles (TASK-003).
+ * Tailwind import, font imports (ADR-008), and the single @theme block.
+ * Do not add colours, sizes, or spacing here that the design does not contain
+ * (design-system.md section 0, FR-011). Owner: TASK-003.
+ */
+@import "tailwindcss";
+
+/* ADR-008: self-hosted fonts. Archivo and Inter are variable (all weights).
+   IBM Plex Mono weights used by the snapshot: 400 (track labels), 500, 600. */
+@import "@fontsource-variable/archivo";
+@import "@fontsource-variable/inter";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+@import "@fontsource/ibm-plex-mono/600.css";
+
+@theme {
+  /* Remove Tailwind's default namespaces so only Meridian tokens exist (FR-011). */
+  --color-*: initial;
+  --font-*: initial;
+  --text-*: initial;
+  --font-weight-*: initial;
+  --tracking-*: initial;
+  --leading-*: initial;
+  --breakpoint-*: initial;
+  --container-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+
+  /* ---- Meridian tokens: verbatim from docs/03-design/paper-snapshot/tokens.css ---- */
+  --color-white: #ffffff;
+  --color-limestone-50: #faf9f6;
+  --color-limestone-100: #f4f2ed;
+  --color-limestone-200: #ebe8e1;
+  --color-limestone-300: #ddd9d0;
+  --color-slate-400: #a8afab;
+  --color-slate-500: #7c8480;
+  --color-slate-600: #5c6663;
+  --color-slate-700: #3a423f;
+  --color-slate-800: #232a28;
+  --color-slate-900: #141a18;
+  --color-copper-50: #e9f3ef;
+  --color-copper-100: #c7e3d8;
+  --color-copper-300: #4fb89a;
+  --color-copper-500: #136f58;
+  --color-copper-600: #0f5a47;
+  --color-copper-700: #0b4536;
+  --color-moss: #3f7d4e;
+  --color-ochre: #b08428;
+  --color-oxide: #a64232;
+  --color-slate-blue: #3d6b8c;
+  --color-bg: var(--color-limestone-100);
+  --color-bg-sunk: var(--color-limestone-200);
+  --color-surface: var(--color-white);
+  --color-surface-inverse: var(--color-slate-900);
+  --color-surface-inverse-raised: var(--color-slate-800);
+  --color-border: var(--color-limestone-300);
+  --color-border-strong: var(--color-slate-400);
+  --color-border-inverse: #2e3634;
+  --color-border-inverse-strong: #3d4644;
+  --color-text: var(--color-slate-900);
+  --color-text-muted: var(--color-slate-600);
+  --color-text-subtle: var(--color-slate-500);
+  --color-text-inverse: var(--color-limestone-100);
+  --color-text-inverse-muted: #9aa5a1;
+  --color-primary: var(--color-copper-500);
+  --color-primary-hover: var(--color-copper-600);
+  --color-primary-active: var(--color-copper-700);
+  --color-primary-soft: var(--color-copper-50);
+  --color-accent-inverse: var(--color-copper-300);
+  --color-on-primary-muted: rgb(255 255 255 / 86%);
+  --color-on-primary-subtle: rgb(255 255 255 / 50%);
+  --color-on-primary-wash: rgb(255 255 255 / 16%);
+  --color-success: var(--color-moss);
+  --color-success-soft: #e4efe7;
+  --color-success-on: #2e6039;
+  --color-warning: var(--color-ochre);
+  --color-warning-soft: #f7efd8;
+  --color-warning-on: #7d5d17;
+  --color-danger: var(--color-oxide);
+  --color-danger-soft: #f7e4e0;
+  --color-danger-on: #7e3226;
+  --color-danger-hover: #8c3628;
+  --color-info: var(--color-slate-blue);
+  --color-info-soft: #e2eaf1;
+  --color-info-on: #2e5069;
+  --color-wordmark: #1e2523;
+  --color-chart-muted: #4c5654;
+  --color-chart-muted-accent: #2a6e5c;
+  --color-scrim-light: rgb(244 242 237 / 92%);
+
+  --font-display: Archivo;
+  --font-sans: Inter;
+  --font-mono: IBM Plex Mono;
+
+  --text-10: 10px;
+  --text-11: 11px;
+  --text-12: 12px;
+  --text-13: 13px;
+  --text-14: 14px;
+  --text-15: 15px;
+  --text-16: 16px;
+  --text-17: 17px;
+  --text-18: 18px;
+  --text-19: 19px;
+  --text-20: 20px;
+  --text-22: 22px;
+  --text-24: 24px;
+  --text-26: 26px;
+  --text-30: 30px;
+  --text-32: 32px;
+  --text-34: 34px;
+  --text-36: 36px;
+  --text-40: 40px;
+  --text-44: 44px;
+  --text-48: 48px;
+  --text-56: 56px;
+  --text-64: 64px;
+  --text-72: 72px;
+  --text-132: 132px;
+  --text-186: 186px;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-black: 900;
+
+  --tracking-display: -0.045em;
+  --tracking-wordmark: -0.04em;
+  --tracking-tighter: -0.035em;
+  --tracking-tight: -0.022em;
+  --tracking-snug: -0.011em;
+  --tracking-normal: 0em;
+  --tracking-logo: 0.04em;
+  --tracking-wide: 0.06em;
+  --tracking-label: 0.08em;
+  --tracking-label-wide: 0.12em;
+  --tracking-wider: 0.14em;
+
+  --leading-none: 100%;
+  --leading-display: 104%;
+  --leading-heading: 118%;
+  --leading-snug: 140%;
+  --leading-body: 160%;
+
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1440px;
+
+  --container-prose: 680px;
+  --container-narrow: 880px;
+  --container-content: 1120px;
+  --container-wide: 1280px;
+  --container-full: 1440px;
+
+  --spacing-0: 0px;
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+  --spacing-20: 80px;
+  --spacing-24: 96px;
+  --spacing-32: 128px;
+  --spacing-40: 160px;
+
+  --radius-none: 0px;
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+  --radius-full: 999px;
+
+  /* ---- Implementation binding (not a new value) ----
+     Fontsource registers the variable families as "Archivo Variable" and
+     "Inter Variable" (ADR-008). These keep the Meridian family, put the
+     self-hosted face name first, and add a generic fallback. */
+  --font-display: "Archivo Variable", Archivo, ui-sans-serif, sans-serif;
+  --font-sans: "Inter Variable", Inter, ui-sans-serif, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  /* ---- Derived from Paper, not in Meridian (design-system.md section 4A) ---- */
+  --spacing-map-height: 220px;
+  --size-icon-xl: 56px;
+  --border-width-thick: 2px;
+  --spacing-focus-ring-offset: 2px;
+  /* KD-003 (user decision, 2026-09-22): Meridian's 4px grid unit, equal to
+     --spacing-1. Numeric utilities such as h-13 (52px), w-85 (340px),
+     leading-4.5 (18px), and max-w-190 (760px) derive from this token. Prefer a
+     named --spacing-*, --container-*, --leading-*, or --text-* token wherever
+     the value matches one exactly. */
+  --spacing: 4px;
+}
+
+/*
+ * ADR-012 menu visibility (C-23, C-24). A desktop dropdown panel is a direct child
+ * of its [data-menu] list item.
+ * - Without JavaScript: the panel shows on :hover and :focus-within.
+ * - With JavaScript (C-24 sets data-js on the item): hover still opens it unless
+ *   suppressed after Escape or a closing click; keyboard opening is through the
+ *   trigger button, which sets data-open.
+ */
+@custom-variant menu-open {
+  [data-menu]:not([data-js]):hover > & {
+    @slot;
+  }
+  [data-menu]:not([data-js]):focus-within > & {
+    @slot;
+  }
+  [data-menu][data-js]:not([data-suppressed]):hover > & {
+    @slot;
+  }
+  [data-menu][data-open] > & {
+    @slot;
+  }
+}
+
+@layer base {
+  html {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    -webkit-font-smoothing: antialiased;
+    font-synthesis: none;
+  }
+
+  /* design-system.md section 6: uniform focus ring from derived tokens. */
+  :focus-visible {
+    outline: var(--border-width-thick) solid var(--color-primary);
+    outline-offset: var(--spacing-focus-ring-offset);
+  }
+
+  /* The native <details> marker is replaced by the design's own icons (ADR-012). */
+  summary {
+    list-style: none;
+    cursor: pointer;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* design-system.md section 6: nothing animates for reduced-motion users. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      transition-duration: 0s !important;
+      animation-duration: 0s !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

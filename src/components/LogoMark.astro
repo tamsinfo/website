@@ -1,0 +1,26 @@
+---
+/**
+ * LogoMark — the faceted-hexagon brand mark (header, footer, mobile header).
+ *
+ * Props:
+ *   class?: string   Size utility, e.g. "size-6.5" (header, 26px) or "size-6" (footer).
+ *
+ * Decorative (aria-hidden): the adjacent "TAMS Infotech" text or the link's
+ * accessible name carries the meaning.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<svg
+  class:list={["shrink-0 text-accent-inverse", className]}
+  viewBox="0 0 26 26"
+  aria-hidden="true"
+  focusable="false"
+>
+  <path d="M13 1L25 7.5V18.5L13 25L1 18.5V7.5L13 1Z" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+  <path d="M13 8L19 11.25V17.75L13 21L7 17.75V11.25L13 8Z" fill="currentColor"></path>
+</svg>

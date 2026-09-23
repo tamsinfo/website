@@ -1,20 +1,120 @@
 ---
-// Placeholder: the build MUST emit a /404 entry in dist/_headers.json, which server.ts
-// reads as its fallback CSP (ADR-002). TASK-003 replaces this page with the 404 screen.
-Astro.csp?.insertDirective("frame-src 'none'");
+/**
+ * SCR-006 — 404 Not Found (FR-009, FR-011, FR-043, US-012).
+ * Source: docs/03-design/paper-snapshot/desktop/not-found.jsx and mobile/not-found.jsx.
+ * Prerendered; the server answers unknown paths with this page and HTTP 404, and
+ * reuses its dist/_headers.json entry as the fallback CSP (ADR-002).
+ * States: this page is the site-wide error state; it has no sub-states (spec).
+ */
+import Button from "../components/Button.astro";
+import Card from "../components/Card.astro";
+import Eyebrow from "../components/Eyebrow.astro";
+import HexWatermark from "../components/HexWatermark.astro";
+import Section from "../components/Section.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import TextLink from "../components/TextLink.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { DISCOVERY_CALL_HREF, PAGE_ROUTES, PLACEHOLDER_ROUTES, hrefFor } from "../lib/site-routes";
+
+const heading = "That page has moved, been renamed, or never existed.";
+const intro =
+  "No need to start again from the homepage — the six places worth going are below. If you followed a link from somewhere and it broke, tell us and we will fix it.";
+
+/* Family cards link to "#": no /services, /solutions, /products, or /industries
+   index page exists (ui-specification.md SCR-006 item 3, FR-012). */
+const wayfinding = [
+  {
+    title: "Services",
+    href: hrefFor(PLACEHOLDER_ROUTES.allServices),
+    body: "Implementation, managed services, custom build and licence procurement.",
+  },
+  {
+    title: "Solutions",
+    href: hrefFor(PLACEHOLDER_ROUTES.allSolutions),
+    body: "RISE, GROW, BTP, Business AI, analytics, integration and automation.",
+  },
+  {
+    title: "Products",
+    href: hrefFor(PLACEHOLDER_ROUTES.allProducts),
+    body: "Gate Entry, EXIM, DigiSign, Production Process, Vendor Portal and more.",
+  },
+  {
+    title: "Industries",
+    href: hrefFor(PLACEHOLDER_ROUTES.allIndustries),
+    body: "Automotive, metals and steel, mill products, pharma, engineering, consumer durables.",
+  },
+  {
+    title: "About us",
+    href: hrefFor(PAGE_ROUTES.about),
+    body: "Who we are, why we only do manufacturing, and how we run a project.",
+  },
+  {
+    title: "Contact",
+    href: hrefFor(PAGE_ROUTES.contact),
+    body: "Thirty minutes with a consultant who has done this in a plant.",
+  },
+];
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Page not found | TAMS Infotech</title>
-  </head>
-  <body>
-    <main>
-      <h1>Page not found</h1>
-      <p><a href="/">Go to the home page</a></p>
-    </main>
-  </body>
-</html>
+<BaseLayout heading={heading} description={intro}>
+  <section
+    class="relative w-full overflow-clip bg-surface-inverse px-5 py-16 font-sans xl:px-20 xl:py-24"
+  >
+    {/* Offsets from not-found.jsx: desktop left 960 of 1440 at 620 wide, mobile left 150 of
+      390 at 380 wide; both leave the drawing 140px past the right edge (-right-35). */}
+    <HexWatermark class="-top-10 -right-35 size-95 xl:-top-22.5 xl:-right-35 xl:size-155" />
+    <div class="relative mx-auto flex w-full max-w-wide flex-col gap-6">
+      <Eyebrow tone="dark">Page not found</Eyebrow>
+      <p
+        class="font-display text-72/none font-medium tracking-display text-accent-inverse xl:text-186/none"
+        aria-hidden="true"
+      >
+        404
+      </p>
+      <h1
+        class="font-display text-30/display font-medium tracking-tighter text-text-inverse xl:max-w-225 xl:text-56/display"
+      >
+        {heading}
+      </h1>
+      <p class="text-16/body text-text-inverse-muted xl:max-w-160 xl:text-18/body">{intro}</p>
+      <div class="flex flex-col gap-3 xl:flex-row">
+        <Button href={hrefFor(PAGE_ROUTES.home)} variant="inverse" size="lg" arrow block>
+          Go to the homepage
+        </Button>
+        <Button href={DISCOVERY_CALL_HREF} variant="outline-inverse" size="lg" arrow block>
+          Report a broken link
+        </Button>
+      </div>
+    </div>
+  </section>
+
+  <Section tone="bg" labelledby="wayfinding-heading">
+    <SectionHeading
+      id="wayfinding-heading"
+      eyebrow="Wayfinding"
+      title="Where you were probably heading"
+    />
+    <ul class="grid grid-cols-1 gap-6 xl:grid-cols-3">
+      {
+        wayfinding.map((card) => (
+          <li class="flex">
+            <Card title={card.title} href={card.href} class="grow">
+              {card.body}
+            </Card>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <Section tone="sunk" labelledby="still-stuck-heading">
+    <SectionHeading id="still-stuck-heading" eyebrow="Still stuck" title="Still cannot find it?" />
+    <div class="flex flex-col gap-6">
+      <p class="text-16/body text-text-muted xl:max-w-215 xl:text-17/body">
+        Search the site, or send us the URL you were trying to reach. Broken links on our own site
+        are our problem to fix, not yours to work around.
+      </p>
+      <TextLink href={DISCOVERY_CALL_HREF}>Contact us</TextLink>
+    </div>
+  </Section>
+</BaseLayout>

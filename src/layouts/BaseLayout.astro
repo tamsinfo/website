@@ -1,0 +1,64 @@
+---
+/**
+ * BaseLayout — document shell for every page (C-20): <head> metadata (C-21,
+ * FR-043 to FR-045), font preloads (ADR-008), the CSP frame-src directive
+ * (ADR-002, NFR-026), SiteHeader, <main>, and SiteFooter.
+ *
+ * Props:
+ *   heading: string       The page's H1 text. Title = "<heading> | TAMS Infotech".
+ *   description: string   Hero introduction paragraph (FR-044); cut to 160 chars
+ *                         at a word boundary with "…" by page-meta.ts.
+ *   route?: string        The page's route, e.g. "/about", for og:url. Omit on the
+ *                         404 page, which carries no og:url (FR-045 edge case).
+ *   frameSrc?: string     CSP frame-src value. Default "'none'". Contact passes
+ *                         "https://www.google.com" for the map embed (ADR-010).
+ * Slot: page content, rendered inside <main id="main">.
+ */
+import "../styles/global.css";
+import archivoLatin from "@fontsource-variable/archivo/files/archivo-latin-wght-normal.woff2?url";
+import interLatin from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url";
+import SiteFooter from "../components/SiteFooter.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import { buildPageMeta } from "../lib/page-meta";
+
+interface Props {
+  heading: string;
+  description: string;
+  route?: string;
+  frameSrc?: string;
+}
+
+const { heading, description, route, frameSrc = "'none'" } = Astro.props;
+const meta = buildPageMeta(route === undefined ? { heading, description } : { heading, description, route });
+
+Astro.csp?.insertDirective(`frame-src ${frameSrc}`);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{meta.title}</title>
+    <meta name="description" content={meta.description} />
+    <meta property="og:title" content={meta.ogTitle} />
+    <meta property="og:description" content={meta.ogDescription} />
+    <meta property="og:type" content={meta.ogType} />
+    {meta.ogUrl !== undefined && <meta property="og:url" content={meta.ogUrl} />}
+    <link rel="preload" href={archivoLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
+  </head>
+  <body class="flex min-h-screen flex-col bg-bg font-sans text-text">
+    <a
+      href="#main"
+      class="sr-only focus-visible:not-sr-only focus-visible:absolute focus-visible:top-4 focus-visible:left-4 focus-visible:z-50 focus-visible:rounded-full focus-visible:bg-limestone-100 focus-visible:px-5 focus-visible:py-3 focus-visible:text-15 focus-visible:font-semibold focus-visible:text-slate-900"
+    >
+      Skip to main content
+    </a>
+    <SiteHeader pathname={Astro.url.pathname} />
+    <main id="main" tabindex="-1" class="flex grow flex-col">
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

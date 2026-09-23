@@ -1,0 +1,51 @@
+---
+/**
+ * Breadcrumb — "Home / Family / Page" trail on dark heroes (design-system.md 7.9).
+ * Present on every screen except Home and 404.
+ *
+ * Props:
+ *   items: { label: string; href?: string }[]
+ *            In order from "Home". The last item is the current page: rendered
+ *            without a link, semibold, with aria-current="page". Pass href "#" for a
+ *            family crumb with no index page (FR-012), or omit href to render it as
+ *            plain text.
+ *   class?: string
+ */
+import Icon from "./Icon.astro";
+
+interface Crumb {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: Crumb[];
+  class?: string;
+}
+
+const { items, class: className } = Astro.props;
+const lastIndex = items.length - 1;
+---
+
+<nav aria-label="Breadcrumb" class:list={["relative", className]}>
+  <ol class="flex flex-wrap items-center gap-2 font-sans text-14 leading-4.5">
+    {
+      items.map((item, index) => (
+        <li class="flex items-center gap-2">
+          {index > 0 && <Icon name="chevron-right" class="size-3.5 text-slate-600" />}
+          {index === lastIndex ? (
+            <span class="font-semibold text-text-inverse" aria-current="page">
+              {item.label}
+            </span>
+          ) : item.href === undefined ? (
+            <span class="text-text-inverse-muted">{item.label}</span>
+          ) : (
+            <a href={item.href} class="text-text-inverse-muted hover:text-text-inverse">
+              {item.label}
+            </a>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>
