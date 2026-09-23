@@ -2,7 +2,7 @@
 artifact: review-feature-solutions-industries
 phase: 4
 status: in-review
-version: 1
+version: 2
 updated: 2026-09-23
 owner: code-reviewer
 depends_on:
@@ -45,7 +45,7 @@ depends_on:
 
 # Review: feature/solutions-industries (TASK-007)
 
-**Range:** main...feature/solutions-industries (ea808c9..25db715, 4 commits)
+**Range:** main...feature/solutions-industries (ea808c9..84cf12f, 5 commits; round 2 adds 84cf12f)
 **Requirements:** FR-046, FR-047, FR-012 (link flip), FR-043 to FR-045 (metadata)
 **Verdict:** APPROVED
 
@@ -97,5 +97,35 @@ depends_on:
 critical 0, high 0, medium 0, low 1
 
 Not failed on (per orchestrator): SCR-022 pill links rendered as text links; SCR-023 intro placement and 2-card row. Both are pending user decisions.
+
+APPROVED
+
+## Round 2: delta re-review of 84cf12f
+
+**Commit:** 84cf12f fix(solutions): remove the four KD-010 design-note captions (conventional format, `Refs: TASK-007`, no AI attribution trailer).
+**Files:** `src/lib/detail-content/solutions.ts`, `tests/unit/detail-pages.test.ts` only. Template, site-routes, deps untouched.
+
+- KD-010: the four caption blocks (Business AI x2, Integration Suite, Automation and Workflow) are removed. Each string is added to `INTENTIONAL_EXCLUSIONS` so the check that no snapshot body text is missing still passes. A new `KD-010 caption removal` test confirms each caption's opening words exist in both desktop and mobile snapshots, are absent from the page copy, and that no caption block remains on those pages. The rendered HTML from the built server contains none of the four captions (0 matches on each page).
+- KD-008, KD-009, KD-011: comment-only changes naming the recorded deviations. KD-011 now also covers the second BTP attribute table (line 292), which had the same 300px/280px gap. Round-1 low finding (solutions.ts:256) is **resolved**: it is recorded as KD-011 in amendments.md, awaiting user review at G4.
+- Regressions: none. The build no longer ships `caption` text on those pages; no other content changed.
+
+### Round-2 gates (reviewer, worktree)
+
+| Gate | Result |
+|---|---|
+| bun install --frozen-lockfile | exit 0 |
+| bunx astro sync | exit 0 |
+| bunx oxfmt --check | exit 0 |
+| bunx oxlint --deny-warnings | exit 0 |
+| bunx astro check | 0 errors, 0 warnings, 0 hints |
+| bunx vitest run | 651 passed (was 647; +4 KD-010 tests) |
+| bunx astro build | exit 0 |
+| server (`PORT=4972 node server.ts`, own PID killed) | /health 200, / 200, /solutions 404, /industries 404, affected pages 200 |
+| bun audit --audit-level=high | no vulnerabilities |
+| arbitrary-value grep, style= grep | 0 matches each |
+
+No `.astro` file changed in this commit.
+
+**Round-2 counts:** critical 0, high 0, medium 0, low 0 open (1 resolved).
 
 APPROVED
