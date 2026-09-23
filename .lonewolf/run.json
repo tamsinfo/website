@@ -106,7 +106,8 @@
             "TASK-004"
           ],
           "branch": "feature/core-pages",
-          "status": "dispatched"
+          "status": "returned",
+          "commits": 4
         },
         {
           "agent": "frontend-developer",
@@ -114,7 +115,8 @@
             "TASK-005"
           ],
           "branch": "feature/contact-page",
-          "status": "dispatched"
+          "status": "returned",
+          "commits": 2
         },
         {
           "agent": "frontend-developer",
@@ -122,6 +124,18 @@
             "TASK-006"
           ],
           "branch": "feature/services-products",
+          "status": "dispatched"
+        }
+      ],
+      "reviews": [
+        {
+          "agent": "code-reviewer",
+          "branch": "feature/contact-page",
+          "status": "APPROVED"
+        },
+        {
+          "agent": "code-reviewer",
+          "branch": "feature/core-pages",
           "status": "dispatched"
         }
       ]
