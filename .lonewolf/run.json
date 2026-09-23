@@ -6,7 +6,33 @@
   "started": "2026-09-23T16:03:40Z",
   "status": "in-progress",
   "steps": [
-    { "step": "diagnose", "status": "complete", "note": "astro dev emits the production CSP header without dev inline hashes; Vite dev inline script (line 3216) and injected <style> blocked. Production build verified clean in a real browser (no console errors on / and /contact)." },
-    { "step": "fix-dev-csp", "status": "in-progress", "agents": [ { "agent": "backend-developer", "tasks": ["TASK-001"], "branch": "fix/dev-csp", "status": "dispatched" } ] }
+    {
+      "step": "diagnose",
+      "status": "complete",
+      "note": "astro dev emits the production CSP header without dev inline hashes; Vite dev inline script (line 3216) and injected <style> blocked. Production build verified clean in a real browser (no console errors on / and /contact)."
+    },
+    {
+      "step": "fix-dev-csp",
+      "status": "in-progress",
+      "agents": [
+        {
+          "agent": "backend-developer",
+          "tasks": [
+            "TASK-001"
+          ],
+          "branch": "fix/dev-csp",
+          "status": "dispatched",
+          "commits": 1,
+          "note": "fix round 2"
+        }
+      ],
+      "reviews": [
+        {
+          "agent": "code-reviewer",
+          "branch": "fix/dev-csp",
+          "status": "CHANGES REQUESTED (HIGH-1: --mode dev build drops CSP)"
+        }
+      ]
+    }
   ]
 }
