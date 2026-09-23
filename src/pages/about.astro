@@ -1,0 +1,125 @@
+---
+/**
+ * SCR-002 — About (FR-002, FR-043 to FR-045, US-001).
+ * Source: docs/03-design/paper-snapshot/desktop/about.jsx and mobile/about.jsx.
+ * Prerendered.
+ * States: populated only. The page has no loading, empty, error, or unauthorized
+ * state (ui-specification.md sections 0 and 2).
+ */
+import ClosingCta from "../components/ClosingCta.astro";
+import Eyebrow from "../components/Eyebrow.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import HighlightCallout from "../components/about/HighlightCallout.astro";
+import SplitIntro from "../components/about/SplitIntro.astro";
+import FeatureCard from "../components/home/FeatureCard.astro";
+import HeadingRow from "../components/home/HeadingRow.astro";
+import ProcessRail from "../components/home/ProcessRail.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import {
+  ABOUT_HERO,
+  ABOUT_PROCESS_SECTION,
+  DIFFERENTIATORS,
+  DIFFERENTIATORS_SECTION,
+  WHO_WE_ARE,
+  WHY_MANUFACTURING,
+} from "../lib/about-content";
+import { PROCESS_INTRO } from "../lib/process-steps";
+import { PAGE_ROUTES, hrefFor } from "../lib/site-routes";
+
+const breadcrumb = [
+  { label: PAGE_ROUTES.home.label, href: hrefFor(PAGE_ROUTES.home) },
+  { label: PAGE_ROUTES.about.label },
+];
+---
+
+<BaseLayout heading={ABOUT_HERO.title} description={ABOUT_HERO.intro} route={PAGE_ROUTES.about.path}>
+  <Hero
+    eyebrow={ABOUT_HERO.eyebrow}
+    title={ABOUT_HERO.title}
+    intro={ABOUT_HERO.intro}
+    breadcrumb={breadcrumb}
+  />
+
+  <SplitIntro id="who-heading" eyebrow={WHO_WE_ARE.eyebrow} title={WHO_WE_ARE.title}>
+    <p class="text-17/body tracking-snug text-text-muted xl:max-w-180 xl:text-20/body">
+      {WHO_WE_ARE.body}
+    </p>
+    <HighlightCallout>
+      <p
+        class="font-display text-19/heading font-medium tracking-snug text-text xl:text-24/heading"
+      >
+        {WHO_WE_ARE.highlight}
+      </p>
+    </HighlightCallout>
+  </SplitIntro>
+
+  <section
+    aria-labelledby="focus-heading"
+    class="relative w-full overflow-clip bg-surface-inverse px-5 py-16 font-sans xl:px-20 xl:py-32"
+  >
+    {/* about.jsx grid band: 1280x180 at top 0 / left 80, 50% opacity; mobile 380x53. */}
+    <svg
+      class="pointer-events-none absolute top-0 left-20 h-13.25 w-95 opacity-50 xl:h-45 xl:w-320"
+      viewBox="0 0 1280 180"
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path class="stroke-border-inverse" d="M0 40h1280M0 90h1280M0 140h1280"></path>
+      <path
+        class="stroke-border-inverse-strong"
+        d="M120 20l30 50-30 50M300 20l30 50-30 50M480 20l30 50-30 50"></path>
+    </svg>
+    <div class="relative mx-auto flex w-full max-w-wide flex-col gap-6 xl:gap-10">
+      <Eyebrow tone="dark">{WHY_MANUFACTURING.eyebrow}</Eyebrow>
+      <h2
+        id="focus-heading"
+        class="font-display text-30/display font-medium tracking-tighter text-text-inverse xl:max-w-190 xl:text-56/display"
+      >
+        {WHY_MANUFACTURING.title}
+      </h2>
+      <p
+        class="font-display text-20/snug font-regular tracking-snug text-text-inverse-muted xl:max-w-240 xl:text-26/snug"
+      >
+        {WHY_MANUFACTURING.body}
+      </p>
+    </div>
+  </section>
+
+  <Section tone="sunk" labelledby="differentiators-heading">
+    <HeadingRow
+      id="differentiators-heading"
+      eyebrow={DIFFERENTIATORS_SECTION.eyebrow}
+      title={DIFFERENTIATORS_SECTION.title}
+      titleClass="xl:max-w-190"
+    />
+    <ul class="grid grid-cols-1 gap-6 xl:grid-cols-3">
+      {
+        DIFFERENTIATORS.map((item) => (
+          <li class="flex">
+            <FeatureCard
+              variant="differentiator"
+              glyph={item.glyph}
+              title={item.title}
+              body={item.body}
+              class="grow"
+            />
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <Section tone="bg" padding="none" class="py-24" labelledby="process-heading">
+    <HeadingRow
+      id="process-heading"
+      eyebrow={ABOUT_PROCESS_SECTION.eyebrow}
+      title={ABOUT_PROCESS_SECTION.title}
+      aside={PROCESS_INTRO}
+    />
+    <ProcessRail />
+  </Section>
+
+  <ClosingCta />
+</BaseLayout>

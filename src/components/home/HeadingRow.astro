@@ -1,0 +1,76 @@
+---
+/**
+ * HeadingRow — section opener used by Home, About, Careers, and Privacy: eyebrow and
+ * <h2> on the left, an optional aside paragraph or action on the right (Desktop),
+ * stacked on Mobile. Layout from the "flex items-end justify-between gap-20" blocks
+ * in the desktop snapshots and their "flex-col gap-6" mobile counterparts.
+ *
+ * Props:
+ *   eyebrow: string
+ *   title: string
+ *   id: string                    id on the <h2>, for Section labelledby.
+ *   tone?: "light" | "dark"       Default "light".
+ *   titleClass?: string           Desktop width of the heading. Default "xl:max-w-prose".
+ *   aside?: string                Paragraph on the right (Desktop) or below (Mobile).
+ *   asideClass?: string           Aside width and type. Default "xl:w-95 text-16/body".
+ * Slot "action" (optional): replaces the aside, e.g. the "All services" pill.
+ */
+import Eyebrow from "../Eyebrow.astro";
+import type { Tone } from "../../lib/ui-classes";
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  id: string;
+  tone?: Tone;
+  titleClass?: string;
+  aside?: string | undefined;
+  asideClass?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  id,
+  tone = "light",
+  titleClass = "xl:max-w-prose",
+  aside,
+  asideClass = "xl:w-95 text-16/body",
+} = Astro.props;
+
+const dark = tone === "dark";
+const hasAction = Astro.slots.has("action");
+---
+
+<div class="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between xl:gap-20">
+  <div class="flex flex-col gap-5">
+    <Eyebrow {tone}>{eyebrow}</Eyebrow>
+    <h2
+      {id}
+      class:list={[
+        "font-display text-30/display font-medium tracking-tighter xl:text-56/display",
+        dark ? "text-text-inverse" : "text-text",
+        titleClass,
+      ]}
+    >
+      {title}
+    </h2>
+  </div>
+  {
+    hasAction ? (
+      <slot name="action" />
+    ) : (
+      aside !== undefined && (
+        <p
+          class:list={[
+            "font-sans xl:shrink-0",
+            dark ? "text-text-inverse-muted" : "text-text-muted",
+            asideClass,
+          ]}
+        >
+          {aside}
+        </p>
+      )
+    )
+  }
+</div>

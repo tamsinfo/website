@@ -1,0 +1,65 @@
+---
+/**
+ * LegalRowTable — the privacy "What we collect" and "Why we use it" grids.
+ * Desktop (privacy.jsx): a bordered three-column grid with a header row. Mobile
+ * (mobile/privacy.jsx): one card per row, each value under its own mono label.
+ *
+ * Semantics: a list of rows. Each row title is an <h3> (SCR-005 item 4: <h3> for
+ * sub-points) followed by a <dl> of the two other columns. The desktop header row
+ * repeats those <dt> labels visually, so it is aria-hidden and the <dt>s are
+ * visually hidden at xl instead.
+ *
+ * Props:
+ *   table: LegalTable
+ */
+import LegalValueText from "./LegalValueText.astro";
+import type { LegalTable } from "../../lib/privacy-content";
+
+interface Props {
+  table: LegalTable;
+}
+
+const { table } = Astro.props;
+const [headingColumn, firstColumn, secondColumn] = table.columns;
+const [headingWidth, firstWidth] = table.widths;
+const headerLabel = "font-display text-17 font-semibold leading-5.5 tracking-snug";
+const cellLabel =
+  "font-mono text-10 uppercase leading-3 tracking-label text-text-subtle xl:sr-only";
+const cellText = "text-14/body text-text-muted";
+---
+
+<div class="overflow-clip rounded-lg border border-border bg-surface">
+  <div
+    class="hidden h-14 items-center gap-6 border-b border-border bg-bg-sunk px-6 xl:flex"
+    aria-hidden="true"
+  >
+    <p class:list={[headerLabel, "shrink-0 text-primary", headingWidth]}>{headingColumn}</p>
+    <p class:list={[headerLabel, "shrink-0 text-text", firstWidth]}>{firstColumn}</p>
+    <p class:list={[headerLabel, "grow basis-0 text-text"]}>{secondColumn}</p>
+  </div>
+  <ul>
+    {
+      table.rows.map((row) => (
+        <li class="flex flex-col gap-3 border-b border-border p-5 last:border-b-0 even:bg-limestone-50 xl:flex-row xl:items-start xl:gap-6 xl:px-6">
+          <h3 class:list={["font-sans text-15/snug font-semibold text-text xl:shrink-0", headingWidth]}>
+            {row.heading}
+          </h3>
+          <dl class="flex flex-col gap-3 xl:grow xl:basis-0 xl:flex-row xl:items-start xl:gap-6">
+            <div class:list={["flex flex-col gap-1 xl:shrink-0", firstWidth]}>
+              <dt class={cellLabel}>{firstColumn}</dt>
+              <dd class="flex flex-col">
+                <LegalValueText value={row.cells[0]} textClass={cellText} />
+              </dd>
+            </div>
+            <div class="flex flex-col gap-1 xl:grow xl:basis-0">
+              <dt class={cellLabel}>{secondColumn}</dt>
+              <dd class="flex flex-col">
+                <LegalValueText value={row.cells[1]} textClass={cellText} />
+              </dd>
+            </div>
+          </dl>
+        </li>
+      ))
+    }
+  </ul>
+</div>

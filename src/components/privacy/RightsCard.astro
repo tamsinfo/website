@@ -1,0 +1,35 @@
+---
+/**
+ * RightsCard — one of the two dark "What you can ask us to do" cards (GDPR, DPDP
+ * Act): a mono title and a dotted list of rights with hairline dividers
+ * (privacy.jsx lines 705–815).
+ *
+ * Props:
+ *   list: RightsList
+ */
+import type { RightsList } from "../../lib/privacy-content";
+
+interface Props {
+  list: RightsList;
+}
+
+const { list } = Astro.props;
+---
+
+<article class="flex flex-col gap-4 rounded-lg bg-surface-inverse-raised p-6 xl:grow xl:basis-0 xl:p-8">
+  <h3
+    class="font-mono text-11 font-medium uppercase leading-3.5 tracking-wider text-text-inverse-muted"
+  >
+    {list.title}
+  </h3>
+  <ul class="flex flex-col">
+    {
+      list.items.map((item) => (
+        <li class="flex items-start gap-4 border-b border-border-inverse py-4 last:border-b-0">
+          <span class="mt-2.25 size-1.25 shrink-0 rounded-full bg-accent-inverse" aria-hidden="true" />
+          <span class="grow basis-0 font-sans text-15/body text-text-inverse">{item}</span>
+        </li>
+      ))
+    }
+  </ul>
+</article>

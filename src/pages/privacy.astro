@@ -1,0 +1,204 @@
+---
+/**
+ * SCR-005 — Privacy Policy (FR-008, FR-043 to FR-045, US-012).
+ * Source: docs/03-design/paper-snapshot/desktop/privacy.jsx and mobile/privacy.jsx.
+ * FR-008: the draft ships exactly as the screen shows it, "to confirm" markers and
+ * the draft notice included. Prerendered.
+ * States: populated only. No loading, empty, error, or unauthorized state applies
+ * (ui-specification.md sections 0 and 2). The snapshot captures no breadcrumb.
+ */
+import Chip from "../components/Chip.astro";
+import Section from "../components/Section.astro";
+import HighlightCallout from "../components/about/HighlightCallout.astro";
+import HeadingRow from "../components/home/HeadingRow.astro";
+import DefinitionRows from "../components/privacy/DefinitionRows.astro";
+import LegalRowTable from "../components/privacy/LegalRowTable.astro";
+import PrivacyHero from "../components/privacy/PrivacyHero.astro";
+import RightsCard from "../components/privacy/RightsCard.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import {
+  CHILDREN_HEADING,
+  CHILDREN_PARAGRAPHS,
+  COOKIES_HEADING,
+  COOKIES_INTRO,
+  COOKIES_ROWS,
+  DATA_HEADING,
+  DATA_TABLE,
+  DISCLOSURE_HEADING,
+  DISCLOSURE_INTRO,
+  DISCLOSURE_ROWS,
+  DRAFT_NOTICE,
+  EXERCISE_HEADING,
+  EXERCISE_INTRO,
+  EXERCISE_ROWS,
+  GROUNDS_HEADING,
+  GROUNDS_TABLE,
+  IDENTITY_HEADING,
+  IDENTITY_ROWS,
+  PRIVACY_HERO,
+  RETENTION_CALLOUT,
+  RIGHTS_HEADING,
+  RIGHTS_LISTS,
+  TRANSFERS_HEADING,
+  TRANSFERS_INTRO,
+  TRANSFERS_ROWS,
+  UPDATES_HEADING,
+  UPDATES_INTRO,
+  UPDATES_ROWS,
+} from "../lib/privacy-content";
+import { PAGE_ROUTES } from "../lib/site-routes";
+
+const titleClass = "xl:max-w-190";
+const asideClass = "text-15/body xl:w-105 xl:text-16/body";
+const bodyClass = "text-16/body text-text-muted xl:max-w-215 xl:text-17/body";
+---
+
+<BaseLayout
+  heading={PRIVACY_HERO.title}
+  description={PRIVACY_HERO.intro}
+  route={PAGE_ROUTES.privacy.path}
+>
+  <PrivacyHero />
+
+  <aside
+    aria-label="Draft notice"
+    class="w-full bg-warning-soft px-5 py-12 font-sans xl:px-20 xl:py-24"
+  >
+    <div class="mx-auto flex w-full max-w-wide flex-col items-start gap-6 xl:flex-row">
+      <Chip variant="warning-strong">{DRAFT_NOTICE.badge}</Chip>
+      <p class="text-15/body text-text xl:grow xl:basis-0">{DRAFT_NOTICE.body}</p>
+    </div>
+  </aside>
+
+  <Section tone="bg" labelledby="identity-heading">
+    <HeadingRow
+      id="identity-heading"
+      eyebrow={IDENTITY_HEADING.eyebrow}
+      title={IDENTITY_HEADING.title}
+      titleClass={titleClass}
+      aside={IDENTITY_HEADING.aside}
+      asideClass={asideClass}
+    />
+    <DefinitionRows rows={IDENTITY_ROWS} />
+  </Section>
+
+  <Section tone="sunk" labelledby="data-heading">
+    <HeadingRow
+      id="data-heading"
+      eyebrow={DATA_HEADING.eyebrow}
+      title={DATA_HEADING.title}
+      titleClass={titleClass}
+    />
+    <LegalRowTable table={DATA_TABLE} />
+  </Section>
+
+  <Section tone="bg" labelledby="grounds-heading">
+    <HeadingRow
+      id="grounds-heading"
+      eyebrow={GROUNDS_HEADING.eyebrow}
+      title={GROUNDS_HEADING.title}
+      titleClass={titleClass}
+      aside={GROUNDS_HEADING.aside}
+      asideClass={asideClass}
+    />
+    <div class="flex flex-col gap-6">
+      <LegalRowTable table={GROUNDS_TABLE} />
+      <HighlightCallout bar="warning" class="p-8">
+        <p class="text-16 font-semibold leading-5 text-text">{RETENTION_CALLOUT.title}</p>
+        <p class="text-15/body text-text-muted">{RETENTION_CALLOUT.body}</p>
+      </HighlightCallout>
+    </div>
+  </Section>
+
+  <Section tone="sunk" labelledby="disclosure-heading">
+    <HeadingRow
+      id="disclosure-heading"
+      eyebrow={DISCLOSURE_HEADING.eyebrow}
+      title={DISCLOSURE_HEADING.title}
+      titleClass={titleClass}
+    />
+    <div class="flex flex-col gap-6">
+      <p class={bodyClass}>{DISCLOSURE_INTRO}</p>
+      <DefinitionRows rows={DISCLOSURE_ROWS} />
+    </div>
+  </Section>
+
+  <Section tone="bg" labelledby="transfers-heading">
+    <HeadingRow
+      id="transfers-heading"
+      eyebrow={TRANSFERS_HEADING.eyebrow}
+      title={TRANSFERS_HEADING.title}
+      titleClass={titleClass}
+    />
+    <div class="flex flex-col gap-6">
+      <p class={bodyClass}>{TRANSFERS_INTRO}</p>
+      <DefinitionRows rows={TRANSFERS_ROWS} />
+    </div>
+  </Section>
+
+  <Section tone="inverse" labelledby="rights-heading">
+    <HeadingRow
+      id="rights-heading"
+      tone="dark"
+      eyebrow={RIGHTS_HEADING.eyebrow}
+      title={RIGHTS_HEADING.title}
+      titleClass={titleClass}
+      aside={RIGHTS_HEADING.aside}
+      asideClass={asideClass}
+    />
+    <div class="flex flex-col gap-6 xl:flex-row">
+      {RIGHTS_LISTS.map((list) => <RightsCard list={list} />)}
+    </div>
+  </Section>
+
+  <Section tone="bg" labelledby="exercise-heading">
+    <HeadingRow
+      id="exercise-heading"
+      eyebrow={EXERCISE_HEADING.eyebrow}
+      title={EXERCISE_HEADING.title}
+      titleClass={titleClass}
+    />
+    <div class="flex flex-col gap-6">
+      <p class={bodyClass}>{EXERCISE_INTRO}</p>
+      <DefinitionRows rows={EXERCISE_ROWS} />
+    </div>
+  </Section>
+
+  <Section tone="sunk" labelledby="cookies-heading">
+    <HeadingRow
+      id="cookies-heading"
+      eyebrow={COOKIES_HEADING.eyebrow}
+      title={COOKIES_HEADING.title}
+      titleClass={titleClass}
+    />
+    <div class="flex flex-col gap-6">
+      <p class={bodyClass}>{COOKIES_INTRO}</p>
+      <DefinitionRows rows={COOKIES_ROWS} />
+    </div>
+  </Section>
+
+  <Section tone="bg" labelledby="children-heading">
+    <HeadingRow
+      id="children-heading"
+      eyebrow={CHILDREN_HEADING.eyebrow}
+      title={CHILDREN_HEADING.title}
+      titleClass={titleClass}
+    />
+    <div class="flex flex-col gap-6">
+      {CHILDREN_PARAGRAPHS.map((paragraph) => <p class={bodyClass}>{paragraph}</p>)}
+    </div>
+  </Section>
+
+  <Section tone="sunk" labelledby="updates-heading">
+    <HeadingRow
+      id="updates-heading"
+      eyebrow={UPDATES_HEADING.eyebrow}
+      title={UPDATES_HEADING.title}
+      titleClass={titleClass}
+    />
+    <div class="flex flex-col gap-6">
+      <p class={bodyClass}>{UPDATES_INTRO}</p>
+      <DefinitionRows rows={UPDATES_ROWS} />
+    </div>
+  </Section>
+</BaseLayout>

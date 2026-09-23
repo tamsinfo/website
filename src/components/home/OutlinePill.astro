@@ -1,0 +1,27 @@
+---
+/**
+ * OutlinePill — the Home "All services" / "All solutions" pill link: 48px, slate-900
+ * hairline, 15px label, trailing arrow (home.jsx). The shared Button "outline"
+ * variant uses the lighter border-strong token and a filled surface, so this
+ * captured style lives here. Full width on Mobile (mobile/home.jsx).
+ *
+ * Props:
+ *   href: string   Resolve through hrefFor (these pills are "#" per FR-012).
+ * Slot: the label text.
+ */
+import Icon from "../Icon.astro";
+
+interface Props {
+  href: string;
+}
+
+const { href } = Astro.props;
+---
+
+<a
+  {href}
+  class="inline-flex h-12 w-full shrink-0 items-center gap-2 rounded-full border border-slate-900 px-6 font-sans text-15 font-semibold leading-4.5 text-text hover:bg-bg-sunk xl:w-auto"
+>
+  <slot />
+  <Icon name="arrow-right" class="size-3.75 text-slate-900" />
+</a>

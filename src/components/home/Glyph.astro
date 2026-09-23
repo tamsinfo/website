@@ -1,0 +1,35 @@
+---
+/**
+ * Glyph — decorative page pictogram from src/lib/feature-glyphs.ts (Home product
+ * tiles, About differentiators, Home data-flow nodes). Strokes with currentColor.
+ *
+ * Props:
+ *   name: GlyphName
+ *   class?: string   Size and colour utilities, e.g. "size-5.5 text-primary".
+ *
+ * Always aria-hidden: every glyph sits beside a visible title or label.
+ */
+import { FEATURE_GLYPHS, type GlyphName } from "../../lib/feature-glyphs";
+
+interface Props {
+  name: GlyphName;
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+const shape = FEATURE_GLYPHS[name];
+---
+
+<svg
+  class:list={["shrink-0", className]}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width={shape.strokeWidth}
+  aria-hidden="true"
+  focusable="false"
+>
+  {shape.paths.map((d) => <path d={d} />)}
+  {shape.circles.map((c) => <circle cx={c.cx} cy={c.cy} r={c.r} />)}
+  {shape.rects.map((r) => <rect x={r.x} y={r.y} width={r.width} height={r.height} />)}
+</svg>

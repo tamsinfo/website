@@ -1,0 +1,62 @@
+---
+/**
+ * FeatureCard — light tile for Home services, products, solutions, industries and
+ * About differentiators (design-system.md section 7.7). The shared Card component
+ * fixes a 19px title and 14px body; these screens capture other sizes, a leading
+ * number, or an icon tile, so this page-level variant carries them.
+ *
+ * Props:
+ *   title: string
+ *   body: string
+ *   variant: FeatureCardVariant   Spacing and title size (feature-card-classes.ts).
+ *   href?: string                 Makes the whole card one link (hrefFor, FR-012).
+ *   index?: string                Leading mono number, e.g. "01".
+ *   glyph?: GlyphName             Icon tile above the title.
+ *   class?: string
+ */
+import Glyph from "./Glyph.astro";
+import type { GlyphName } from "../../lib/feature-glyphs";
+import { featureCardClasses, type FeatureCardVariant } from "../../lib/feature-card-classes";
+
+interface Props {
+  title: string;
+  body: string;
+  variant: FeatureCardVariant;
+  href?: string | undefined;
+  index?: string | undefined;
+  glyph?: GlyphName | undefined;
+  class?: string;
+}
+
+const { title, body, variant, href, index, glyph, class: className } = Astro.props;
+const Root = href === undefined ? "div" : "a";
+const classes = featureCardClasses(variant);
+---
+
+<Root
+  href={href}
+  class:list={[
+    "flex flex-col rounded-lg border border-border bg-surface",
+    classes.container,
+    className,
+  ]}
+>
+  {
+    index !== undefined && (
+      <p class="font-mono text-11 font-medium leading-3.5 tracking-label-wide text-primary">
+        {index}
+      </p>
+    )
+  }
+  {
+    glyph !== undefined && (
+      <span class="flex size-11 shrink-0 items-center justify-center rounded-md bg-primary-soft">
+        <Glyph name={glyph} class="size-5.5 text-primary" />
+      </span>
+    )
+  }
+  <h3 class:list={["font-display font-semibold tracking-snug text-text", classes.title]}>
+    {title}
+  </h3>
+  <p class="font-sans text-15/body text-text-muted">{body}</p>
+</Root>

@@ -1,0 +1,46 @@
+---
+/**
+ * SplitIntro — the two-column opener on About ("Who we are") and Careers ("What it is
+ * like here"): a 400px eyebrow and <h2> column, then the body column (about.jsx,
+ * careers.jsx). Stacked on Mobile.
+ *
+ * The Mobile heading size (16px) is transcribed from mobile/about.jsx line 84 and
+ * mobile/careers.jsx line 84; it is reported as a suspected design defect, not
+ * corrected here.
+ *
+ * Props:
+ *   eyebrow: string
+ *   title: string
+ *   id: string        id on the <h2>, for Section labelledby.
+ * Slot: the body column content.
+ */
+import Eyebrow from "../Eyebrow.astro";
+import Section from "../Section.astro";
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  id: string;
+}
+
+const { eyebrow, title, id } = Astro.props;
+---
+
+<Section
+  tone="bg"
+  labelledby={id}
+  innerClass="flex flex-col items-start gap-6 xl:flex-row xl:gap-20"
+>
+  <div class="flex w-full shrink-0 flex-col gap-5 xl:w-100">
+    <Eyebrow>{eyebrow}</Eyebrow>
+    <h2
+      {id}
+      class="font-display text-16/display font-medium tracking-tighter text-text xl:text-48/display"
+    >
+      {title}
+    </h2>
+  </div>
+  <div class="flex w-full flex-col gap-6 xl:w-auto xl:grow xl:basis-0 xl:gap-10">
+    <slot />
+  </div>
+</Section>

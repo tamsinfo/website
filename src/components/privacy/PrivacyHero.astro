@@ -1,0 +1,39 @@
+---
+/**
+ * PrivacyHero — SCR-005 section 2: the dark "Legal" hero with the three "to confirm"
+ * markers (privacy.jsx lines 74–103). Unlike the shared Hero it has no breadcrumb,
+ * no watermark, and no CTA; the snapshot captures none of them.
+ *
+ * Props: none. Copy comes from src/lib/privacy-content.ts.
+ */
+import Eyebrow from "../Eyebrow.astro";
+import LegalValueText from "./LegalValueText.astro";
+import { PRIVACY_HERO } from "../../lib/privacy-content";
+---
+
+<section
+  aria-labelledby="privacy-heading"
+  class="w-full bg-surface-inverse px-5 py-16 font-sans xl:p-20"
+>
+  <div class="mx-auto flex w-full max-w-wide flex-col gap-6">
+    <Eyebrow tone="dark">{PRIVACY_HERO.eyebrow}</Eyebrow>
+    <h1
+      id="privacy-heading"
+      class="font-display text-34/display font-medium tracking-tighter text-text-inverse xl:max-w-225 xl:text-64/display"
+    >
+      {PRIVACY_HERO.title}
+    </h1>
+    <p class="text-16/body text-text-inverse-muted xl:max-w-190 xl:text-18/body">
+      {PRIVACY_HERO.intro}
+    </p>
+    <ul class="flex flex-col gap-4 xl:flex-row">
+      {
+        PRIVACY_HERO.markers.map((marker) => (
+          <li class="flex">
+            <LegalValueText value={marker} />
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

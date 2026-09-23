@@ -1,0 +1,24 @@
+---
+/**
+ * ModuleTracks — the six outlined module-track tiles on the dark "How we develop
+ * consultants" band (careers.jsx lines 150–198). Display only, not selectable.
+ *
+ * Props: none. Tracks come from src/lib/careers-content.ts.
+ */
+import { MODULE_TRACKS } from "../../lib/careers-content";
+---
+
+<ul class="grid grid-cols-1 gap-6 xl:grid-cols-6">
+  {
+    MODULE_TRACKS.map((track) => (
+      <li class="flex flex-col gap-4 rounded-md border border-border-inverse-strong p-6">
+        <p class="font-mono text-11 leading-3.5 tracking-label-wide text-text-subtle">
+          {track.label}
+        </p>
+        <h3 class="font-display text-19 font-semibold leading-6 tracking-tight text-accent-inverse xl:text-24 xl:leading-7.5">
+          {track.module}
+        </h3>
+      </li>
+    ))
+  }
+</ul>

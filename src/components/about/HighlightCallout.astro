@@ -1,0 +1,26 @@
+---
+/**
+ * HighlightCallout — bordered card with a 3px accent bar on the left (About "Who we
+ * are" highlight, Privacy retention note). From about.jsx and privacy.jsx.
+ *
+ * Props:
+ *   bar?: "primary" | "warning"   Accent bar colour. Default "primary".
+ *   class?: string                Padding overrides. Default "p-6 xl:p-8".
+ * Slot: the callout content.
+ */
+interface Props {
+  bar?: "primary" | "warning";
+  class?: string;
+}
+
+const { bar = "primary", class: className = "p-6 xl:p-8" } = Astro.props;
+---
+
+<div class:list={["flex gap-6 rounded-lg border border-border bg-surface", className]}>
+  <span
+    class:list={["w-0.75 shrink-0 rounded-full", bar === "warning" ? "bg-warning" : "bg-primary"]}
+    aria-hidden="true"></span>
+  <div class="flex min-w-0 grow basis-0 flex-col gap-3">
+    <slot />
+  </div>
+</div>

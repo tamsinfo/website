@@ -1,0 +1,53 @@
+---
+/**
+ * ChallengeTable — SCR-001 section 3, the "What are you facing?" comparison table
+ * (design-system.md section 7.8). Each row pairs a problem (row header) with the
+ * SAP outcome; the arrow between them is decorative.
+ *
+ * The shared DataTable gives every column equal padding and one header colour. This
+ * table needs a coloured second header and an arrow gutter, so it is built here.
+ *
+ * Props: none. Rows come from src/lib/home-content.ts.
+ */
+import Glyph from "./Glyph.astro";
+import { CHALLENGES, CHALLENGES_SECTION } from "../../lib/home-content";
+import { TABLE_ROW_CLASS } from "../../lib/ui-classes";
+
+const headerCell =
+  "font-mono text-11 font-medium uppercase leading-3.5 tracking-label-wide align-middle";
+---
+
+<div class="overflow-clip rounded-lg border border-border bg-surface">
+  <table class="w-full border-collapse text-left font-sans">
+    <caption class="sr-only">{CHALLENGES_SECTION.title}</caption>
+    <thead class="bg-bg-sunk">
+      <tr class="h-12 border-b border-border">
+        <th scope="col" class:list={[headerCell, "w-5/11 pl-8 text-text-muted"]}>
+          {CHALLENGES_SECTION.problemColumn}
+        </th>
+        <th scope="col" class:list={[headerCell, "pr-8 pl-6 text-primary xl:pl-10"]}>
+          {CHALLENGES_SECTION.outcomeColumn}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        CHALLENGES.map((challenge) => (
+          <tr class={TABLE_ROW_CLASS}>
+            <th scope="row" class="py-6 pl-8 align-middle font-regular">
+              <span class="flex items-center gap-6 xl:gap-10">
+                <span class="grow text-17 font-semibold leading-5.5 tracking-snug text-text">
+                  {challenge.problem}
+                </span>
+                <Glyph name="arrow-right-fine" class="size-6 text-primary" />
+              </span>
+            </th>
+            <td class="py-6 pr-8 pl-6 align-middle text-15/body text-text-muted xl:pl-10">
+              {challenge.outcome}
+            </td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>

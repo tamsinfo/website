@@ -1,0 +1,82 @@
+---
+/**
+ * SCR-003 — Careers (FR-003, FR-004, FR-043 to FR-045, US-001).
+ * Source: docs/03-design/paper-snapshot/desktop/careers.jsx and mobile/careers.jsx.
+ * Prerendered.
+ * States: the "Open roles" table has only its empty state (FR-004, user decision in
+ * ui-specification.md SCR-003): the column shell, no role rows, no "roles open"
+ * badge, no Apply control, and one row reading "No openings available". The rest of
+ * the page is populated only. No loading, error, or unauthorized state applies.
+ * The snapshot has no closing CTA band between "Open roles" and the footer.
+ */
+import DataTable from "../components/DataTable.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import SplitIntro from "../components/about/SplitIntro.astro";
+import ModuleTracks from "../components/careers/ModuleTracks.astro";
+import HeadingRow from "../components/home/HeadingRow.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import {
+  CAREERS_HERO,
+  DEVELOPMENT_SECTION,
+  OPEN_ROLES_COLUMNS,
+  OPEN_ROLES_EMPTY_MESSAGE,
+  OPEN_ROLES_SECTION,
+  WORK_SECTION,
+} from "../lib/careers-content";
+import { PAGE_ROUTES, hrefFor } from "../lib/site-routes";
+
+const breadcrumb = [
+  { label: PAGE_ROUTES.home.label, href: hrefFor(PAGE_ROUTES.home) },
+  { label: PAGE_ROUTES.careers.label },
+];
+---
+
+<BaseLayout
+  heading={CAREERS_HERO.title}
+  description={CAREERS_HERO.intro}
+  route={PAGE_ROUTES.careers.path}
+>
+  <Hero
+    eyebrow={CAREERS_HERO.eyebrow}
+    title={CAREERS_HERO.title}
+    intro={CAREERS_HERO.intro}
+    breadcrumb={breadcrumb}
+  />
+
+  <SplitIntro id="work-heading" eyebrow={WORK_SECTION.eyebrow} title={WORK_SECTION.title}>
+    <p
+      class="font-display text-20/snug font-regular tracking-snug text-text-muted xl:max-w-190 xl:text-26/snug"
+    >
+      {WORK_SECTION.body}
+    </p>
+  </SplitIntro>
+
+  <Section tone="inverse" labelledby="development-heading">
+    <HeadingRow
+      id="development-heading"
+      tone="dark"
+      eyebrow={DEVELOPMENT_SECTION.eyebrow}
+      title={DEVELOPMENT_SECTION.title}
+      titleClass="xl:max-w-190"
+      aside={DEVELOPMENT_SECTION.aside}
+      asideClass="text-17/body xl:w-115"
+    />
+    <ModuleTracks />
+  </Section>
+
+  <Section tone="sunk" labelledby="open-roles-heading">
+    <HeadingRow
+      id="open-roles-heading"
+      eyebrow={OPEN_ROLES_SECTION.eyebrow}
+      title={OPEN_ROLES_SECTION.title}
+      titleClass=""
+    />
+    <DataTable
+      caption={OPEN_ROLES_SECTION.title}
+      columns={[...OPEN_ROLES_COLUMNS]}
+      headerTone="limestone"
+      emptyMessage={OPEN_ROLES_EMPTY_MESSAGE}
+    />
+  </Section>
+</BaseLayout>
