@@ -1,0 +1,140 @@
+---
+/**
+ * ContactForm — SCR-004 right column, states A (initial), B (field errors),
+ * B' (send failure / rate limit), and C (submitting). State D is ThankYouPanel.
+ * Source: desktop/contact.jsx and mobile/contact.jsx (form card).
+ *
+ * Props:
+ *   phonePrefill: string        "<calling code> " from C-11 (FR-024).
+ *   callingCodes: string        Space-separated calling-code digits (ADR-006).
+ *   siteKey: string | null      Turnstile site key (C-12). Null renders no widget.
+ *
+ * The submit button renders as type="button": with JavaScript off the form sends no
+ * request (FR-041). contact-form-client.ts upgrades it and runs every state.
+ */
+import FormField from "./FormField.astro";
+import Icon from "../Icon.astro";
+import { INTEREST_OPTIONS } from "../../lib/contact-validation";
+import {
+  INPUT_CLASS,
+  OPTION_CLASS,
+  SELECT_CLASS,
+  TEXTAREA_CLASS,
+} from "../../lib/contact-ui-classes";
+import { buttonClasses } from "../../lib/ui-classes";
+
+interface Props {
+  phonePrefill: string;
+  callingCodes: string;
+  siteKey: string | null;
+}
+
+const { phonePrefill, callingCodes, siteKey } = Astro.props;
+---
+
+<div data-form-panel class="rounded-lg border border-border bg-surface p-6 xl:p-10">
+  <form data-contact-form data-calling-codes={callingCodes} novalidate>
+    <div data-banner-region aria-live="assertive"></div>
+    <div data-field-summary aria-live="polite"></div>
+    <div class="flex flex-col gap-5">
+      <div class="flex flex-col gap-4 xl:flex-row">
+        <FormField field="name" label="Name">
+          <input
+            id="contact-name"
+            name="name"
+            type="text"
+            autocomplete="name"
+            placeholder="Your full name"
+            required
+            class={INPUT_CLASS}
+          />
+        </FormField>
+        <FormField field="company" label="Company">
+          <input
+            id="contact-company"
+            name="company"
+            type="text"
+            autocomplete="organization"
+            placeholder="Company name"
+            required
+            class={INPUT_CLASS}
+          />
+        </FormField>
+      </div>
+      <div class="flex flex-col gap-4 xl:flex-row">
+        <FormField field="workEmail" label="Work email">
+          <input
+            id="contact-workEmail"
+            name="workEmail"
+            type="email"
+            autocomplete="email"
+            placeholder="name@company.com"
+            required
+            class={INPUT_CLASS}
+          />
+        </FormField>
+        <FormField field="phone" label="Phone">
+          <input
+            id="contact-phone"
+            name="phone"
+            type="tel"
+            autocomplete="tel"
+            value={phonePrefill}
+            class={INPUT_CLASS}
+          />
+        </FormField>
+      </div>
+      <FormField field="interest" label="Interest">
+        <div class="relative">
+          <select id="contact-interest" name="interest" required class={SELECT_CLASS}>
+            <option value="" selected class={OPTION_CLASS}>Select an interest</option>
+            {
+              INTEREST_OPTIONS.map((option) => (
+                <option value={option} class={OPTION_CLASS}>
+                  {option}
+                </option>
+              ))
+            }
+          </select>
+          <Icon
+            name="chevron-down"
+            class="pointer-events-none absolute top-1/2 right-4 size-4.5 -translate-y-1/2 text-text-muted"
+          />
+        </div>
+      </FormField>
+      <FormField field="message" label="Message">
+        <textarea
+          id="contact-message"
+          name="message"
+          placeholder="The actual problem. Current release, what is breaking, and when you need it fixed."
+          required
+          class={TEXTAREA_CLASS}></textarea>
+      </FormField>
+      <div class="flex flex-col">
+        {siteKey !== null && <div data-turnstile data-sitekey={siteKey}></div>}
+        <div class="flex flex-col gap-6 pt-2 xl:flex-row xl:items-center xl:justify-between">
+          <p class="grow basis-0 font-sans text-13/snug text-text-subtle">
+            Routed straight to the right team. Reply within one working day.
+          </p>
+          <button data-submit type="button" class={buttonClasses("primary", "lg", true)}>
+            Send message
+            <span data-submit-arrow class="contents">
+              <Icon name="arrow-right" class="size-4" />
+            </span>
+            <span
+              data-submit-spinner
+              class="size-4 shrink-0 rounded-full border-(length:--border-width-thick) border-on-primary-subtle border-t-white motion-safe:animate-spin"
+              aria-hidden="true"
+              hidden></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+  import { initContactForm } from "../../lib/contact-form-client";
+
+  initContactForm();
+</script>

@@ -1,0 +1,56 @@
+---
+/**
+ * SCR-004 — Contact (C-27, TASK-005). FR-005, FR-016 to FR-019, FR-024, FR-029,
+ * FR-036 to FR-041, FR-048, FR-049, FR-055.
+ * Source: desktop/contact.jsx, desktop/contact-thank-you.jsx, mobile/contact.jsx,
+ * mobile/contact-thank-you.jsx.
+ *
+ * States: loading N/A (server-rendered, spec section 0); empty N/A; populated =
+ * state A; error = states B and B'; unauthorized N/A (no accounts). Submitting (C)
+ * and thank-you (D) run in the browser (contact-form-client.ts).
+ */
+import Hero from "../components/Hero.astro";
+import ContactForm from "../components/contact/ContactForm.astro";
+import OfficeDetails from "../components/contact/OfficeDetails.astro";
+import ThankYouPanel from "../components/contact/ThankYouPanel.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { callingCodeFor, listCallingCodes } from "../lib/calling-codes";
+import { readTurnstileSiteKey } from "../lib/runtime-config";
+import { PAGE_ROUTES, hrefFor } from "../lib/site-routes";
+
+// ADR-001: the Phone prefill varies per request by CF-IPCountry (FR-024), and the
+// Turnstile site key is read at request time (NFR-015).
+export const prerender = false;
+
+const heading = "Talk to someone who has done this in a plant";
+const intro = "Thirty minutes, no deck, no discovery questionnaire. Bring the actual problem.";
+
+const phonePrefill = `${callingCodeFor(Astro.request.headers.get("CF-IPCountry"))} `;
+const callingCodes = listCallingCodes().join(" ");
+const siteKey = readTurnstileSiteKey();
+
+Astro.response.headers.set("Cache-Control", "private, no-store");
+---
+
+<BaseLayout
+  {heading}
+  description={intro}
+  route={hrefFor(PAGE_ROUTES.contact)}
+  frameSrc="https://challenges.cloudflare.com https://www.google.com"
+>
+  <Hero
+    eyebrow="Contact"
+    title={heading}
+    {intro}
+    breadcrumb={[{ label: "Home", href: hrefFor(PAGE_ROUTES.home) }, { label: "Contact Us" }]}
+  />
+  <section class="w-full bg-bg px-5 py-12 font-sans xl:px-20 xl:py-24">
+    <div class="mx-auto flex w-full max-w-wide flex-col gap-6 xl:flex-row xl:items-start xl:gap-20">
+      <OfficeDetails />
+      <div id="contact-form" class="flex w-full shrink-0 flex-col xl:w-150">
+        <ContactForm {phonePrefill} {callingCodes} {siteKey} />
+        <ThankYouPanel />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
