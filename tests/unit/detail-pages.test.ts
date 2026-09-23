@@ -1,8 +1,10 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
+import { INDUSTRIES_FAMILY } from "../../src/lib/detail-content/industries";
 import { PRODUCTS_FAMILY } from "../../src/lib/detail-content/products";
 import { SERVICES_FAMILY } from "../../src/lib/detail-content/services";
+import { SOLUTIONS_FAMILY } from "../../src/lib/detail-content/solutions";
 import {
   type DetailFamily,
   type DetailPageContent,
@@ -14,13 +16,13 @@ import {
   hrefForRouteId,
 } from "../../src/lib/detail-page";
 import { buildPageMeta } from "../../src/lib/page-meta";
-import { SOLUTION_ROUTES } from "../../src/lib/site-routes";
+import { INDUSTRY_ROUTES, SOLUTION_ROUTES } from "../../src/lib/site-routes";
 
 const SNAPSHOT_DIR = fileURLToPath(
   new URL("../../docs/03-design/paper-snapshot/", import.meta.url),
 );
 
-/** FR-006 and FR-007 route tables, verbatim. */
+/** FR-006, FR-007, FR-046, and FR-047 route tables, verbatim. */
 const FR_006_ROUTES = [
   "/services/s4hana-cloud-implementation",
   "/services/s4hana-managed-services",
@@ -35,6 +37,24 @@ const FR_007_ROUTES = [
   "/products/vendor-portal",
   "/products/connected-factory",
   "/products/digital-manufacturing-ai",
+];
+const FR_046_ROUTES = [
+  "/solutions/rise-with-sap",
+  "/solutions/grow-with-sap",
+  "/solutions/sap-btp",
+  "/solutions/sap-business-ai",
+  "/solutions/industry-specific-sap-solutions",
+  "/solutions/sap-analytics-and-reporting",
+  "/solutions/sap-integration-suite",
+  "/solutions/sap-automation-and-workflow",
+];
+const FR_047_ROUTES = [
+  "/industries/automotive",
+  "/industries/metals-and-steel",
+  "/industries/mill-products",
+  "/industries/pharmaceuticals",
+  "/industries/engineering-and-fabrication",
+  "/industries/consumer-durables",
 ];
 
 /** Keys whose values are presentation settings or accessible names, not captured copy. */
@@ -121,6 +141,8 @@ function pageCopy(page: DetailPageContent): string[] {
 const FAMILIES: readonly [DetailFamily, string, readonly string[]][] = [
   [SERVICES_FAMILY, "services", FR_006_ROUTES],
   [PRODUCTS_FAMILY, "products", FR_007_ROUTES],
+  [SOLUTIONS_FAMILY, "solutions", FR_046_ROUTES],
+  [INDUSTRIES_FAMILY, "industries", FR_047_ROUTES],
 ];
 
 describe.each(FAMILIES)("%s family", (family, prefix, expectedRoutes) => {
@@ -130,7 +152,7 @@ describe.each(FAMILIES)("%s family", (family, prefix, expectedRoutes) => {
     expect(entries.map((entry) => entry.route)).toEqual(expectedRoutes);
   });
 
-  it("builds no family index page (FR-006, FR-007 edge cases)", () => {
+  it("builds no family index page (FR-006, FR-007, FR-046, FR-047 edge cases)", () => {
     expect(entries.some((entry) => entry.slug === "" || entry.route === `/${prefix}`)).toBe(false);
   });
 
@@ -186,6 +208,52 @@ describe.each(FAMILIES)("%s family", (family, prefix, expectedRoutes) => {
   });
 });
 
+const TASK_007_ENTRIES = [SOLUTIONS_FAMILY, INDUSTRIES_FAMILY].flatMap((family) =>
+  detailRoutes(family).map((entry) => [entry.route, entry, family] as const),
+);
+
+describe.each(TASK_007_ENTRIES)("%s (TASK-007)", (_route, entry, family) => {
+  it("uses the ui-specification H1, which is also its menu label and last crumb", () => {
+    const route = family.routes.find((candidate) => candidate.path === entry.route);
+    expect(entry.page.title).toBe(route?.label);
+    expect(entry.page.breadcrumbLabel).toBe(entry.page.title);
+  });
+
+  it("uses the family eyebrow and the captured 'Questions' FAQ eyebrow", () => {
+    expect(entry.page.eyebrow).toBe(family.label === "Solutions" ? "Solution" : "Industry");
+    expect(entry.page.sections.at(-1)?.heading?.eyebrow).toBe("Questions");
+  });
+
+  it("links every in-page cross-reference to a shipped route, never '#'", () => {
+    const hrefs = entry.page.sections.flatMap((section) =>
+      section.blocks.flatMap((block) => (block.kind === "link" ? [block.href] : [])),
+    );
+    expect(hrefs.filter((href) => href === "#")).toEqual([]);
+  });
+});
+
+describe("TASK-007 cross-links", () => {
+  it("links GROW to Production Process and Business AI to Mill products", () => {
+    const linksOf = (id: string) =>
+      SOLUTIONS_FAMILY.pages[id]!.sections.flatMap((section) =>
+        section.blocks.flatMap((block) => (block.kind === "link" ? [block] : [])),
+      );
+    expect(linksOf("grow-with-sap")).toEqual([
+      {
+        kind: "link",
+        label: "Production Process applications",
+        href: "/products/production-process",
+      },
+    ]);
+    expect(linksOf("sap-business-ai")).toEqual([
+      { kind: "link", label: "Mill products", href: "/industries/mill-products" },
+    ]);
+    expect(linksOf("industry-specific-sap-solutions").map((link) => link.href)).toEqual(
+      INDUSTRY_ROUTES.map((route) => route.path),
+    );
+  });
+});
+
 describe("detailRoutes", () => {
   it("fails the build when a route has no content", () => {
     const family: DetailFamily = { ...SERVICES_FAMILY, pages: {} };
@@ -219,7 +287,13 @@ describe("hrefForRouteId (FR-012)", () => {
   });
 
   it("uses '#' while the destination has not shipped", () => {
-    expect(hrefForRouteId(SOLUTION_ROUTES, "sap-btp")).toBe("#");
+    const unshipped = [{ id: "draft", label: "Draft", path: "/solutions/draft", ships: false }];
+    expect(hrefForRouteId(unshipped, "draft")).toBe("#");
+  });
+
+  it("points Solutions and Industries cross-links at their shipped routes (TASK-007)", () => {
+    expect(hrefForRouteId(SOLUTION_ROUTES, "sap-btp")).toBe("/solutions/sap-btp");
+    expect(hrefForRouteId(INDUSTRY_ROUTES, "mill-products")).toBe("/industries/mill-products");
   });
 
   it("rejects an unknown route id", () => {
