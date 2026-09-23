@@ -51,7 +51,7 @@
     "ADR": 15,
     "ENT": 7,
     "SCR": 31,
-    "TASK": 0,
+    "TASK": 7,
     "TC": 0,
     "VULN": 0,
     "AMD": 3
@@ -111,6 +111,10 @@
     },
     "deploy/README.md": {
       "status": "approved",
+      "version": 1
+    },
+    "docs/04-development/implementation-plan.md": {
+      "status": "draft",
       "version": 1
     }
   }
