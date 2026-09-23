@@ -1,0 +1,369 @@
+# artifact: api-contract
+# phase: 3
+# status: draft
+# version: 1
+# updated: 2026-09-22
+# owner: system-architect
+# depends_on:
+#   - docs/02-requirements/functional-requirements.md
+#   - docs/02-requirements/non-functional-requirements.md
+#   - docs/02-requirements/user-stories.md
+#   - docs/01-planning/mvp-scope.md
+#   - .lonewolf/stack-profile.md
+openapi: 3.0.3
+info:
+  title: TAMS Infotech Website API
+  version: 1.0.0
+  description: |
+    Server operations of the TAMS Infotech website V1. Pages are HTML and are not
+    described here, except where noted. The system has no accounts, so every
+    operation is public.
+
+    Design: docs/03-design/system-architecture.md. Transient entities:
+    docs/03-design/data-model.md.
+  license:
+    name: Proprietary
+    url: https://tamsinfotech.com
+servers:
+  - url: https://tamsinfotech.com
+    description: Production origin, behind Cloudflare.
+  - url: http://127.0.0.1:4321
+    description: Local built server (`node server.ts`).
+security: []
+tags:
+  - name: contact
+    description: Contact form submission (FR-027 to FR-042, FR-048 to FR-050, FR-053).
+  - name: operations
+    description: Process health (NFR-008, NFR-010).
+paths:
+  /api/contact:
+    post:
+      operationId: submitContactEnquiry
+      tags: [contact]
+      summary: Submit one contact enquiry and email it to the sales mailbox.
+      security: []
+      description: |
+        Implements FR-027, FR-028, FR-030 to FR-035, FR-042, FR-050, FR-053, and
+        NFR-005, NFR-007, NFR-017, NFR-018.
+
+        **Check order (FR-053).** The server evaluates these checks in order and
+        responds with the first failure:
+        1. Method is POST, else 405 `METHOD_NOT_ALLOWED`. Every other method on this
+           path (GET, HEAD, PUT, PATCH, DELETE, OPTIONS) receives 405 with
+           `Allow: POST`, without reading the body.
+        2. Media type is `application/json` (parameters such as `charset=utf-8`
+           allowed; comparison case-insensitive), else 415 `UNSUPPORTED_MEDIA_TYPE`.
+        3. Body is at most 65,536 bytes, else 413 `PAYLOAD_TOO_LARGE`. The server
+           rejects a `Content-Length` above the limit without reading, and stops
+           reading a streamed body at the limit (NFR-007).
+        4. Rate limit, else 429 `RATE_LIMITED`. Every POST counts from step 1 onward,
+           including POSTs rejected at steps 2 to 7 (FR-042). Key: `CF-Connecting-IP`,
+           else the socket peer address (FR-050).
+        5. Body parses as a JSON object and every field passes FR-020 to FR-026, else
+           400 `VALIDATION_FAILED`. Invalid JSON or a non-object body returns 400 with
+           an empty `fieldErrors` array.
+        6. Server configuration is complete, else 502 `SEND_FAILED`. Then the
+           Turnstile token passes Siteverify within 3 seconds, else 403
+           `SPAM_CHECK_FAILED`. A missing token is a Turnstile failure, not a field
+           error. The server does not call Siteverify when an earlier check fails.
+        7. The SMTP relay accepts the message within 8 seconds, else 502 `SEND_FAILED`.
+
+        **Field normalization.** For `name`, `company`, `workEmail`, `phone`, and
+        `message` the server trims leading and trailing whitespace, then counts Unicode
+        code points. An absent required field counts as empty. A present field whose
+        JSON type is not string fails its rule. `phone` may be absent. A trimmed
+        `phone` equal to `+` followed by a calling code from the libphonenumber
+        metadata counts as empty. `interest` is compared exactly, without trimming.
+        Unknown extra properties are ignored (FR-027).
+
+        **Idempotency.** Deliberately unsupported. FR-030 requires two emails for two
+        identical submissions. The page prevents double submission (FR-040).
+
+        **Side effects.** On 200 exactly one email goes to the sales mailbox. No other
+        status sends email. No field value is stored or logged (FR-034, NFR-017).
+      parameters:
+        - $ref: '#/components/parameters/CfConnectingIp'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactSubmission'
+            example:
+              name: Priya Raman
+              company: Northaid Logistics
+              workEmail: ops@northaid.example
+              phone: '+91 98450 12345'
+              interest: Services
+              message: We plan to move from ECC to S/4HANA Cloud next year and need a partner.
+              turnstileToken: XXXX.DUMMY.TOKEN.XXXX
+      responses:
+        '200':
+          description: The SMTP relay accepted the enquiry email (FR-030). The page shows the thank-you state (FR-036).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactAccepted'
+        '400':
+          description: Invalid JSON, non-object body, or one or more field rule failures (FR-027). One entry per failing field.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                fieldErrors:
+                  value:
+                    code: VALIDATION_FAILED
+                    fieldErrors:
+                      - field: workEmail
+                        message: Enter a valid email address.
+                      - field: message
+                        message: Message must be at least 20 characters.
+                notAnObject:
+                  value:
+                    code: VALIDATION_FAILED
+                    fieldErrors: []
+        '403':
+          description: Turnstile token missing, invalid, reused, or Siteverify failed or exceeded 3 seconds (FR-028).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: SPAM_CHECK_FAILED
+        '405':
+          description: Method other than POST (FR-027, FR-053).
+          headers:
+            Allow:
+              description: Always `POST`.
+              schema:
+                type: string
+                enum: [POST]
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: METHOD_NOT_ALLOWED
+        '413':
+          description: Body larger than 65,536 bytes (NFR-007).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: PAYLOAD_TOO_LARGE
+        '415':
+          description: Content type other than application/json (FR-027).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: UNSUPPORTED_MEDIA_TYPE
+        '429':
+          description: Sixth or later POST from one client IP within any 10-minute window (FR-042).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: RATE_LIMITED
+        '502':
+          description: |
+            SMTP unreachable, rejected, or slower than 8 seconds (FR-030); a required
+            environment variable is missing (NFR-015); or an unexpected server error.
+            The submission is discarded (FR-034).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: SEND_FAILED
+  /health:
+    get:
+      operationId: getHealth
+      tags: [operations]
+      summary: Report that the server process is running.
+      security: []
+      description: |
+        Implements NFR-010 and serves the NFR-008 uptime check. Returns 200 whenever the
+        process runs, regardless of SMTP or configuration state. It MUST respond within
+        1 second.
+      responses:
+        '200':
+          description: The process is running.
+          headers:
+            Cache-Control:
+              description: Always `no-store`, so proxies never serve a stale result.
+              schema:
+                type: string
+                enum: [no-store]
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+components:
+  parameters:
+    CfConnectingIp:
+      name: CF-Connecting-IP
+      in: header
+      required: false
+      description: |
+        Client IP set by Cloudflare (FR-050). The rate-limit key. When absent, the
+        server uses the socket peer address. The server trims the value and ignores an
+        empty value or one longer than 45 characters. Never logged (NFR-017).
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 45
+        example: 203.0.113.7
+  schemas:
+    ContactSubmission:
+      type: object
+      description: |
+        One contact form submission (ENT-001). Constraints apply to trimmed values,
+        counted in Unicode code points. The server re-applies every rule (FR-027).
+      required: [name, company, workEmail, interest, message, turnstileToken]
+      additionalProperties: true
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          pattern: '^[^\u0000-\u001F\u007F]*$'
+          description: FR-020. Trimmed. No control characters U+0000 to U+001F or U+007F.
+          example: Priya Raman
+        company:
+          type: string
+          minLength: 1
+          maxLength: 150
+          pattern: '^[^\u0000-\u001F\u007F]*$'
+          description: FR-021. Trimmed. No control characters.
+          example: Northaid Logistics
+        workEmail:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 254
+          pattern: "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
+          description: FR-022. Trimmed. WHATWG valid email address. Personal domains allowed. Becomes Reply-To (FR-033).
+          example: ops@northaid.example
+        phone:
+          type: string
+          minLength: 0
+          maxLength: 20
+          pattern: '^[0-9 +()-]*$'
+          description: |
+            FR-023. Optional. Trimmed. Empty, absent, or a calling code alone (such as
+            `+91`) means "Not provided" in the email (FR-032).
+          example: '+91 98450 12345'
+        interest:
+          type: string
+          enum: [Services, Solutions, Products, Careers, Other]
+          description: FR-025. Exact, case-sensitive match. Not trimmed.
+          example: Services
+        message:
+          type: string
+          minLength: 20
+          maxLength: 4000
+          description: FR-026. Trimmed. Line breaks preserved. Sent as literal plain text.
+          example: We plan to move from ECC to S/4HANA Cloud next year and need a partner.
+        turnstileToken:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: |
+            FR-028. Token from the Turnstile widget. Missing, empty, non-string, or
+            over-length tokens fail with 403 SPAM_CHECK_FAILED, not 400.
+          example: XXXX.DUMMY.TOKEN.XXXX
+    ContactAccepted:
+      type: object
+      description: Success body (FR-030). The page already holds the values it echoes (FR-036).
+      required: [status]
+      additionalProperties: false
+      properties:
+        status:
+          type: string
+          enum: [sent]
+          example: sent
+      example:
+        status: sent
+    ErrorCode:
+      type: string
+      description: |
+        Closed set. Clients branch on this value. Status mapping: VALIDATION_FAILED 400,
+        SPAM_CHECK_FAILED 403, METHOD_NOT_ALLOWED 405, PAYLOAD_TOO_LARGE 413,
+        UNSUPPORTED_MEDIA_TYPE 415, RATE_LIMITED 429, SEND_FAILED 502.
+      enum:
+        - VALIDATION_FAILED
+        - PAYLOAD_TOO_LARGE
+        - UNSUPPORTED_MEDIA_TYPE
+        - METHOD_NOT_ALLOWED
+        - SPAM_CHECK_FAILED
+        - RATE_LIMITED
+        - SEND_FAILED
+      example: VALIDATION_FAILED
+    FieldName:
+      type: string
+      description: Contact form field that failed a rule. Listed in form order.
+      enum: [name, company, workEmail, phone, interest, message]
+      example: workEmail
+    FieldErrorMessage:
+      type: string
+      description: |
+        Exact text the page shows below the field (FR-020 to FR-026). Mapping:
+        name "Enter your name."; company "Enter your company name."; workEmail
+        "Enter a valid email address."; phone "Enter a valid phone number.";
+        interest "Choose an interest."; message below 20 "Message must be at least
+        20 characters."; message above 4000 "Message must be at most 4000 characters."
+      enum:
+        - Enter your name.
+        - Enter your company name.
+        - Enter a valid email address.
+        - Enter a valid phone number.
+        - Choose an interest.
+        - Message must be at least 20 characters.
+        - Message must be at most 4000 characters.
+      example: Enter a valid email address.
+    FieldError:
+      type: object
+      description: One failing field (ENT-002). At most one entry per field.
+      required: [field, message]
+      additionalProperties: false
+      properties:
+        field:
+          $ref: '#/components/schemas/FieldName'
+        message:
+          $ref: '#/components/schemas/FieldErrorMessage'
+      example:
+        field: workEmail
+        message: Enter a valid email address.
+    Error:
+      type: object
+      description: |
+        Error body for every non-200 response of submitContactEnquiry. `fieldErrors`
+        is present if and only if `code` is VALIDATION_FAILED. It is empty when the
+        body is not a JSON object. Entries follow form order: name, company,
+        workEmail, phone, interest, message.
+      required: [code]
+      additionalProperties: false
+      properties:
+        code:
+          $ref: '#/components/schemas/ErrorCode'
+        fieldErrors:
+          type: array
+          minItems: 0
+          maxItems: 6
+          items:
+            $ref: '#/components/schemas/FieldError'
+      example:
+        code: VALIDATION_FAILED
+        fieldErrors:
+          - field: name
+            message: Enter your name.
+    HealthStatus:
+      type: string
+      enum: [ok]
+      description: Fixed body of GET /health.
+      example: ok

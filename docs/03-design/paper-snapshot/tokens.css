@@ -1,0 +1,160 @@
+/*
+ * Meridian Design tokens, transcribed verbatim from the Paper file
+ * "TAMS Infotech — Landing Website" (01M27T0EFKMJE9HYVF14XW481S).
+ * Token content hash at capture: afb6ef06. Captured 2026-09-22.
+ * Snapshot input only. The implementation copies these into src/styles/global.css @theme.
+ */
+@theme {
+  --color-white: #FFFFFF;
+  --color-limestone-50: #FAF9F6;
+  --color-limestone-100: #F4F2ED;
+  --color-limestone-200: #EBE8E1;
+  --color-limestone-300: #DDD9D0;
+  --color-slate-400: #A8AFAB;
+  --color-slate-500: #7C8480;
+  --color-slate-600: #5C6663;
+  --color-slate-700: #3A423F;
+  --color-slate-800: #232A28;
+  --color-slate-900: #141A18;
+  --color-copper-50: #E9F3EF;
+  --color-copper-100: #C7E3D8;
+  --color-copper-300: #4FB89A;
+  --color-copper-500: #136F58;
+  --color-copper-600: #0F5A47;
+  --color-copper-700: #0B4536;
+  --color-moss: #3F7D4E;
+  --color-ochre: #B08428;
+  --color-oxide: #A64232;
+  --color-slate-blue: #3D6B8C;
+  --color-bg: var(--color-limestone-100);
+  --color-bg-sunk: var(--color-limestone-200);
+  --color-surface: var(--color-white);
+  --color-surface-inverse: var(--color-slate-900);
+  --color-surface-inverse-raised: var(--color-slate-800);
+  --color-border: var(--color-limestone-300);
+  --color-border-strong: var(--color-slate-400);
+  --color-border-inverse: #2E3634;
+  --color-border-inverse-strong: #3D4644;
+  --color-text: var(--color-slate-900);
+  --color-text-muted: var(--color-slate-600);
+  --color-text-subtle: var(--color-slate-500);
+  --color-text-inverse: var(--color-limestone-100);
+  --color-text-inverse-muted: #9AA5A1;
+  --color-primary: var(--color-copper-500);
+  --color-primary-hover: var(--color-copper-600);
+  --color-primary-active: var(--color-copper-700);
+  --color-primary-soft: var(--color-copper-50);
+  --color-accent-inverse: var(--color-copper-300);
+  --color-on-primary-muted: rgb(255 255 255 / 86%);
+  --color-on-primary-subtle: rgb(255 255 255 / 50%);
+  --color-on-primary-wash: rgb(255 255 255 / 16%);
+  --color-success: var(--color-moss);
+  --color-success-soft: #E4EFE7;
+  --color-success-on: #2E6039;
+  --color-warning: var(--color-ochre);
+  --color-warning-soft: #F7EFD8;
+  --color-warning-on: #7D5D17;
+  --color-danger: var(--color-oxide);
+  --color-danger-soft: #F7E4E0;
+  --color-danger-on: #7E3226;
+  --color-danger-hover: #8C3628;
+  --color-info: var(--color-slate-blue);
+  --color-info-soft: #E2EAF1;
+  --color-info-on: #2E5069;
+  --color-wordmark: #1E2523;
+  --color-chart-muted: #4C5654;
+  --color-chart-muted-accent: #2A6E5C;
+  --color-scrim-light: rgb(244 242 237 / 92%);
+
+  --font-display: Archivo;
+  --font-sans: Inter;
+  --font-mono: IBM Plex Mono;
+
+  --text-10: 10px;
+  --text-11: 11px;
+  --text-12: 12px;
+  --text-13: 13px;
+  --text-14: 14px;
+  --text-15: 15px;
+  --text-16: 16px;
+  --text-17: 17px;
+  --text-18: 18px;
+  --text-19: 19px;
+  --text-20: 20px;
+  --text-22: 22px;
+  --text-24: 24px;
+  --text-26: 26px;
+  --text-30: 30px;
+  --text-32: 32px;
+  --text-34: 34px;
+  --text-36: 36px;
+  --text-40: 40px;
+  --text-44: 44px;
+  --text-48: 48px;
+  --text-56: 56px;
+  --text-64: 64px;
+  --text-72: 72px;
+  --text-132: 132px;
+  --text-186: 186px;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-black: 900;
+
+  --tracking-display: -0.045em;
+  --tracking-wordmark: -0.04em;
+  --tracking-tighter: -0.035em;
+  --tracking-tight: -0.022em;
+  --tracking-snug: -0.011em;
+  --tracking-normal: 0em;
+  --tracking-logo: 0.04em;
+  --tracking-wide: 0.06em;
+  --tracking-label: 0.08em;
+  --tracking-label-wide: 0.12em;
+  --tracking-wider: 0.14em;
+
+  --leading-none: 100%;
+  --leading-display: 104%;
+  --leading-heading: 118%;
+  --leading-snug: 140%;
+  --leading-body: 160%;
+
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1440px;
+
+  --container-prose: 680px;
+  --container-narrow: 880px;
+  --container-content: 1120px;
+  --container-wide: 1280px;
+  --container-full: 1440px;
+
+  --spacing-0: 0px;
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+  --spacing-20: 80px;
+  --spacing-24: 96px;
+  --spacing-32: 128px;
+  --spacing-40: 160px;
+
+  --radius-none: 0px;
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+  --radius-full: 999px;
+}

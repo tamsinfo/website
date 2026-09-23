@@ -73,3 +73,10 @@ Questions raised by the requirements auditor, with proposed defaults:
 - Q: Without JavaScript, may Solutions/Industries be unreachable from the header? A (user): **Must be reachable.** Header menus must work without JavaScript.
 - Q: Will the user run one manual form submission on a physical iPhone and one on a physical Android phone? A (user): **Yes, I'll test.**
 
+## Phase 3 architect BLOCKED questions — user decisions (2026-09-22, ~18:15 PDT)
+
+1. Thank-you "Reference" row: server generates a random non-sequential reference, returns it in the 200 response, shows it on screen, and puts it in the email subject and body. (Requires amendment of FR-031/FR-032; user chose to amend now.)
+2. "Send another message": resets the form in place to its initial state (FR-024 prefill, Interest unselected). Design text stays as designed.
+3. Desktop breakpoint: 1280 px (--breakpoint-xl). Below 1280 px renders the Mobile layout.
+4. Cloudflare: user keeps Web Analytics automatic injection ON (CSP must allow static.cloudflareinsights.com for script and cloudflareinsights.com for beacon connect). Rocket Loader and Email Address Obfuscation stay OFF.
+
