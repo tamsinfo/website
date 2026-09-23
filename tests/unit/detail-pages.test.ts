@@ -94,6 +94,7 @@ function snapshotText(file: string): string {
  * Captured text intentionally not built:
  * - KD-005: the Mobile-only Vendor Portal "In build" banner, omitted on both layouts.
  * - KD-007: four design-note captions removed at the user's decision.
+ * - KD-010: four more design-note captions removed (Business AI, Integration, Automation).
  */
 const INTENTIONAL_EXCLUSIONS = new Set([
   "In build",
@@ -102,7 +103,19 @@ const INTENTIONAL_EXCLUSIONS = new Set([
   "Six packages, each tied to one measurable outcome. Only the first is running in production today, and the page says so.",
   "Six stages from the machine to the ERP. The IIoT platform is selected to fit the equipment and environment — TAMS is not tied to a single vendor, and no vendor is named on the site.",
   "Two audiences, one diagram. The left column is the purchasing conversation; the right column is the IT conversation. They are usually different meetings.",
+  "SAP Business AI across the value chain. Almost all of this is available today — the constraint is entitlement, release level and activation, not availability.",
+  "Four steps, in this order. The entitlement check comes before the demo, because a demo of something you are not licensed for wastes everybody's time.",
+  "An integration without an error path is not finished. Silent integration failures are the expensive kind.",
+  "Four tests before building. A process that runs eleven times a year rarely justifies the build and the maintenance.",
 ]);
+
+/** KD-010 captions: the Solutions page each was captured on, and its opening words. */
+const KD_010_CAPTIONS = [
+  ["sap-business-ai", "SAP Business AI across the value chain."],
+  ["sap-business-ai", "Four steps, in this order."],
+  ["sap-integration-suite", "An integration without an error path is not finished."],
+  ["sap-automation-and-workflow", "Four tests before building."],
+] as const;
 
 /**
  * Captured body lines of a snapshot: every text line after the hero paragraph and
@@ -177,7 +190,7 @@ describe.each(FAMILIES)("%s family", (family, prefix, expectedRoutes) => {
       expect(lines.filter((line) => !copy.includes(line))).toEqual([]);
     });
 
-    it("builds none of the KD-005 and KD-007 exclusions", () => {
+    it("builds none of the KD-005, KD-007, and KD-010 exclusions", () => {
       const copy = pageCopy(entry.page);
       expect(copy.filter((text) => INTENTIONAL_EXCLUSIONS.has(text))).toEqual([]);
     });
@@ -237,6 +250,20 @@ function solutionLinks(id: string) {
     section.blocks.flatMap((block) => (block.kind === "link" ? [block] : [])),
   );
 }
+
+describe("KD-010 caption removal", () => {
+  it.each(KD_010_CAPTIONS)("drops the %s caption starting %j on both layouts", (id, start) => {
+    for (const width of ["desktop", "mobile"]) {
+      expect(snapshotText(`${width}/solutions-${id}.jsx`)).toContain(start);
+    }
+    const page = SOLUTIONS_FAMILY.pages[id]!;
+    expect(pageCopy(page).some((text) => text.includes(start))).toBe(false);
+    const captions = page.sections.flatMap((section) =>
+      section.blocks.filter((block) => block.kind === "caption"),
+    );
+    expect(captions).toEqual([]);
+  });
+});
 
 describe("TASK-007 cross-links", () => {
   it("links GROW to Production Process and Business AI to Mill products", () => {

@@ -253,7 +253,7 @@ const SAP_BTP: DetailPageContent = {
           kind: "attributeTable",
           caption: "BTP pillars of value with RISE and what each means in practice",
           columns: ["Pillar", "What it means in practice"],
-          /* Captured label column is 300px; the template's widest option is 280px. */
+          /* KD-011: captured label column is 300px; the template's widest option is 280px. */
           labelWidth: "lg",
           rows: [
             {
@@ -289,6 +289,7 @@ const SAP_BTP: DetailPageContent = {
           kind: "attributeTable",
           caption: "BTP pillars with GROW and what each means in practice",
           columns: ["Pillar", "What it means in practice"],
+          /* KD-011: captured label column is 300px; the template's widest option is 280px. */
           labelWidth: "lg",
           rows: [
             {
@@ -393,10 +394,7 @@ const SAP_BUSINESS_AI: DetailPageContent = {
             ],
           ],
         },
-        {
-          kind: "caption",
-          text: "SAP Business AI across the value chain. Almost all of this is available today — the constraint is entitlement, release level and activation, not availability.",
-        },
+        /* KD-010: the captured caption here read as a design note and is removed. */
       ],
     },
     {
@@ -442,10 +440,7 @@ const SAP_BUSINESS_AI: DetailPageContent = {
             { title: "Role-based enablement" },
           ],
         },
-        {
-          kind: "caption",
-          text: "Four steps, in this order. The entitlement check comes before the demo, because a demo of something you are not licensed for wastes everybody's time.",
-        },
+        /* KD-010: the captured caption here read as a design note and is removed. */
         {
           kind: "paragraph",
           text: "For a manufacturing-specific view, see mill products, where SAP's embedded AI is furthest along.",
@@ -534,8 +529,8 @@ const INDUSTRY_SPECIFIC: DetailPageContent = {
           kind: "paragraph",
           text: "Our sector pages set out what we build for each:",
         },
-        /* Captured as a wrapping row of outlined pill links. The template has no pill-link
-           block (reported BLOCKED), so each renders as the template's text link. */
+        /* KD-008: captured as a wrapping row of outlined pill links. The template has no
+           pill-link block, so each renders as the template's text link (accepted for V1). */
         {
           kind: "link",
           label: "Automotive",
@@ -603,8 +598,8 @@ const ANALYTICS_AND_REPORTING: DetailPageContent = {
       tone: "sunk",
       heading: { eyebrow: "First build", title: "The CFO dashboard" },
       blocks: [
-        /* Captured beside the heading at a 420px measure; the template places section
-           text below the heading (reported BLOCKED). */
+        /* KD-009: captured beside the heading at a 420px measure; the template places
+           section text below the heading (accepted for V1). */
         {
           kind: "paragraph",
           text: "The most common first build. Five KPI blocks with drill-down from the board-level number to the document that created it.",
@@ -627,7 +622,8 @@ const ANALYTICS_AND_REPORTING: DetailPageContent = {
                 body: "Cost centre performance, variance analysis and the drivers behind it.",
               },
             ],
-            /* Captured as two cards plus an empty third slot (reported BLOCKED). */
+            /* KD-009: captured as two cards plus an empty third slot; renders as two
+               half-width cards (accepted for V1). */
             [
               {
                 title: "Working capital",
@@ -745,10 +741,7 @@ const INTEGRATION_SUITE: DetailPageContent = {
             },
           ],
         },
-        {
-          kind: "caption",
-          text: "An integration without an error path is not finished. Silent integration failures are the expensive kind.",
-        },
+        /* KD-010: the captured caption here read as a design note and is removed. */
       ],
     },
     {
@@ -849,10 +842,7 @@ const AUTOMATION_AND_WORKFLOW: DetailPageContent = {
             { title: "Instrument it", detail: "Measure how often it falls to exception" },
           ],
         },
-        {
-          kind: "caption",
-          text: "Four tests before building. A process that runs eleven times a year rarely justifies the build and the maintenance.",
-        },
+        /* KD-010: the captured caption here read as a design note and is removed. */
       ],
     },
     {
