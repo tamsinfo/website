@@ -1,7 +1,7 @@
 ---
 artifact: system-architecture
 phase: 3
-status: draft
+status: approved
 version: 2
 updated: 2026-09-22
 owner: system-architect

@@ -1,0 +1,48 @@
+# deploy/docker-compose.yml
+#
+# Implements: system-architecture.md section 5.6 (one container, no database, no
+# volume), ADR-009 (sessions disabled -> no writable session directory required, so
+# the root filesystem runs read-only), ADR-015 (every secret supplied through
+# env_file, never baked into the image), NFR-010 (health endpoint), NFR-014
+# (non-root, enforced in deploy/Dockerfile, not here).
+#
+# This is the full local/prod-like stack. There is no database in this system
+# (docs/03-design/data-model.md: "The system has no database and persists
+# nothing"), so this file defines exactly one service.
+#
+# Usage: copy .env.example to .env at the repo root, fill in real values, then run
+# `docker compose -f deploy/docker-compose.yml up --build`.
+
+services:
+  web:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    image: tams-infotech-website:local
+    env_file:
+      - ../.env
+    environment:
+      # PORT and HOST have defaults in server.ts (ADR-015); set explicitly here so
+      # the healthcheck and the port mapping below agree with the running value.
+      PORT: "4321"
+      HOST: "0.0.0.0"
+    ports:
+      - "${HOST_PORT:-4321}:4321"
+    # ADR-009: sessions are disabled and the system persists nothing, so the
+    # container needs no writable application directory. /tmp is mounted as tmpfs
+    # only in case the Node runtime itself needs scratch space; the application
+    # writes nothing there.
+    read_only: true
+    tmpfs:
+      - /tmp
+    healthcheck:
+      test:
+        - "CMD"
+        - "node"
+        - "-e"
+        - "fetch('http://127.0.0.1:4321/health').then((r) => process.exit(r.status === 200 ? 0 : 1)).catch(() => process.exit(1))"
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+    restart: unless-stopped

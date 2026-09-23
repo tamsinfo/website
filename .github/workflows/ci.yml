@@ -1,0 +1,102 @@
+# .github/workflows/ci.yml
+#
+# Implements: docs/03-design/system-architecture.md section 5 (CI/CD architect
+# duties), .lonewolf/stack-profile.md section 1 (toolchain) and section 7/8 (lint
+# gate and Definition of Done, run in the same order and with the same flags as
+# local). This workflow validates pull requests and pushes to main. It builds
+# nothing deployable and pushes no image; deploy/.github/workflows/build.yml does
+# the image build only, and neither workflow deploys (deployment-assets skill).
+#
+# Bun 1.3.14 is the only package manager (stack-profile.md, "Prohibited tooling").
+# npm, npx, pnpm, and yarn MUST NOT appear anywhere in this file.
+
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-test-build:
+    name: Lint, type-check, test, and build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4.2.2
+
+      # Explicit, version-pinned Bun install. Do NOT rely on a runner having Bun
+      # preinstalled or on a local shell alias; the runner exposes no Bun binary
+      # until this step runs.
+      - name: Install Bun 1.3.14
+        uses: oven-sh/setup-bun@v2.0.2
+        with:
+          bun-version: "1.3.14"
+
+      - name: Cache Bun install
+        uses: actions/cache@v4.1.2
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: |
+            bun-${{ runner.os }}-
+
+      - name: Install dependencies (frozen lockfile)
+        run: bun install --frozen-lockfile
+
+      - name: Generate Astro types
+        run: bunx astro sync
+
+      - name: Format check (Oxfmt)
+        run: bunx oxfmt --check
+
+      - name: Lint (Oxlint, zero warnings)
+        run: bunx oxlint --deny-warnings
+
+      - name: Type check (astro check)
+        run: bunx astro check
+
+      - name: Unit and integration tests (Vitest)
+        run: bunx vitest run
+
+      - name: Production build (Astro)
+        run: bunx astro build
+
+      - name: Dependency audit (zero high/critical advisories)
+        run: bun audit --audit-level=high
+
+      # Stack profile section 5: no Tailwind arbitrary values in src/.
+      - name: Grep check — no Tailwind arbitrary values
+        run: |
+          if grep -rnE '\b[a-z-]+-\[[^]]+\]' src/; then
+            echo "::error::Tailwind arbitrary value found in src/. Add a design token instead."
+            exit 1
+          fi
+
+      # Stack profile section 5: no inline style= attributes in .astro files.
+      - name: Grep check — no inline style attributes in .astro files
+        run: |
+          if grep -rn 'style=' src/ --include='*.astro'; then
+            echo "::error::Inline style= attribute found in an .astro file."
+            exit 1
+          fi
+
+      # Stack profile section 8, item 14: no prohibited lockfile or config exists.
+      - name: Check for prohibited tooling artifacts
+        run: |
+          fail=0
+          for f in package-lock.json pnpm-lock.yaml yarn.lock .eslintrc .eslintrc.js .eslintrc.cjs .eslintrc.json eslint.config.js eslint.config.mjs eslint.config.cjs .prettierrc .prettierrc.js .prettierrc.cjs .prettierrc.json prettier.config.js prettier.config.cjs biome.json biome.jsonc vite.config.ts "tailwind.config.js" "tailwind.config.ts" "tailwind.config.cjs"; do
+            if [ -e "$f" ]; then
+              echo "::error::Prohibited file present: $f"
+              fail=1
+            fi
+          done
+          exit "$fail"

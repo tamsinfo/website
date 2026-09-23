@@ -6,7 +6,7 @@
     "created": "2026-09-22"
   },
   "stack_profile": "astro-node-tailwind",
-  "current_phase": 3,
+  "current_phase": 4,
   "gates": {
     "G0": {
       "name": "Intake",
@@ -25,12 +25,12 @@
     },
     "G3": {
       "name": "Design",
-      "status": "pending",
-      "approved_at": null
+      "status": "approved",
+      "approved_at": "2026-09-23T01:38:32Z"
     },
     "G4": {
       "name": "Development",
-      "status": "locked",
+      "status": "pending",
       "approved_at": null
     },
     "G5": {
@@ -50,7 +50,7 @@
     "US": 13,
     "ADR": 15,
     "ENT": 7,
-    "SCR": 0,
+    "SCR": 31,
     "TASK": 0,
     "TC": 0,
     "VULN": 0,
@@ -84,6 +84,34 @@
     "docs/02-requirements/user-stories.md": {
       "status": "approved",
       "version": 3
+    },
+    "docs/03-design/system-architecture.md": {
+      "status": "approved",
+      "version": 2
+    },
+    "docs/03-design/api-contract.yaml": {
+      "status": "approved",
+      "version": 2
+    },
+    "docs/03-design/data-model.md": {
+      "status": "approved",
+      "version": 2
+    },
+    "docs/03-design/ui-specification.md": {
+      "status": "approved",
+      "version": 2
+    },
+    "docs/03-design/design-system.md": {
+      "status": "approved",
+      "version": 2
+    },
+    "docs/03-design/paper-snapshot/MANIFEST.md": {
+      "status": "approved",
+      "version": 1
+    },
+    "deploy/README.md": {
+      "status": "approved",
+      "version": 1
     }
   }
 }

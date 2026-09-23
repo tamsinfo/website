@@ -4,7 +4,7 @@
   "phase": 3,
   "command": "/lonewolf:design",
   "started": "2026-09-22T22:47:33Z",
-  "status": "in-progress",
+  "status": "complete",
   "steps": [
     {
       "step": "paper-inventory",
@@ -190,21 +190,56 @@
     },
     {
       "step": "parallel-design-deploy",
-      "status": "in-progress",
+      "status": "complete",
       "agents": [
         {
           "agent": "ui-ux-designer",
           "tasks": [],
           "branch": null,
-          "status": "dispatched"
+          "status": "returned",
+          "artifacts": [
+            "docs/03-design/ui-specification.md",
+            "docs/03-design/design-system.md"
+          ]
         },
         {
           "agent": "cicd-architect",
           "tasks": [],
           "branch": null,
-          "status": "dispatched"
+          "status": "returned",
+          "artifacts": [
+            "deploy/Dockerfile",
+            "deploy/docker-compose.yml",
+            "deploy/README.md",
+            ".env.example",
+            ".dockerignore",
+            ".github/workflows/ci.yml",
+            ".github/workflows/build.yml"
+          ]
         }
       ]
+    },
+    {
+      "step": "ui-corrections",
+      "status": "complete",
+      "agents": [
+        {
+          "agent": "ui-ux-designer",
+          "tasks": [],
+          "branch": null,
+          "status": "returned"
+        }
+      ]
+    },
+    {
+      "step": "integration-check",
+      "status": "complete",
+      "note": "operationIds ok; FR/NFR coverage ok; 3 non-user-facing error codes documented by designer; raw px replaced by tokens; stray src/styles/global.css removed"
+    },
+    {
+      "step": "secret-sweep",
+      "status": "complete",
+      "note": "no credentials; Turnstile public test site key in .env.example"
     }
   ]
 }

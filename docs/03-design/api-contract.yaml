@@ -1,6 +1,6 @@
 # artifact: api-contract
 # phase: 3
-# status: draft
+# status: approved
 # version: 2
 # amended_by: AMD-001 (200 body carries reference, FR-054); AMD-002 and AMD-003 need no API change
 # updated: 2026-09-22

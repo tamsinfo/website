@@ -20,7 +20,8 @@ the thank-you state, and includes it in the email subject and body.
 - docs/03-design/api-contract.yaml (frontmatter in YAML comments; not visible to impact.py)
 
 **Approved by:** user, 2026-09-23T01:11:58Z
-**Status:** open
+**Resolution.** Resolved 2026-09-23T01:38:32Z. FR-031/FR-032/FR-036 amended; FR-054 added; contract 200 body carries `reference`; ENT-007 added. Regenerated: docs/02-requirements/functional-requirements.md v3, docs/02-requirements/non-functional-requirements.md v3, docs/02-requirements/user-stories.md v3 (G2 re-approved 2026-09-23T01:13:20Z); docs/03-design/system-architecture.md v2, docs/03-design/api-contract.yaml v2, docs/03-design/data-model.md v2 (G3 approved 2026-09-23T01:38:32Z). .lonewolf/audit-requirements.md remains stale (auditor report, not regenerated).
+**Status:** resolved
 
 ### AMD-002: "Send another message" control has no requirement
 
@@ -33,7 +34,8 @@ place to its initial state (FR-024 prefill, FR-025 Interest unselected).
 **Blast radius.** Same artifact set and gates as AMD-001.
 
 **Approved by:** user, 2026-09-23T01:11:58Z
-**Status:** open
+**Resolution.** Resolved 2026-09-23T01:38:32Z. FR-055 added; UI spec SCR-004 specifies the reset. Regenerated: docs/02-requirements/functional-requirements.md v3, docs/02-requirements/non-functional-requirements.md v3, docs/02-requirements/user-stories.md v3 (G2 re-approved 2026-09-23T01:13:20Z); docs/03-design/system-architecture.md v2, docs/03-design/api-contract.yaml v2, docs/03-design/data-model.md v2 (G3 approved 2026-09-23T01:38:32Z). .lonewolf/audit-requirements.md remains stale (auditor report, not regenerated).
+**Status:** resolved
 
 ### AMD-003: CSP forbids the Cloudflare Web Analytics beacon the user needs
 
@@ -50,4 +52,5 @@ known; the requirement, not the design, is wrong.
 docs/03-design/data-model.md, docs/03-design/api-contract.yaml. Gates G2 and G3.
 
 **Approved by:** user, 2026-09-23T01:11:58Z
-**Status:** open
+**Resolution.** Resolved 2026-09-23T01:38:32Z. NFR-011 amended; ADR-002 CSP adds Cloudflare Insights origins (re-proven on the scratch build). Regenerated: docs/02-requirements/functional-requirements.md v3, docs/02-requirements/non-functional-requirements.md v3, docs/02-requirements/user-stories.md v3 (G2 re-approved 2026-09-23T01:13:20Z); docs/03-design/system-architecture.md v2, docs/03-design/api-contract.yaml v2, docs/03-design/data-model.md v2 (G3 approved 2026-09-23T01:38:32Z). .lonewolf/audit-requirements.md remains stale (auditor report, not regenerated).
+**Status:** resolved

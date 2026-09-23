@@ -1,7 +1,7 @@
 ---
 artifact: MANIFEST
 phase: 3
-status: draft
+status: approved
 version: 1
 updated: 2026-09-22
 owner: orchestrator

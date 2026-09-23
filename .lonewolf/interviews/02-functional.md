@@ -80,3 +80,11 @@ Questions raised by the requirements auditor, with proposed defaults:
 3. Desktop breakpoint: 1280 px (--breakpoint-xl). Below 1280 px renders the Mobile layout.
 4. Cloudflare: user keeps Web Analytics automatic injection ON (CSP must allow static.cloudflareinsights.com for script and cloudflareinsights.com for beacon connect). Rocket Loader and Email Address Obfuscation stay OFF.
 
+## Phase 3 UI designer BLOCKED items — user decisions (2026-09-22, ~18:45 PDT)
+
+1. Careers: FR-004 empty state wins over the populated Paper table. Keep the table header/shell from the design; no rows, no "6 roles open" badge, no Apply buttons; one row reads "No openings available" (user's own wording from Phase 1).
+2. Contrast failures (--color-text-subtle small text 3.9:1; --color-border on inputs 1.3:1): ACCEPTED for V1 as a known limitation. NFR-021/NFR-027 waiver expected at G5; fix in the next design pass.
+3. Contact Interest control: native <select> styled as the design's closed dropdown (design shows its open state). Not radio pills.
+4. Design values with no Meridian token (e.g. map height 220px, 2px borders/focus ring, 56px icon): add as named "derived" tokens in a clearly marked block in global.css ("derived from Paper, not in Meridian").
+Orchestrator resolutions (mechanical): Home snapshot tail is read by the developer at build time; "All services"/"All solutions" pills and the 404 "Services" card link to "#" per FR-012.
+

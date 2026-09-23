@@ -1,0 +1,26 @@
+# .dockerignore
+#
+# Implements deployment-assets skill Dockerfile standard: exclude .git, dependency
+# directories, test output, and .env from the build context. The build context is
+# the repository root (deploy/docker-compose.yml sets context: ..).
+
+.git
+.github
+.lonewolf
+docs
+deploy
+
+node_modules
+.astro
+dist
+
+.env
+.env.*
+!.env.example
+
+coverage
+test-results
+playwright-report
+
+*.log
+.DS_Store
