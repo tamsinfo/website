@@ -15,9 +15,7 @@
 @import "@fontsource/ibm-plex-mono/600.css";
 
 @theme {
-  /* Remove Tailwind's default namespaces so only Meridian tokens exist (FR-011).
-     The bare --spacing multiplier (4px, equal to --spacing-1) stays available for
-     snapshot values on the 4px grid that have no named step. */
+  /* Remove Tailwind's default namespaces so only Meridian tokens exist (FR-011). */
   --color-*: initial;
   --font-*: initial;
   --text-*: initial;
@@ -196,6 +194,12 @@
   --size-icon-xl: 56px;
   --border-width-thick: 2px;
   --spacing-focus-ring-offset: 2px;
+  /* KD-003 (user decision, 2026-09-22): Meridian's 4px grid unit, equal to
+     --spacing-1. Numeric utilities such as h-13 (52px), w-85 (340px),
+     leading-4.5 (18px), and max-w-190 (760px) derive from this token. Prefer a
+     named --spacing-*, --container-*, --leading-*, or --text-* token wherever
+     the value matches one exactly. */
+  --spacing: 4px;
 }
 
 /*
