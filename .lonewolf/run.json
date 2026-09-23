@@ -138,6 +138,13 @@
           "branch": "feature/core-pages",
           "status": "dispatched"
         }
+      ],
+      "merged": [
+        {
+          "branch": "feature/contact-page",
+          "commit": "28231db",
+          "gates": "pass (366 tests)"
+        }
       ]
     }
   ]
