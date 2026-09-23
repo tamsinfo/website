@@ -98,7 +98,7 @@
     },
     {
       "step": "wave-2",
-      "status": "in-progress",
+      "status": "complete",
       "agents": [
         {
           "agent": "frontend-developer",
@@ -156,6 +156,25 @@
           "branch": "feature/services-products",
           "commit": "221983b",
           "gates": "pass (465 tests)"
+        },
+        {
+          "branch": "feature/core-pages",
+          "commit": "cd76253",
+          "gates": "pass (485 tests; renders / 200)"
+        }
+      ]
+    },
+    {
+      "step": "wave-3",
+      "status": "in-progress",
+      "agents": [
+        {
+          "agent": "frontend-developer",
+          "tasks": [
+            "TASK-007"
+          ],
+          "branch": "feature/solutions-industries",
+          "status": "dispatched"
         }
       ]
     }
