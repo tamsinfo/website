@@ -9,7 +9,7 @@
  *
  * Props: none. Rows come from src/lib/home-content.ts.
  */
-import Icon from "../Icon.astro";
+import Glyph from "./Glyph.astro";
 import { CHALLENGES, CHALLENGES_SECTION } from "../../lib/home-content";
 import { TABLE_ROW_CLASS } from "../../lib/ui-classes";
 
@@ -39,7 +39,7 @@ const headerCell =
                 <span class="grow text-17 font-semibold leading-5.5 tracking-snug text-text">
                   {challenge.problem}
                 </span>
-                <Icon name="arrow-right" class="size-6 text-primary" />
+                <Glyph name="arrow-right-fine" class="size-6 text-primary" />
               </span>
             </th>
             <td class="py-6 pr-8 pl-6 align-middle text-15/body text-text-muted xl:pl-10">

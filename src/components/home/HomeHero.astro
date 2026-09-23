@@ -57,7 +57,15 @@ import { DISCOVERY_CALL_HREF } from "../../lib/site-routes";
         {HOME_HERO.intro}
       </p>
       <div class="flex flex-col gap-3 xl:shrink-0 xl:flex-row xl:items-center">
-        <Button href={DISCOVERY_CALL_HREF} variant="inverse" size="xl" arrow block>
+        {/* mobile/home.jsx:58 captures 20px side padding below xl; the xl size keeps 32px. */}
+        <Button
+          href={DISCOVERY_CALL_HREF}
+          variant="inverse"
+          size="xl"
+          arrow
+          block
+          class="max-xl:px-5"
+        >
           {HOME_HERO.primaryCta}
         </Button>
         <Button href={PRODUCTS_SECTION_HREF} variant="outline-inverse" size="xl" block>
@@ -65,10 +73,10 @@ import { DISCOVERY_CALL_HREF } from "../../lib/site-routes";
         </Button>
       </div>
     </div>
-    <ul class="flex flex-col gap-5 border-t border-border-inverse pt-6 pb-12 xl:flex-row xl:gap-0 xl:pt-10">
+    <ul class="flex flex-col border-t border-border-inverse pt-6 pb-12 xl:flex-row xl:pt-10">
       {
         HOME_STATS.map((stat) => (
-          <li class="flex flex-col gap-2 xl:grow xl:basis-0 xl:px-8 xl:first:pl-0 xl:last:pr-0 xl:not-first:border-l xl:not-first:border-border-inverse">
+          <li class="flex flex-col gap-2 px-8 first:pl-0 last:pr-0 xl:grow xl:basis-0 xl:not-first:border-l xl:not-first:border-border-inverse">
             <p
               class:list={[
                 "font-display text-26/none font-medium tracking-tighter xl:text-40/none",

@@ -70,6 +70,13 @@ export const FEATURE_GLYPHS = {
     "M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3",
   ]),
   "bar-chart": glyph(["M4 20V4M4 20h16M8 16V9M12.5 16V6M17 16v-4"]),
+  /* Home comparison-table arrow: the shared arrow shape at the snapshot's 1.6 stroke. */
+  "arrow-right-fine": {
+    strokeWidth: 1.6,
+    paths: ["M4 12h15M13.5 6.5L20 12l-6.5 5.5"],
+    circles: [],
+    rects: [],
+  },
 } as const satisfies Record<string, IconShape>;
 
 export type GlyphName = keyof typeof FEATURE_GLYPHS;
