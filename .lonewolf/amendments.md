@@ -108,3 +108,24 @@ was missed. A usage-limit pause stopped all agents from ~19:15 to 22:50 PDT. At 
 Must pages, Phase 5, and Gate G6 remained.
 **Decision (user):** Continue the full gated process; V1 deploys when G6 passes. No
 requirement changed.
+
+### Known deviation KD-005: Vendor Portal mobile "In build" banner omitted
+
+**Raised by:** frontend-developer, TASK-006 (BLOCKED 1)
+**Problem:** `mobile/products-vendor-portal.jsx` has a dismissible warning banner absent from the Desktop screen; no FR defines dismiss behaviour.
+**Decision (user, 2026-09-22):** Omit the banner on both layouts for V1.
+**Status:** accepted deviation
+
+### Known deviation KD-006: Detail-page section types beyond ui-specification §5
+
+**Raised by:** frontend-developer, TASK-006 (BLOCKED 2)
+**Problem:** ui-specification §5 lists only card grid, table, stat band, and process rail; the snapshots also use leads, callouts, captions, checklists, chip groups, an architecture diagram, bullet columns, and always-open FAQ lists.
+**Decision (user, 2026-09-22):** Accept as drawn; the spec list was incomplete. ui-specification.md SHOULD be corrected in a later amendment.
+**Status:** accepted deviation
+
+### Known deviation KD-007: Four design-note captions removed
+
+**Raised by:** frontend-developer, TASK-006 (out-of-scope note)
+**Problem:** Four captions read like notes left in the design: Gate Entry "Both diagrams share the same component"; Digital Manufacturing & AI "…and the page says so"; Connected Factory "no vendor is named on the site"; Vendor Portal "Two audiences, one diagram…".
+**Decision (user, 2026-09-22):** Remove these four captions. The user will reconcile the Paper design.
+**Status:** accepted deviation

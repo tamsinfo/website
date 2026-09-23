@@ -124,7 +124,9 @@
             "TASK-006"
           ],
           "branch": "feature/services-products",
-          "status": "dispatched"
+          "status": "returned",
+          "commits": 4,
+          "blocked": 2
         }
       ],
       "reviews": [
@@ -136,6 +138,11 @@
         {
           "agent": "code-reviewer",
           "branch": "feature/core-pages",
+          "status": "dispatched"
+        },
+        {
+          "agent": "code-reviewer",
+          "branch": "feature/services-products",
           "status": "dispatched"
         }
       ],
