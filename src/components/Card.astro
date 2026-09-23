@@ -1,0 +1,84 @@
+---
+/**
+ * Card — content tile (design-system.md section 7.7): service, product, solution,
+ * industry, differentiator, and 404 wayfinding tiles.
+ *
+ * Props:
+ *   title: string                Card title (<h3> by default, section 0 heading rule).
+ *   href?: string                Makes the whole card one link. Use hrefFor() from
+ *                                site-routes so unshipped destinations are "#" (FR-012).
+ *   tone?: "light" | "dark"      "light" (default): surface fill + hairline border.
+ *                                "dark": surface-inverse-raised fill, no border.
+ *   size?: "md" | "lg"           Padding p-6 (default, compact) or p-8 (feature).
+ *   radius?: "lg" | "md"         Default "lg".
+ *   headingLevel?: 3 | 4         Default 3.
+ *   arrow?: boolean              Trailing arrow beside the title. Default: true when
+ *                                href is set.
+ *   class?: string               Layout classes from the parent grid.
+ * Slot: body copy (styled text-14/body muted by default) or any card content.
+ *
+ * Known limitation (design-system.md section 1): the light border token measures
+ * 1.3:1 against the surface. Do not darken it.
+ */
+import Icon from "./Icon.astro";
+import type { Tone } from "../lib/ui-classes";
+
+interface Props {
+  title: string;
+  href?: string;
+  tone?: Tone;
+  size?: "md" | "lg";
+  radius?: "lg" | "md";
+  headingLevel?: 3 | 4;
+  arrow?: boolean;
+  class?: string;
+}
+
+const {
+  title,
+  href,
+  tone = "light",
+  size = "md",
+  radius = "lg",
+  headingLevel = 3,
+  arrow = href !== undefined,
+  class: className,
+} = Astro.props;
+
+const Root = href === undefined ? "div" : "a";
+const Heading = headingLevel === 4 ? "h4" : "h3";
+const dark = tone === "dark";
+---
+
+<Root
+  href={href}
+  class:list={[
+    "flex flex-col",
+    size === "lg" ? "gap-4 p-8" : "gap-3 p-6",
+    radius === "md" ? "rounded-md" : "rounded-lg",
+    dark ? "bg-surface-inverse-raised" : "border border-border bg-surface",
+    className,
+  ]}
+>
+  <div class="flex items-center justify-between gap-4">
+    <Heading
+      class:list={[
+        "font-display text-19 font-semibold leading-6 tracking-snug",
+        dark ? "text-text-inverse" : "text-text",
+      ]}
+    >
+      {title}
+    </Heading>
+    {
+      arrow && (
+        <Icon
+          name="arrow-right"
+          class:list={["size-3.75", dark ? "text-accent-inverse" : "text-primary"]}
+        />
+      )
+    }
+  </div>
+  <div class:list={["font-sans text-14/body", dark ? "text-text-inverse-muted" : "text-text-muted"]}>
+    <slot />
+  </div>
+</Root>

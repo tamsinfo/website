@@ -1,0 +1,29 @@
+---
+/**
+ * Chip — static, non-interactive pill label (design-system.md section 7.6).
+ * Not an input: Contact "Interest" is a native <select>.
+ *
+ * Props:
+ *   variant?: "track" | "outline" | "warning" | "warning-strong" | "status"
+ *     track          Careers module chips (MM, PP/QM ...). Default.
+ *     outline        Unselected chip style.
+ *     warning        Privacy "to confirm — ..." markers.
+ *     warning-strong Privacy "Draft — not yet legal advice" badge.
+ *     status         Careers "N roles open" badge with a success dot.
+ *   class?: string
+ * Slot: label text.
+ */
+import { chipClasses, type ChipVariant } from "../lib/ui-classes";
+
+interface Props {
+  variant?: ChipVariant;
+  class?: string;
+}
+
+const { variant = "track", class: className } = Astro.props;
+---
+
+<span class:list={[chipClasses(variant), className]}>
+  {variant === "status" && <span class="size-1.5 shrink-0 rounded-full bg-success" aria-hidden="true" />}
+  <slot />
+</span>

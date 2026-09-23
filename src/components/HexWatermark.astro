@@ -1,0 +1,34 @@
+---
+/**
+ * HexWatermark — the decorative faceted-hexagon line drawing behind dark heroes
+ * (design-system.md section 7.10). Positioned absolutely by its parent section,
+ * which must be `relative overflow-clip`.
+ *
+ * Props:
+ *   class?: string   Position and size utilities. Default matches the detail-page
+ *                    hero capture: 380px at 35% opacity on Mobile, 620px on Desktop.
+ */
+interface Props {
+  class?: string;
+}
+
+const {
+  class: className = "-top-13.75 -right-38.5 size-95 xl:-top-22.5 xl:-right-45 xl:size-155",
+} = Astro.props;
+---
+
+<svg
+  class:list={["pointer-events-none absolute opacity-35", className]}
+  viewBox="0 0 620 620"
+  fill="none"
+  stroke-width="1.5"
+  aria-hidden="true"
+  focusable="false"
+>
+  <path class="stroke-border-inverse-strong" d="M310 16L563 163V457L310 604L57 457V163L310 16Z"></path>
+  <path class="stroke-border-inverse-strong" d="M310 114L478 212V408L310 506L142 408V212L310 114Z"></path>
+  <path class="stroke-accent-inverse" d="M310 212L394 261V359L310 408L226 359V261L310 212Z"></path>
+  <path
+    class="stroke-border-inverse"
+    d="M0 310h226M394 310h226M0 245h142M478 245h142M0 375h142M478 375h142"></path>
+</svg>

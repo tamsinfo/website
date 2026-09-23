@@ -1,0 +1,30 @@
+---
+/**
+ * Eyebrow — the dot plus mono uppercase kicker above section headings and heroes.
+ *
+ * Props:
+ *   tone?: "light" | "dark"   "light" (default) = primary on light sections;
+ *                             "dark" = accent-inverse on dark sections.
+ *   class?: string
+ * Slot: the label text.
+ */
+import { eyebrowTone, type Tone } from "../lib/ui-classes";
+
+interface Props {
+  tone?: Tone;
+  class?: string;
+}
+
+const { tone = "light", class: className } = Astro.props;
+const colours = eyebrowTone(tone);
+---
+
+<p class:list={["flex items-center gap-2", className]}>
+  <span class:list={["size-1.25 shrink-0 rounded-full", colours.dot]} aria-hidden="true"></span>
+  <span
+    class:list={[
+      "font-mono text-11 font-medium uppercase leading-3.5 tracking-wider",
+      colours.label,
+    ]}><slot /></span
+  >
+</p>

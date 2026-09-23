@@ -1,0 +1,44 @@
+---
+/**
+ * Icon — decorative stroke icons transcribed from the Paper snapshot paths.
+ *
+ * Props:
+ *   name: IconName   Which icon to draw (see ICON_PATHS in src/lib/icons.ts).
+ *   class?: string   Size and colour utilities, e.g. "size-4 text-primary". The icon
+ *                    strokes with currentColor, so colour comes from a text-* token.
+ *
+ * Always aria-hidden: every icon sits beside visible text or inside a control with
+ * its own accessible name.
+ */
+import { ICON_PATHS, type IconName } from "../lib/icons";
+
+interface Props {
+  name: IconName;
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+const icon = ICON_PATHS[name];
+---
+
+<svg
+  class:list={["shrink-0", className]}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width={icon.strokeWidth}
+  aria-hidden="true"
+  focusable="false"
+>
+  {icon.paths.map((d) => <path d={d} />)}
+  {
+    icon.circles.map((c) => (
+      <circle cx={c.cx} cy={c.cy} r={c.r} />
+    ))
+  }
+  {
+    icon.rects.map((r) => (
+      <rect x={r.x} y={r.y} width={r.width} height={r.height} />
+    ))
+  }
+</svg>

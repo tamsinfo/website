@@ -1,0 +1,54 @@
+---
+/**
+ * Section — full-bleed page section with the design's gutters and rhythm
+ * (design-system.md section 3). Mobile: px-5, py-12. Desktop (xl): px-20, py-24.
+ * Content is centred in --container-wide (1280px), the 1440 frame minus gutters.
+ *
+ * Props:
+ *   tone?: "bg" | "sunk" | "surface" | "inverse"   Background. Default "bg".
+ *   padding?: "default" | "loose" | "none"
+ *            "default" = py-12 / xl:py-24; "loose" = py-32 (dark full-bleed bands);
+ *            "none" = gutters only.
+ *   labelledby?: string   id of the section's heading, for aria-labelledby.
+ *   id?: string
+ *   class?: string        Extra classes on the <section>.
+ *   innerClass?: string   Replaces the inner layout classes (default
+ *                         "flex flex-col gap-8 xl:gap-12").
+ * Slot: section content.
+ */
+import { sectionToneClass, type SectionTone } from "../lib/ui-classes";
+
+interface Props {
+  tone?: SectionTone;
+  padding?: "default" | "loose" | "none";
+  labelledby?: string;
+  id?: string;
+  class?: string;
+  innerClass?: string;
+}
+
+const {
+  tone = "bg",
+  padding = "default",
+  labelledby,
+  id,
+  class: className,
+  innerClass = "flex flex-col gap-8 xl:gap-12",
+} = Astro.props;
+
+const paddingClass = {
+  default: "py-12 xl:py-24",
+  loose: "py-32",
+  none: "",
+}[padding];
+---
+
+<section
+  {id}
+  aria-labelledby={labelledby}
+  class:list={["w-full px-5 font-sans xl:px-20", sectionToneClass(tone), paddingClass, className]}
+>
+  <div class:list={["mx-auto w-full max-w-wide", innerClass]}>
+    <slot />
+  </div>
+</section>

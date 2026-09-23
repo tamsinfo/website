@@ -1,0 +1,87 @@
+---
+/**
+ * DataTable — table shell (design-system.md section 7.8): Home "What are you
+ * facing?" and the Careers open-roles table. Semantic <table>, no sorting.
+ *
+ * Props:
+ *   caption: string                 Accessible table name (rendered visually hidden).
+ *   columns: { label: string; class?: string }[]
+ *                                   Header cells; `class` sets width utilities,
+ *                                   e.g. "xl:w-30" (120px).
+ *   headerTone?: "sunk" | "limestone"   Header row fill: bg-sunk (Home, default) or
+ *                                   limestone-100 (Careers).
+ *   emptyMessage?: string           Rendered as one full-width row when no rows are
+ *                                   slotted (SCR-003 empty state: "No openings available").
+ *   class?: string
+ * Slot: <tr> rows. Use TABLE_ROW_CLASS and TABLE_CELL_CLASS from src/lib/ui-classes.ts
+ * so rows alternate surface / limestone-50 with hairline dividers.
+ *
+ * The wrapper scrolls horizontally on narrow screens and is focusable so keyboard
+ * users can scroll it (the page itself never scrolls sideways, NFR-020).
+ */
+import {
+  TABLE_CELL_CLASS,
+  TABLE_ROW_CLASS,
+  tableHeaderClass,
+  type TableHeaderTone,
+} from "../lib/ui-classes";
+
+interface Column {
+  label: string;
+  class?: string;
+}
+
+interface Props {
+  caption: string;
+  columns: Column[];
+  headerTone?: TableHeaderTone;
+  emptyMessage?: string;
+  class?: string;
+}
+
+const { caption, columns, headerTone = "sunk", emptyMessage, class: className } = Astro.props;
+const hasRows = Astro.slots.has("default");
+---
+
+<div
+  class:list={["overflow-x-auto rounded-lg border border-border bg-surface", className]}
+  role="region"
+  aria-label={caption}
+  tabindex="0"
+>
+  <table class="w-full border-collapse text-left font-sans">
+    <caption class="sr-only">{caption}</caption>
+    <thead class={tableHeaderClass(headerTone)}>
+      <tr class="h-12 border-b border-border">
+        {
+          columns.map((column) => (
+            <th
+              scope="col"
+              class:list={[
+                "px-5 font-mono text-11 font-medium uppercase leading-3.5 tracking-label-wide text-text-muted xl:px-8",
+                column.class,
+              ]}
+            >
+              {column.label}
+            </th>
+          ))
+        }
+      </tr>
+    </thead>
+    <tbody>
+      {
+        hasRows ? (
+          <slot />
+        ) : (
+          emptyMessage !== undefined && (
+            <tr class={TABLE_ROW_CLASS}>
+              <td colspan={columns.length} class:list={[TABLE_CELL_CLASS, "text-15/body text-text-muted"]}>
+                {emptyMessage}
+              </td>
+            </tr>
+          )
+        )
+      }
+    </tbody>
+  </table>
+</div>

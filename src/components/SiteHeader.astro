@@ -1,0 +1,70 @@
+---
+/**
+ * SiteHeader — the site header on every screen (C-23; ui-specification.md
+ * section 1; design-system.md sections 7.12 to 7.14). Desktop row at >= xl
+ * (ADR-013), Mobile row below it.
+ *
+ * Props:
+ *   pathname: string   The current path (Astro.url.pathname). Drives the
+ *                      highlighted item, the Mobile page badge, and aria-current.
+ *
+ * The search icon is decorative only: no in-scope screen has search results
+ * (design-system.md section 7.12).
+ */
+import DesktopNav from "./DesktopNav.astro";
+import Button from "./Button.astro";
+import Icon from "./Icon.astro";
+import LogoMark from "./LogoMark.astro";
+import MobileNav from "./MobileNav.astro";
+import { DISCOVERY_CALL_HREF, currentNavKey, currentNavLabel } from "../lib/site-routes";
+
+interface Props {
+  pathname: string;
+}
+
+const { pathname } = Astro.props;
+const current = currentNavKey(pathname);
+const badge = currentNavLabel(current);
+---
+
+<header class="relative z-40 w-full bg-surface-inverse font-sans text-text-inverse">
+  <div class="hidden px-10 xl:block 2xl:px-20">
+    <div class="mx-auto flex h-20 w-full max-w-wide items-center justify-between gap-8 2xl:gap-10">
+      <div class="flex items-center gap-8 2xl:gap-10">
+        <a href="/" aria-label="TAMS Infotech, home" class="flex shrink-0 items-center gap-3">
+          <LogoMark class="size-6.5" />
+          <span class="font-display text-18 font-bold leading-5.5 tracking-tight">TAMS Infotech</span>
+        </a>
+        <DesktopNav {current} {pathname} />
+      </div>
+      <div class="flex shrink-0 items-center gap-4 2xl:gap-5">
+        <Icon name="search" class="size-5 text-text-inverse" />
+        <Button href={DISCOVERY_CALL_HREF} variant="inverse" size="nav">Book a discovery call</Button>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex h-16 items-center justify-between gap-3 px-5 xl:hidden">
+    <a href="/" aria-label="TAMS Infotech, home" class="flex shrink-0 items-center gap-2">
+      <LogoMark class="size-6" />
+      <span class="font-display text-17 font-bold leading-5.5 tracking-tight">TAMS Infotech</span>
+    </a>
+    <div class="flex shrink-0 items-center gap-3">
+      {
+        badge !== undefined && (
+          <span class="flex h-6 items-center rounded-full bg-surface-inverse-raised px-2 font-mono text-10 font-medium uppercase leading-3 tracking-label text-accent-inverse">
+            {badge}
+          </span>
+        )
+      }
+      <Icon name="search" class="size-4.5 text-text-inverse" />
+      <MobileNav {current} {pathname} />
+    </div>
+  </div>
+</header>
+
+<script>
+  import { initNavMenus } from "../lib/nav-menu-client";
+
+  initNavMenus();
+</script>

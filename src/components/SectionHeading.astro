@@ -1,0 +1,69 @@
+---
+/**
+ * SectionHeading — eyebrow plus heading pair that opens a content section
+ * (ui-specification.md section 0: eyebrow + heading pairs are <h2>).
+ *
+ * Props:
+ *   eyebrow: string                 Kicker text above the heading.
+ *   title: string                   Heading text.
+ *   id?: string                     id on the heading, for Section labelledby.
+ *   tone?: "light" | "dark"         Default "light".
+ *   level?: 2 | 3                   Heading level. Default 2.
+ *   size?: "56" | "48"              Desktop Display M (56) or Display S (48). Both
+ *                                   step down to 30 on Mobile. Default "56".
+ *   align?: "start" | "center"      Default "start".
+ *   class?: string
+ * Slot (optional): intro paragraph(s) rendered under the heading.
+ */
+import Eyebrow from "./Eyebrow.astro";
+import type { Tone } from "../lib/ui-classes";
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  id?: string;
+  tone?: Tone;
+  level?: 2 | 3;
+  size?: "56" | "48";
+  align?: "start" | "center";
+  class?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  id,
+  tone = "light",
+  level = 2,
+  size = "56",
+  align = "start",
+  class: className,
+} = Astro.props;
+
+const Heading = level === 3 ? "h3" : "h2";
+const sizeClass =
+  size === "48"
+    ? "tracking-tight xl:text-48/display"
+    : "tracking-tighter xl:max-w-190 xl:text-56/display";
+---
+
+<div
+  class:list={[
+    "flex flex-col gap-5",
+    align === "center" ? "items-center text-center" : "items-start",
+    className,
+  ]}
+>
+  <Eyebrow {tone}>{eyebrow}</Eyebrow>
+  <Heading
+    {id}
+    class:list={[
+      "font-display text-30/display font-medium",
+      tone === "dark" ? "text-text-inverse" : "text-text",
+      sizeClass,
+    ]}
+  >
+    {title}
+  </Heading>
+  <slot />
+</div>

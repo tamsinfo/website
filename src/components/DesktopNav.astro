@@ -1,0 +1,82 @@
+---
+/**
+ * DesktopNav — primary navigation list for the Desktop header (C-23, ADR-012,
+ * design-system.md sections 7.12 and 7.13). Shown at >= xl only (by SiteHeader).
+ *
+ * Props:
+ *   current?: NavKey    Header item to highlight (accent-inverse, semibold).
+ *   pathname: string    Current path, for aria-current on the matching link.
+ *
+ * Dropdowns: `li[data-menu]` holds a <button aria-expanded aria-controls> and a
+ * single-column link list. The list shows on :hover / :focus-within with no
+ * JavaScript (global.css `menu-open` variant); nav-menu-client.ts adds click,
+ * outside-click, and Escape handling.
+ */
+import Icon from "./Icon.astro";
+import { PRIMARY_NAV, isCurrentHref, type NavKey } from "../lib/site-routes";
+
+interface Props {
+  current?: NavKey | undefined;
+  pathname: string;
+}
+
+const { current, pathname } = Astro.props;
+const itemClass = "font-sans text-15 leading-4.5 whitespace-nowrap hover:text-accent-inverse";
+---
+
+<nav aria-label="Primary">
+  <ul class="flex h-20 items-center gap-5 2xl:gap-6">
+    {
+      PRIMARY_NAV.map((item) => {
+        const active = item.key === current;
+        const tone = active ? "font-semibold text-accent-inverse" : "font-medium text-text-inverse";
+        if (item.kind === "link") {
+          return (
+            <li class="flex h-full items-center">
+              <a
+                href={item.href}
+                class:list={[itemClass, tone]}
+                aria-current={isCurrentHref(item.href, pathname) ? "page" : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          );
+        }
+        return (
+          <li data-menu class="relative flex h-full items-center">
+            <button
+              type="button"
+              data-menu-trigger
+              aria-expanded="false"
+              aria-controls={item.menuId}
+              class:list={["flex items-center gap-1", itemClass, tone]}
+            >
+              {item.label}
+              <Icon name="chevron-down" class="size-3.25 text-text-inverse-muted" />
+            </button>
+            <ul
+              id={item.menuId}
+              class="absolute top-full left-0 z-50 hidden w-max border-t border-border bg-surface py-2 menu-open:block"
+            >
+              {item.links.map((link) => (
+                <li>
+                  <a
+                    href={link.href}
+                    class:list={[
+                      "block px-6 py-3 font-sans text-15 font-medium leading-4.5 hover:bg-bg-sunk",
+                      isCurrentHref(link.href, pathname) ? "text-primary" : "text-text",
+                    ]}
+                    aria-current={isCurrentHref(link.href, pathname) ? "page" : undefined}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        );
+      })
+    }
+  </ul>
+</nav>

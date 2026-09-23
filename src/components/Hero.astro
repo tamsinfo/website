@@ -1,0 +1,93 @@
+---
+/**
+ * Hero — standard dark page hero (design-system.md section 7.10), used by About,
+ * Careers, Contact, Privacy, and every Services / Products / Solutions / Industries
+ * detail page. Layout from desktop/services-*.jsx and mobile/services-*.jsx:
+ * breadcrumb, then eyebrow, H1, intro, with the CTA to the right on Desktop and
+ * full width below on Mobile.
+ *
+ * Props:
+ *   eyebrow: string          Kicker, e.g. "Service".
+ *   title: string            The page's H1 (also its <title>, FR-043).
+ *   intro?: string           Hero introduction paragraph (FR-044 description source).
+ *   breadcrumb?: { label: string; href?: string }[]   See Breadcrumb.astro.
+ *   cta?: { label: string; href: string } | false
+ *                            Default: "Book a discovery call" → /contact#contact-form
+ *                            (FR-016). Pass false for no CTA.
+ *   class?: string
+ * Slots:
+ *   default (optional)       Extra content under the intro (for example a stat rail).
+ *   aside (optional)         Replaces the CTA column.
+ */
+import Breadcrumb from "./Breadcrumb.astro";
+import Button from "./Button.astro";
+import Eyebrow from "./Eyebrow.astro";
+import HexWatermark from "./HexWatermark.astro";
+import { DISCOVERY_CALL_HREF } from "../lib/site-routes";
+
+interface Crumb {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  intro?: string;
+  breadcrumb?: Crumb[];
+  cta?: { label: string; href: string } | false;
+  class?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  intro,
+  breadcrumb,
+  cta = { label: "Book a discovery call", href: DISCOVERY_CALL_HREF },
+  class: className,
+} = Astro.props;
+
+const hasAside = Astro.slots.has("aside");
+---
+
+<section
+  class:list={[
+    "relative w-full overflow-clip bg-surface-inverse px-5 pt-10 pb-12 font-sans text-text-inverse xl:px-20 xl:pt-16 xl:pb-24",
+    className,
+  ]}
+>
+  <HexWatermark />
+  <div class="relative mx-auto flex w-full max-w-wide flex-col gap-8 xl:gap-16">
+    {breadcrumb !== undefined && <Breadcrumb items={breadcrumb} />}
+    <div class="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between xl:gap-20">
+      <div class="flex min-w-0 grow basis-0 flex-col gap-6">
+        <Eyebrow tone="dark">{eyebrow}</Eyebrow>
+        <h1
+          class="font-display text-34/display font-medium tracking-tighter text-text-inverse xl:max-w-250 xl:text-72/display"
+        >
+          {title}
+        </h1>
+        {
+          intro !== undefined && (
+            <p class="text-17/body tracking-snug text-text-inverse-muted xl:max-w-190 xl:text-18/body">
+              {intro}
+            </p>
+          )
+        }
+        <slot />
+      </div>
+      {
+        hasAside ? (
+          <slot name="aside" />
+        ) : (
+          cta !== false && (
+            <Button href={cta.href} variant="inverse" size="xl" arrow block>
+              {cta.label}
+            </Button>
+          )
+        )
+      }
+    </div>
+  </div>
+</section>

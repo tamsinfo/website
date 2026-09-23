@@ -1,0 +1,68 @@
+---
+/**
+ * Button — pill button or link (design-system.md section 7.1).
+ *
+ * Props:
+ *   href?: string            Renders an <a> when set, otherwise a <button>.
+ *   variant?: "inverse" | "primary" | "outline" | "outline-inverse"
+ *                            Default "inverse" (limestone pill on dark sections).
+ *   size?: "sm" | "md" | "nav" | "lg" | "xl"
+ *                            40 / 48 / 44 / 52 / 56 px. Default "lg".
+ *   arrow?: boolean          Trailing arrow icon. Default false.
+ *   block?: boolean          Full width on Mobile, natural width on Desktop. Default false.
+ *   type?: "button" | "submit" | "reset"   <button> only. Default "button".
+ *   disabled?: boolean       Sets aria-disabled (opacity 40, no pointer events).
+ *   busy?: boolean           Sets aria-busy (submitting state, FR-040).
+ *   id?: string
+ *   class?: string
+ * Slot: the label text.
+ *
+ * "Book a discovery call" MUST use href={DISCOVERY_CALL_HREF} (FR-016).
+ */
+import Icon from "./Icon.astro";
+import { buttonClasses, type ButtonSize, type ButtonVariant } from "../lib/ui-classes";
+
+interface Props {
+  href?: string;
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  arrow?: boolean;
+  block?: boolean;
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
+  busy?: boolean;
+  id?: string;
+  class?: string;
+}
+
+const {
+  href,
+  variant = "inverse",
+  size = "lg",
+  arrow = false,
+  block = false,
+  type = "button",
+  disabled = false,
+  busy = false,
+  id,
+  class: className,
+} = Astro.props;
+
+const classes = [buttonClasses(variant, size, block), className];
+const ariaDisabled = disabled ? "true" : undefined;
+const ariaBusy = busy ? "true" : undefined;
+---
+
+{
+  href === undefined ? (
+    <button {id} {type} class:list={classes} aria-disabled={ariaDisabled} aria-busy={ariaBusy}>
+      <slot />
+      {arrow && <Icon name="arrow-right" class="size-4" />}
+    </button>
+  ) : (
+    <a {id} {href} class:list={classes} aria-disabled={ariaDisabled}>
+      <slot />
+      {arrow && <Icon name="arrow-right" class="size-4" />}
+    </a>
+  )
+}
