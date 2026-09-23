@@ -138,12 +138,12 @@
         {
           "agent": "code-reviewer",
           "branch": "feature/core-pages",
-          "status": "dispatched"
+          "status": "APPROVED; author fix round dispatched"
         },
         {
           "agent": "code-reviewer",
           "branch": "feature/services-products",
-          "status": "dispatched"
+          "status": "APPROVED; author fix round dispatched"
         }
       ],
       "merged": [
