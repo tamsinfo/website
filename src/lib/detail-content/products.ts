@@ -114,10 +114,6 @@ const GATE_ENTRY: DetailPageContent = {
             { title: "QR scanned and matched", detail: "Delivery documents matched, truck exits" },
           ],
         },
-        {
-          kind: "caption",
-          text: "Outbound cycle, drawn to mirror the inbound flow so the pair reads as one family. Both diagrams share the same component.",
-        },
       ],
     },
     {
@@ -738,10 +734,6 @@ const VENDOR_PORTAL: DetailPageContent = {
             },
           ],
         },
-        {
-          kind: "caption",
-          text: "Two audiences, one diagram. The left column is the purchasing conversation; the right column is the IT conversation. They are usually different meetings.",
-        },
       ],
     },
     {
@@ -866,10 +858,6 @@ const CONNECTED_FACTORY: DetailPageContent = {
             { title: "TAMS Industry Intelligence" },
             { title: "SAP" },
           ],
-        },
-        {
-          kind: "caption",
-          text: "Six stages from the machine to the ERP. The IIoT platform is selected to fit the equipment and environment — TAMS is not tied to a single vendor, and no vendor is named on the site.",
         },
         {
           kind: "paragraph",
@@ -1052,10 +1040,6 @@ const DIGITAL_MANUFACTURING_AI: DetailPageContent = {
               { title: "TAMS Supplier Intelligence", body: "Predict supplier delays and risks" },
             ],
           ],
-        },
-        {
-          kind: "caption",
-          text: "Six packages, each tied to one measurable outcome. Only the first is running in production today, and the page says so.",
         },
         {
           kind: "callout",

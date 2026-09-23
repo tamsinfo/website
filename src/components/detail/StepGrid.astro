@@ -35,7 +35,7 @@ const { block } = Astro.props;
             step.dashed === true && "border-dashed",
           ]}
         >
-          <span class="flex size-6.5 shrink-0 items-center justify-center rounded-full bg-primary font-mono text-12 leading-4 font-semibold text-white">
+          <span aria-hidden="true" class="flex size-6.5 shrink-0 items-center justify-center rounded-full bg-primary font-mono text-12 leading-4 font-semibold text-white">
             {index + 1}
           </span>
           <p class="min-h-10.5 text-15/snug font-semibold text-text">{step.title}</p>

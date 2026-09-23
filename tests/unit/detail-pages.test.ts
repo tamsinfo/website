@@ -71,13 +71,17 @@ function snapshotText(file: string): string {
 }
 
 /**
- * mobile/products-vendor-portal.jsx alone carries a dismissible "In build" banner that
- * the Desktop capture lacks. ui-specification.md section 5 makes a Mobile-only section
- * a BLOCKED finding, so it is not built until the user decides.
+ * Captured text intentionally not built:
+ * - KD-005: the Mobile-only Vendor Portal "In build" banner, omitted on both layouts.
+ * - KD-007: four design-note captions removed at the user's decision.
  */
-const MOBILE_ONLY_PENDING = new Set([
+const INTENTIONAL_EXCLUSIONS = new Set([
   "In build",
   "The portal is in development against SAP fixture data and is not yet generally available. Early-access conversations are open now.",
+  "Outbound cycle, drawn to mirror the inbound flow so the pair reads as one family. Both diagrams share the same component.",
+  "Six packages, each tied to one measurable outcome. Only the first is running in production today, and the page says so.",
+  "Six stages from the machine to the ERP. The IIoT platform is selected to fit the equipment and environment — TAMS is not tied to a single vendor, and no vendor is named on the site.",
+  "Two audiences, one diagram. The left column is the purchasing conversation; the right column is the IT conversation. They are usually different meetings.",
 ]);
 
 /**
@@ -96,7 +100,9 @@ function snapshotBodyLines(file: string, intro: string): string[] {
     .slice(start + 1, end)
     .filter(
       (line) =>
-        line !== "Book a discovery call" && !/^\d+$/.test(line) && !MOBILE_ONLY_PENDING.has(line),
+        line !== "Book a discovery call" &&
+        !/^\d+$/.test(line) &&
+        !INTENTIONAL_EXCLUSIONS.has(line),
     );
 }
 
@@ -147,6 +153,11 @@ describe.each(FAMILIES)("%s family", (family, prefix, expectedRoutes) => {
       const lines = snapshotBodyLines(`${width}/${prefix}-${entry.slug}.jsx`, entry.page.intro);
       expect(lines.length).toBeGreaterThan(0);
       expect(lines.filter((line) => !copy.includes(line))).toEqual([]);
+    });
+
+    it("builds none of the KD-005 and KD-007 exclusions", () => {
+      const copy = pageCopy(entry.page);
+      expect(copy.filter((text) => INTENTIONAL_EXCLUSIONS.has(text))).toEqual([]);
     });
 
     it("ends the body with the FAQ section, before the closing CTA", () => {
