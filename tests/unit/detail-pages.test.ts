@@ -232,23 +232,25 @@ describe.each(TASK_007_ENTRIES)("%s (TASK-007)", (_route, entry, family) => {
   });
 });
 
+function solutionLinks(id: string) {
+  return SOLUTIONS_FAMILY.pages[id]!.sections.flatMap((section) =>
+    section.blocks.flatMap((block) => (block.kind === "link" ? [block] : [])),
+  );
+}
+
 describe("TASK-007 cross-links", () => {
   it("links GROW to Production Process and Business AI to Mill products", () => {
-    const linksOf = (id: string) =>
-      SOLUTIONS_FAMILY.pages[id]!.sections.flatMap((section) =>
-        section.blocks.flatMap((block) => (block.kind === "link" ? [block] : [])),
-      );
-    expect(linksOf("grow-with-sap")).toEqual([
+    expect(solutionLinks("grow-with-sap")).toEqual([
       {
         kind: "link",
         label: "Production Process applications",
         href: "/products/production-process",
       },
     ]);
-    expect(linksOf("sap-business-ai")).toEqual([
+    expect(solutionLinks("sap-business-ai")).toEqual([
       { kind: "link", label: "Mill products", href: "/industries/mill-products" },
     ]);
-    expect(linksOf("industry-specific-sap-solutions").map((link) => link.href)).toEqual(
+    expect(solutionLinks("industry-specific-sap-solutions").map((link) => link.href)).toEqual(
       INDUSTRY_ROUTES.map((route) => route.path),
     );
   });
