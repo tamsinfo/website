@@ -15,7 +15,7 @@
     },
     {
       "step": "wave-0",
-      "status": "in-progress",
+      "status": "complete",
       "agents": [
         {
           "agent": "backend-developer",
@@ -31,6 +31,29 @@
         {
           "agent": "code-reviewer",
           "branch": "feature/foundation",
+          "status": "APPROVED"
+        }
+      ],
+      "merged": "86151b7"
+    },
+    {
+      "step": "wave-1",
+      "status": "in-progress",
+      "agents": [
+        {
+          "agent": "backend-developer",
+          "tasks": [
+            "TASK-002"
+          ],
+          "branch": "feature/contact-endpoint",
+          "status": "dispatched"
+        },
+        {
+          "agent": "frontend-developer",
+          "tasks": [
+            "TASK-003"
+          ],
+          "branch": "feature/site-shell",
           "status": "dispatched"
         }
       ]
