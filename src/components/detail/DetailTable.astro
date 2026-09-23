@@ -1,0 +1,119 @@
+---
+/**
+ * DetailTable — comparison and attribute tables on detail pages (design-system.md
+ * section 7.8). A semantic <table> on every width: rows lay out as a grid on
+ * Desktop and stack on Mobile, as captured. Explicit roles keep the table semantics
+ * that some browsers drop when table display is overridden.
+ *
+ * Props:
+ *   block: ComparisonTableBlock | AttributeTableBlock   See src/lib/detail-page.ts.
+ *   tone: "light" | "dark"   Attribute tables support both; comparisons are light.
+ */
+import type {
+  AttributeTableBlock,
+  BlockTone,
+  ComparisonTableBlock,
+} from "../../lib/detail-page";
+import { attributeLabelWidth, attributeTableClasses } from "../../lib/detail-classes";
+
+interface Props {
+  block: ComparisonTableBlock | AttributeTableBlock;
+  tone: BlockTone;
+}
+
+const { block, tone } = Astro.props;
+const colours = attributeTableClasses(block.kind === "comparisonTable" ? "light" : tone);
+const headCell =
+  "block font-display text-17 leading-5.5 font-semibold tracking-snug xl:table-cell xl:text-18 xl:pl-8 xl:align-middle";
+const isComparison = block.kind === "comparisonTable";
+const rowClass = `flex flex-col gap-6 border-b px-8 last:border-b-0 xl:table-row xl:p-0 ${isComparison ? "py-5" : "py-6"} ${colours.divider} ${colours.stripe}`;
+const bodyCellPadding = isComparison ? "xl:py-5" : "xl:py-6";
+const bodyCell = `block align-top xl:table-cell xl:pl-8 ${bodyCellPadding}`;
+---
+
+<div class:list={["overflow-clip rounded-lg", colours.frame]}>
+  <table class="block w-full border-collapse text-left font-sans xl:table" role="table">
+    <caption class="sr-only">{block.caption}</caption>
+    <thead class="block xl:table-header-group" role="rowgroup">
+      <tr
+        class:list={[
+          "flex flex-col gap-2 border-b px-8 py-4 xl:table-row xl:h-14 xl:p-0",
+          colours.head,
+          colours.divider,
+        ]}
+        role="row"
+      >
+        {
+          block.kind === "comparisonTable" ? (
+            <>
+              <td class="hidden xl:table-cell xl:w-42.5 xl:pl-8" />
+              <th scope="col" role="columnheader" class:list={[headCell, colours.firstHead]}>
+                {block.columns[0]}
+              </th>
+              <th scope="col" role="columnheader" class:list={[headCell, colours.otherHead, "xl:pr-8"]}>
+                {block.columns[1]}
+              </th>
+            </>
+          ) : (
+            <>
+              <th
+                scope="col"
+                role="columnheader"
+                class:list={[headCell, colours.firstHead, attributeLabelWidth(block.labelWidth)]}
+              >
+                {block.columns[0]}
+              </th>
+              <th scope="col" role="columnheader" class:list={[headCell, colours.otherHead, "xl:pr-8"]}>
+                {block.columns[1]}
+              </th>
+            </>
+          )
+        }
+      </tr>
+    </thead>
+    <tbody class="block xl:table-row-group" role="rowgroup">
+      {
+        block.kind === "comparisonTable"
+          ? block.rows.map((row) => (
+              <tr class={rowClass} role="row">
+                <th
+                  scope="row"
+                  role="rowheader"
+                  class:list={[
+                    bodyCell,
+                    "font-mono text-12 leading-4 font-medium tracking-label text-text-subtle uppercase xl:w-42.5",
+                  ]}
+                >
+                  {row.label}
+                </th>
+                <td role="cell" class:list={[bodyCell, "text-15/body text-text"]}>
+                  {row.values[0]}
+                </td>
+                <td role="cell" class:list={[bodyCell, "text-15/body text-text-muted xl:pr-8"]}>
+                  {row.values[1]}
+                </td>
+              </tr>
+            ))
+          : block.rows.map((row) => (
+              <tr class={rowClass} role="row">
+                <th
+                  scope="row"
+                  role="rowheader"
+                  class:list={[
+                    bodyCell,
+                    "text-16/snug font-semibold",
+                    colours.label,
+                    attributeLabelWidth(block.labelWidth),
+                  ]}
+                >
+                  {row.label}
+                </th>
+                <td role="cell" class:list={[bodyCell, "text-15/body xl:pr-8", colours.value]}>
+                  {row.value}
+                </td>
+              </tr>
+            ))
+      }
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,26 @@
+---
+/**
+ * SCR-011 to SCR-017 — Products detail pages (FR-007, US-003).
+ * One prerendered page per PRODUCT_ROUTES entry. Any other slug, and "/products"
+ * itself, has no page and falls through to the 404 page (FR-007 edge cases).
+ * Content: src/lib/detail-content/products.ts, transcribed per snapshot.
+ */
+import DetailPage from "../../components/detail/DetailPage.astro";
+import { PRODUCTS_FAMILY } from "../../lib/detail-content/products";
+import { type DetailRouteEntry, detailRoutes } from "../../lib/detail-page";
+
+export function getStaticPaths() {
+  return detailRoutes(PRODUCTS_FAMILY).map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: DetailRouteEntry;
+}
+
+const { entry } = Astro.props;
+---
+
+<DetailPage {entry} />

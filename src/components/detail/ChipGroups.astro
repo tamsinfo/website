@@ -1,0 +1,35 @@
+---
+/**
+ * ChipGroups — labelled groups of static outline chips (AMS coverage). Groups sit
+ * side by side on Desktop and stack on Mobile. Chips are labels, not controls.
+ *
+ * Props:
+ *   groups: { label: string; chips: string[] }[]
+ */
+import type { ChipGroup } from "../../lib/detail-page";
+
+interface Props {
+  groups: readonly ChipGroup[];
+}
+
+const { groups } = Astro.props;
+---
+
+<div class="flex flex-col items-start gap-6 xl:flex-row xl:gap-10">
+  {
+    groups.map((group) => (
+      <div class="flex w-full flex-col gap-4 xl:grow xl:basis-0">
+        <p class="font-mono text-11 leading-3.5 font-medium tracking-wider text-text-subtle uppercase">
+          {group.label}
+        </p>
+        <ul class="flex flex-wrap gap-2">
+          {group.chips.map((chip) => (
+            <li class="flex h-9 items-center rounded-full border border-border-strong px-4 text-15 leading-4.5 font-medium text-text">
+              {chip}
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
+</div>

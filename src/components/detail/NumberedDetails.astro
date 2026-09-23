@@ -1,0 +1,36 @@
+---
+/**
+ * NumberedDetails — numbered long-form cards, one per application: badge, <h3>
+ * title, and one or more paragraphs at a 900px measure on Desktop.
+ *
+ * Props:
+ *   items: { title: string; paragraphs: string[] }[]
+ */
+import type { NumberedDetail } from "../../lib/detail-page";
+
+interface Props {
+  items: readonly NumberedDetail[];
+}
+
+const { items } = Astro.props;
+---
+
+<ol class="flex flex-col gap-6">
+  {
+    items.map((item, index) => (
+      <li class="flex flex-col items-start gap-6 rounded-lg border border-border bg-surface p-6 xl:flex-row xl:p-8">
+        <span aria-hidden="true" class="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary font-mono text-13 leading-4 font-semibold text-white">
+          {index + 1}
+        </span>
+        <div class="flex grow basis-0 flex-col gap-4 xl:max-w-225">
+          <h3 class="font-display text-19/heading font-semibold tracking-snug text-text xl:text-24/heading">
+            {item.title}
+          </h3>
+          {item.paragraphs.map((paragraph) => (
+            <p class="text-16/body text-text-muted">{paragraph}</p>
+          ))}
+        </div>
+      </li>
+    ))
+  }
+</ol>

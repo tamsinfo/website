@@ -1,0 +1,53 @@
+---
+/**
+ * ProcessRail — numbered steps joined by a hairline (the "how we work" rail pattern).
+ * Horizontal on Desktop, stacked on Mobile, as captured. The last step uses the
+ * slate-900 badge and has no trailing line.
+ *
+ * Props:
+ *   steps: { title: string; detail?: string }[]
+ */
+import type { RailStep } from "../../lib/detail-page";
+
+interface Props {
+  steps: readonly RailStep[];
+}
+
+const { steps } = Astro.props;
+const lastIndex = steps.length - 1;
+---
+
+<ol class="flex flex-col items-start xl:flex-row">
+  {
+    steps.map((step, index) => {
+      const isLast = index === lastIndex;
+      return (
+        <li class="flex w-full grow basis-0 flex-col gap-4">
+          <div class="flex items-center">
+            <span
+              aria-hidden="true"
+              class:list={[
+                "flex size-9 shrink-0 items-center justify-center rounded-full font-mono text-13 leading-4 font-semibold text-white",
+                isLast ? "bg-slate-900" : "bg-primary",
+              ]}
+            >
+              {index + 1}
+            </span>
+            {!isLast && <span class="h-px grow basis-0 bg-border" aria-hidden="true" />}
+          </div>
+          <div class:list={["flex flex-col gap-2", !isLast && "pr-6"]}>
+            <p
+              class:list={[
+                "font-semibold text-text",
+                step.detail === undefined ? "text-16/snug" : "text-15/snug",
+              ]}
+            >
+              {step.title}
+            </p>
+            {step.detail !== undefined && <p class="text-13/snug text-text-subtle">{step.detail}</p>}
+          </div>
+        </li>
+      );
+    })
+  }
+</ol>

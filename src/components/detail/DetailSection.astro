@@ -1,0 +1,43 @@
+---
+/**
+ * DetailSection — one body section of the detail template: eyebrow plus <h2>, then
+ * its blocks in snapshot order. Gutters and rhythm come from the shared Section.
+ *
+ * Props:
+ *   section: DetailSection   See src/lib/detail-page.ts.
+ */
+import Section from "../Section.astro";
+import SectionHeading from "../SectionHeading.astro";
+import {
+  type DetailSection as DetailSectionData,
+  blockTone,
+  sectionHeadingId,
+} from "../../lib/detail-page";
+import DetailBlock from "./DetailBlock.astro";
+
+interface Props {
+  section: DetailSectionData;
+}
+
+const { section } = Astro.props;
+const tone = blockTone(section.tone);
+const { heading } = section;
+const headingId = sectionHeadingId(section);
+/* A compact band has no heading, so it carries no aria-labelledby. */
+const layout =
+  section.compact === true
+    ? { padding: "none" as const, class: "py-10 xl:py-16" }
+    : { padding: "default" as const };
+const labelling = heading === undefined ? {} : { labelledby: headingId };
+---
+
+<Section tone={section.tone} {...layout} {...labelling}>
+  {
+    heading !== undefined && (
+      <SectionHeading eyebrow={heading.eyebrow} title={heading.title} id={headingId} {tone} />
+    )
+  }
+  <div class="flex flex-col gap-6">
+    {section.blocks.map((block) => <DetailBlock {block} {tone} />)}
+  </div>
+</Section>

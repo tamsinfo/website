@@ -1,0 +1,77 @@
+---
+/**
+ * ArchitectureDiagram — labelled columns of document boxes joined by arrows (EXIM
+ * import and export architecture). Columns run left to right on Desktop and top to
+ * bottom on Mobile, where the arrows turn downward, as captured. The arrows are
+ * decorative: the caption block that follows states what solid and dashed mean.
+ *
+ * Props:
+ *   block: ArchitectureBlock   See src/lib/detail-page.ts.
+ */
+import type { ArchitectureBlock } from "../../lib/detail-page";
+
+interface Props {
+  block: ArchitectureBlock;
+}
+
+const { block } = Astro.props;
+---
+
+<div class="flex flex-col xl:flex-row">
+  {
+    block.columns.map((column, index) => {
+      const emphasis = column.emphasis === true;
+      const connector = block.connectors[index];
+      return (
+        <>
+          <div
+            class:list={[
+              "flex flex-col gap-4 rounded-lg bg-bg-sunk p-5 xl:grow xl:basis-0",
+              emphasis && "border border-primary",
+            ]}
+          >
+            <p class="flex items-center gap-2">
+              <span
+                class:list={["size-1.25 shrink-0 rounded-full", emphasis ? "bg-primary" : "bg-text-subtle"]}
+                aria-hidden="true"
+              />
+              <span
+                class:list={[
+                  "font-mono text-11 leading-3.5 font-medium tracking-wider uppercase",
+                  emphasis ? "text-primary" : "text-text-subtle",
+                ]}
+              >
+                {column.label}
+              </span>
+            </p>
+            <ul class="flex flex-col gap-2">
+              {column.items.map((item) => (
+                <li
+                  class:list={[
+                    "flex items-center rounded-sm border bg-surface px-4 py-3 text-14/snug text-text",
+                    emphasis ? "border-primary font-medium" : "border-border",
+                  ]}
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+          {connector !== undefined && (
+            <div class="flex h-8 shrink-0 items-center justify-center xl:h-auto xl:w-8" aria-hidden="true">
+              <svg class="h-3 w-8 shrink-0 rotate-90 xl:rotate-0" viewBox="0 0 32 12" focusable="false">
+                <path
+                  class="fill-none stroke-text-subtle"
+                  d="M2 6h24"
+                  stroke-width="1.5"
+                  stroke-dasharray={connector === "dashed" ? "4 3" : undefined}
+                />
+                <path class="fill-text-subtle" d="M30 6l-6 -4v8z" />
+              </svg>
+            </div>
+          )}
+        </>
+      );
+    })
+  }
+</div>

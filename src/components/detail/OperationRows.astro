@@ -1,0 +1,41 @@
+---
+/**
+ * OperationRows — one card per production order: title (<h3>), a mono operation
+ * count, and a chip per operation. Title column left of the chips on Desktop; the
+ * chips wrap below the title on Mobile.
+ *
+ * Props:
+ *   rows: { title: string; meta: string; chips: string[] }[]
+ */
+import type { OperationRow } from "../../lib/detail-page";
+
+interface Props {
+  rows: readonly OperationRow[];
+}
+
+const { rows } = Astro.props;
+---
+
+<ul class="flex flex-col gap-4">
+  {
+    rows.map((row) => (
+      <li class="flex flex-col items-start gap-6 rounded-lg border border-border bg-surface p-6 xl:flex-row">
+        <div class="flex w-full shrink-0 flex-col gap-2 xl:w-52.5">
+          <h3 class="font-display text-17/heading font-semibold tracking-snug text-text xl:text-19/heading">
+            {row.title}
+          </h3>
+          <p class="font-mono text-11 leading-3.5 font-medium tracking-label text-primary uppercase">
+            {row.meta}
+          </p>
+        </div>
+        <ul class="flex grow basis-0 flex-wrap gap-2">
+          {row.chips.map((chip) => (
+            <li class="flex h-8.5 items-center rounded-full border border-border-strong px-4 text-14 leading-4.5 text-text">
+              {chip}
+            </li>
+          ))}
+        </ul>
+      </li>
+    ))
+  }
+</ul>
