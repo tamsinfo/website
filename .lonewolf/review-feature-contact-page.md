@@ -7,15 +7,10 @@ updated: 2026-09-22
 owner: code-reviewer
 depends_on:
   - .lonewolf/stack-profile.md
-  - .lonewolf/amendments.md
-  - docs/03-design/api-contract.yaml
   - docs/03-design/system-architecture.md
   - docs/03-design/design-system.md
   - docs/03-design/ui-specification.md
-  - docs/03-design/paper-snapshot/desktop/contact.jsx
-  - docs/03-design/paper-snapshot/desktop/contact-thank-you.jsx
-  - docs/03-design/paper-snapshot/mobile/contact.jsx
-  - docs/03-design/paper-snapshot/mobile/contact-thank-you.jsx
+  - docs/03-design/paper-snapshot/MANIFEST.md
   - docs/02-requirements/functional-requirements.md
   - docs/04-development/implementation-plan.md
 ---

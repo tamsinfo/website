@@ -7,40 +7,11 @@ updated: 2026-09-23
 owner: code-reviewer
 depends_on:
   - .lonewolf/stack-profile.md
-  - .lonewolf/amendments.md
-  - docs/03-design/api-contract.yaml
   - docs/03-design/design-system.md
   - docs/03-design/ui-specification.md
   - docs/04-development/implementation-plan.md
   - docs/02-requirements/functional-requirements.md
-  - docs/03-design/paper-snapshot/desktop/industries-automotive.jsx
-  - docs/03-design/paper-snapshot/desktop/industries-consumer-durables.jsx
-  - docs/03-design/paper-snapshot/desktop/industries-engineering-and-fabrication.jsx
-  - docs/03-design/paper-snapshot/desktop/industries-metals-and-steel.jsx
-  - docs/03-design/paper-snapshot/desktop/industries-mill-products.jsx
-  - docs/03-design/paper-snapshot/desktop/industries-pharmaceuticals.jsx
-  - docs/03-design/paper-snapshot/desktop/solutions-grow-with-sap.jsx
-  - docs/03-design/paper-snapshot/desktop/solutions-industry-specific-sap-solutions.jsx
-  - docs/03-design/paper-snapshot/desktop/solutions-rise-with-sap.jsx
-  - docs/03-design/paper-snapshot/desktop/solutions-sap-analytics-and-reporting.jsx
-  - docs/03-design/paper-snapshot/desktop/solutions-sap-automation-and-workflow.jsx
-  - docs/03-design/paper-snapshot/desktop/solutions-sap-btp.jsx
-  - docs/03-design/paper-snapshot/desktop/solutions-sap-business-ai.jsx
-  - docs/03-design/paper-snapshot/desktop/solutions-sap-integration-suite.jsx
-  - docs/03-design/paper-snapshot/mobile/industries-automotive.jsx
-  - docs/03-design/paper-snapshot/mobile/industries-consumer-durables.jsx
-  - docs/03-design/paper-snapshot/mobile/industries-engineering-and-fabrication.jsx
-  - docs/03-design/paper-snapshot/mobile/industries-metals-and-steel.jsx
-  - docs/03-design/paper-snapshot/mobile/industries-mill-products.jsx
-  - docs/03-design/paper-snapshot/mobile/industries-pharmaceuticals.jsx
-  - docs/03-design/paper-snapshot/mobile/solutions-grow-with-sap.jsx
-  - docs/03-design/paper-snapshot/mobile/solutions-industry-specific-sap-solutions.jsx
-  - docs/03-design/paper-snapshot/mobile/solutions-rise-with-sap.jsx
-  - docs/03-design/paper-snapshot/mobile/solutions-sap-analytics-and-reporting.jsx
-  - docs/03-design/paper-snapshot/mobile/solutions-sap-automation-and-workflow.jsx
-  - docs/03-design/paper-snapshot/mobile/solutions-sap-btp.jsx
-  - docs/03-design/paper-snapshot/mobile/solutions-sap-business-ai.jsx
-  - docs/03-design/paper-snapshot/mobile/solutions-sap-integration-suite.jsx
+  - docs/03-design/paper-snapshot/MANIFEST.md
 ---
 
 # Review: feature/solutions-industries (TASK-007)

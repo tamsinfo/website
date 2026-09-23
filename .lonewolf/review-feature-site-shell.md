@@ -7,17 +7,13 @@ updated: 2026-09-22
 owner: code-reviewer
 depends_on:
   - .lonewolf/stack-profile.md
-  - docs/03-design/api-contract.yaml
   - docs/03-design/system-architecture.md
   - docs/03-design/design-system.md
   - docs/03-design/ui-specification.md
-  - docs/03-design/paper-snapshot/tokens.css
-  - docs/03-design/paper-snapshot/desktop/home.jsx
-  - docs/03-design/paper-snapshot/desktop/not-found.jsx
+  - docs/03-design/paper-snapshot/MANIFEST.md
   - docs/02-requirements/functional-requirements.md
   - docs/02-requirements/non-functional-requirements.md
   - docs/04-development/implementation-plan.md
-  - .lonewolf/amendments.md
 ---
 
 # Review: feature/site-shell (TASK-003)

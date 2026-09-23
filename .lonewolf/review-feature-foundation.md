@@ -7,7 +7,6 @@ updated: 2026-09-22
 owner: code-reviewer
 depends_on:
   - .lonewolf/stack-profile.md
-  - docs/03-design/api-contract.yaml
   - docs/03-design/system-architecture.md
   - docs/03-design/data-model.md
   - docs/02-requirements/functional-requirements.md

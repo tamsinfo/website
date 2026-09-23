@@ -7,19 +7,11 @@ updated: 2026-09-22
 owner: code-reviewer
 depends_on:
   - .lonewolf/stack-profile.md
-  - .lonewolf/amendments.md
   - docs/04-development/implementation-plan.md
   - docs/02-requirements/functional-requirements.md
   - docs/03-design/ui-specification.md
   - docs/03-design/design-system.md
-  - docs/03-design/paper-snapshot/desktop/home.jsx
-  - docs/03-design/paper-snapshot/mobile/home.jsx
-  - docs/03-design/paper-snapshot/desktop/about.jsx
-  - docs/03-design/paper-snapshot/mobile/about.jsx
-  - docs/03-design/paper-snapshot/desktop/careers.jsx
-  - docs/03-design/paper-snapshot/mobile/careers.jsx
-  - docs/03-design/paper-snapshot/desktop/privacy.jsx
-  - docs/03-design/paper-snapshot/mobile/privacy.jsx
+  - docs/03-design/paper-snapshot/MANIFEST.md
 ---
 
 # Review: feature/core-pages (TASK-004)

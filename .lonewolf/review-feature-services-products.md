@@ -7,32 +7,9 @@ updated: 2026-09-23
 owner: code-reviewer
 depends_on:
   - .lonewolf/stack-profile.md
-  - .lonewolf/amendments.md
-  - docs/03-design/api-contract.yaml
   - docs/03-design/design-system.md
   - docs/03-design/ui-specification.md
-  - docs/03-design/paper-snapshot/desktop/services-s4hana-cloud-implementation.jsx
-  - docs/03-design/paper-snapshot/desktop/services-s4hana-managed-services.jsx
-  - docs/03-design/paper-snapshot/desktop/services-custom-application-build.jsx
-  - docs/03-design/paper-snapshot/desktop/services-license-procurement.jsx
-  - docs/03-design/paper-snapshot/desktop/products-gate-entry.jsx
-  - docs/03-design/paper-snapshot/desktop/products-exim.jsx
-  - docs/03-design/paper-snapshot/desktop/products-digisign.jsx
-  - docs/03-design/paper-snapshot/desktop/products-production-process.jsx
-  - docs/03-design/paper-snapshot/desktop/products-vendor-portal.jsx
-  - docs/03-design/paper-snapshot/desktop/products-connected-factory.jsx
-  - docs/03-design/paper-snapshot/desktop/products-digital-manufacturing-ai.jsx
-  - docs/03-design/paper-snapshot/mobile/services-s4hana-cloud-implementation.jsx
-  - docs/03-design/paper-snapshot/mobile/services-s4hana-managed-services.jsx
-  - docs/03-design/paper-snapshot/mobile/services-custom-application-build.jsx
-  - docs/03-design/paper-snapshot/mobile/services-license-procurement.jsx
-  - docs/03-design/paper-snapshot/mobile/products-gate-entry.jsx
-  - docs/03-design/paper-snapshot/mobile/products-exim.jsx
-  - docs/03-design/paper-snapshot/mobile/products-digisign.jsx
-  - docs/03-design/paper-snapshot/mobile/products-production-process.jsx
-  - docs/03-design/paper-snapshot/mobile/products-vendor-portal.jsx
-  - docs/03-design/paper-snapshot/mobile/products-connected-factory.jsx
-  - docs/03-design/paper-snapshot/mobile/products-digital-manufacturing-ai.jsx
+  - docs/03-design/paper-snapshot/MANIFEST.md
   - docs/02-requirements/functional-requirements.md
   - docs/04-development/implementation-plan.md
 ---
