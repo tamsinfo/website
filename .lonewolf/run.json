@@ -151,6 +151,11 @@
           "branch": "feature/contact-page",
           "commit": "28231db",
           "gates": "pass (366 tests)"
+        },
+        {
+          "branch": "feature/services-products",
+          "commit": "221983b",
+          "gates": "pass (465 tests)"
         }
       ]
     }

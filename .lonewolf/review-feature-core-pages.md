@@ -161,3 +161,48 @@ The tests assert content data, not rendered markup. I closed that gap by checkin
 Counts: critical 0, high 0, medium 1, low 4.
 
 APPROVED
+
+---
+
+## Round 2 (delta re-review, 2026-09-23): commit ee0f8da
+
+**Range:** `7419503..ee0f8da`, 1 commit, 5 files, +25/-10. The commit message is conventional and has no AI trailer.
+
+### Resolution of round-1 findings
+
+| Finding | Status | Evidence |
+|---|---|---|
+| [medium] (a) mobile stat rail | Resolved | `HomeHero.astro:76,79`: the `gap-5` is removed. `px-8 first:pl-0 last:pr-0` now applies at every width, matching mobile/home.jsx:73-110 (pr-8 / px-8 ×3 / pl-8). Desktop is unchanged: the same padding plus `xl:` borders. |
+| [medium] (b) mobile process rail gap | Resolved (gap). One residual low is noted below. | `ProcessRail.astro:17`: `gap-6` is removed. Desktop is unchanged. |
+| [medium] (c) mobile data-flow arrows | Resolved | `ConnectedManufacturing.astro:33,99,120`: the rotation is removed. The arrow cell is `w-8`, start-aligned in the column, 16 px tall, and points right, matching mobile/home.jsx:505-547. Desktop keeps `w-8`, centred. |
+| [low] challenge-table stroke | Resolved | The new `arrow-right-fine` glyph (`feature-glyphs.ts:73-79`) uses the same path at 1.6. The built `/` has 5 table arrows at `stroke-width="1.6"`. |
+| [low] mobile hero CTA padding | Resolved | `class="max-xl:px-5"` on the primary Button. In the built CSS, `max-xl:px-5` (offset 39327) comes after `.px-8` (offset 24838), so it overrides below xl. The value is a token (`--spacing-5`). |
+| [low] Careers column widths | Open (optional) | Not addressed. Cosmetic. |
+| [low] cross-page components under `home/` / `about/` | Open | Not addressed. Placement only. |
+
+### New finding
+
+#### [low] Mobile process-rail hairline spans the full row, not the step's content width
+
+**File:** src/components/home/ProcessRail.astro:17
+**Requirement:** FR-001; mobile/home.jsx (`flex items-start flex-col` around the steps)
+**Problem:** The snapshot's step column is `items-start`, so each `<li>` is only as wide as its content and the connecting hairline ends at the text's width. The `<ol>` has `flex flex-col` without `items-start`, so each `<li>` stretches to the full container width and the hairline runs to the right edge.
+**Consequence:** On mobile the hairlines are longer than designed. This is cosmetic, with no functional or accessibility effect.
+**Fix:** Add `items-start` to the `<ol>` (or `max-xl:items-start`, because `xl:items-start` already exists).
+
+### Regression check
+
+- The diff touches only the 5 files listed. There is no change to content, links, headings, or ARIA.
+- The Glyph is `aria-hidden` like the Icon it replaces.
+- No new arbitrary values, inline styles, or dependencies.
+- The comment added at `HomeHero.astro:60` explains why. Indentation is consistent.
+
+### Gates re-run (round 2)
+
+`bun install --frozen-lockfile` 0 · `astro sync` 0 · `oxfmt --check` 0 · `oxlint --deny-warnings` 0 · `astro check` 0/0/0 · `vitest run` 18 files / 342 passed · `astro build` 0 · `bun audit` no vulnerabilities · checks 10 and 11 greps: no matches · built server (`node server.ts`, PORT=4996): `/health` 200, `/` 200, `/about` 200, `/careers` 200, `/privacy` 200.
+
+### Round-2 verdict
+
+Counts: critical 0, high 0, medium 0, low 3 (2 carried over, 1 new).
+
+APPROVED
