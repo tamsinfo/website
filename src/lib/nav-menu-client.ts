@@ -5,6 +5,8 @@
  * :focus-within (global.css `menu-open` variant) and the mobile menu is a native
  * <details>. When it runs it adds, per FR-013 to FR-015:
  * - click toggling with aria-expanded, one open menu at a time;
+ * - a click-opened menu closes when the pointer leaves; a keyboard-opened one
+ *   stays open until focus leaves (decision rules in nav-menu-state.ts);
  * - outside-click close;
  * - Escape close with focus return to the trigger;
  * - close when focus leaves the item (Tab past the last link);
@@ -15,74 +17,81 @@
  * - mobile menu: `details[data-mobile-menu]` > `summary`
  */
 
+import {
+  INITIAL_MENU_STATE,
+  handlesEscape,
+  isMenuVisible,
+  reduceMenu,
+  type MenuEvent,
+  type MenuState,
+} from "./nav-menu-state";
+
 const MENU_SELECTOR = "[data-menu]";
 const TRIGGER_SELECTOR = "[data-menu-trigger]";
 const MOBILE_SELECTOR = "details[data-mobile-menu]";
 
-export function isMenuOpen(item: HTMLElement): boolean {
-  return item.hasAttribute("data-open");
+interface DesktopMenu {
+  readonly item: HTMLElement;
+  readonly trigger: HTMLButtonElement;
+  state: MenuState;
 }
 
-function triggerOf(item: HTMLElement): HTMLButtonElement | null {
-  return item.querySelector<HTMLButtonElement>(TRIGGER_SELECTOR);
+/** Write a menu's state to the markup: data-open, data-suppressed, aria-expanded. */
+function render(menu: DesktopMenu): void {
+  menu.item.toggleAttribute("data-open", menu.state.open);
+  menu.item.toggleAttribute("data-suppressed", menu.state.suppressed);
+  menu.trigger.setAttribute("aria-expanded", isMenuVisible(menu.state) ? "true" : "false");
 }
 
-/**
- * Open or close one desktop menu. `suppress` marks an explicit close (Escape or a
- * closing click) that must beat :hover until the pointer leaves or focus moves
- * (ADR-012 consequences).
- */
-export function setMenuOpen(item: HTMLElement, open: boolean, suppress = false): void {
-  item.toggleAttribute("data-open", open);
-  item.toggleAttribute("data-suppressed", !open && suppress);
-  triggerOf(item)?.setAttribute("aria-expanded", open ? "true" : "false");
+function dispatch(menu: DesktopMenu, event: MenuEvent): void {
+  menu.state = reduceMenu(menu.state, event);
+  render(menu);
 }
 
-function closeAll(items: readonly HTMLElement[], except?: HTMLElement): void {
-  for (const item of items) {
-    if (item !== except && isMenuOpen(item)) setMenuOpen(item, false);
+function closeOthers(menus: readonly DesktopMenu[], keep?: DesktopMenu): void {
+  for (const menu of menus) {
+    if (menu !== keep) dispatch(menu, { type: "close" });
   }
 }
 
 function enhanceDesktop(doc: Document): void {
-  const items = [...doc.querySelectorAll<HTMLElement>(MENU_SELECTOR)];
-  for (const item of items) {
-    item.setAttribute("data-js", "");
-    const trigger = triggerOf(item);
+  const menus: DesktopMenu[] = [];
+  for (const item of doc.querySelectorAll<HTMLElement>(MENU_SELECTOR)) {
+    const trigger = item.querySelector<HTMLButtonElement>(TRIGGER_SELECTOR);
     if (trigger === null) continue;
+    item.setAttribute("data-js", "");
+    menus.push({ item, trigger, state: INITIAL_MENU_STATE });
+  }
 
-    trigger.addEventListener("click", () => {
-      const open = !isMenuOpen(item);
-      closeAll(items, item);
-      setMenuOpen(item, open, !open);
+  for (const menu of menus) {
+    const { item, trigger } = menu;
+
+    trigger.addEventListener("click", (event) => {
+      // detail > 0 for a mouse or touch click; 0 for Enter or Space on the button.
+      dispatch(menu, { type: "trigger", pointer: event.detail > 0 });
+      if (menu.state.open) closeOthers(menus, menu);
     });
 
     item.addEventListener("mouseenter", () => {
-      // FR-013: hover opens; keep aria-expanded in step with what is shown.
-      if (item.hasAttribute("data-suppressed")) return;
-      closeAll(items, item);
-      trigger.setAttribute("aria-expanded", "true");
+      dispatch(menu, { type: "pointer-enter" });
+      if (isMenuVisible(menu.state)) closeOthers(menus, menu);
     });
 
     item.addEventListener("mouseleave", () => {
-      item.removeAttribute("data-suppressed");
-      if (!isMenuOpen(item)) trigger.setAttribute("aria-expanded", "false");
-      else if (!item.contains(doc.activeElement)) setMenuOpen(item, false);
+      dispatch(menu, { type: "pointer-leave" });
     });
 
     item.addEventListener("focusout", (event) => {
       const next = event.relatedTarget;
       if (next instanceof Node && item.contains(next)) return;
       // FR-014 edge case: Tab past the last link closes the menu.
-      if (isMenuOpen(item)) setMenuOpen(item, false);
-      item.removeAttribute("data-suppressed");
+      dispatch(menu, { type: "focus-leave" });
     });
 
     item.addEventListener("keydown", (event) => {
-      if (event.key !== "Escape") return;
-      if (!isMenuOpen(item) && trigger.getAttribute("aria-expanded") !== "true") return;
+      if (event.key !== "Escape" || !handlesEscape(menu.state)) return;
       event.preventDefault();
-      setMenuOpen(item, false, true);
+      dispatch(menu, { type: "escape" });
       trigger.focus();
     });
   }
@@ -90,8 +99,10 @@ function enhanceDesktop(doc: Document): void {
   doc.addEventListener("click", (event) => {
     const target = event.target;
     if (!(target instanceof Node)) return;
-    const inside = items.find((item) => item.contains(target));
-    closeAll(items, inside);
+    closeOthers(
+      menus,
+      menus.find((menu) => menu.item.contains(target)),
+    );
   });
 }
 
