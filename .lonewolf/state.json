@@ -30,7 +30,7 @@
     },
     "G4": {
       "name": "Development",
-      "status": "pending",
+      "status": "in-review",
       "approved_at": null,
       "revision_requests": [
         {
@@ -43,7 +43,9 @@
         {
           "id": 2,
           "raised": "2026-09-24",
-          "text": "Layout is hardcoded to the 1440/1280 px design widths instead of being fluid: section backgrounds do not stretch edge to edge on wide screens and content is not centred with a max-width container (mx-auto); elements overflow (e.g. Contact form inputs extend past their card). Responsive design is not done: at phone widths (320-414 px) headings, text, and buttons overflow and are cut off (e.g. empty CTA pill on Contact). Evidence: user screenshots of the deployed site at ~2000 px and 320/414 px."
+          "text": "Layout is hardcoded to the 1440/1280 px design widths instead of being fluid: section backgrounds do not stretch edge to edge on wide screens and content is not centred with a max-width container (mx-auto); elements overflow (e.g. Contact form inputs extend past their card). Responsive design is not done: at phone widths (320-414 px) headings, text, and buttons overflow and are cut off (e.g. empty CTA pill on Contact). Evidence: user screenshots of the deployed site at ~2000 px and 320/414 px.",
+          "resolved": "2026-09-24",
+          "resolution": "Root cause: Meridian --container-full: 1440px in Tailwind's --container-* namespace made w-full/max-w-full compile to 1440px. Fix fix/fluid-layout (merge 15097fc): token moved to :root; every band full-bleed with shared centred container (mx-auto, max-w-wide at xl, max-w-narrow below); tables/header/hero/turnstile fixed at narrow widths; break-word; guard tests for utility collisions and per-breakpoint fixed widths (703 tests). Verified: orchestrator real-browser sweep 320-2560 px (no overflow, full-bleed bands, centred content, inputs inside card); developer WebKit sweep 31 routes x 19 widths = 589/589 pass. Review APPROVED round 2."
         }
       ]
     },

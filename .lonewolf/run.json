@@ -4,7 +4,7 @@
   "phase": 4,
   "command": "/lonewolf:build (G4 revision request 2)",
   "started": "2026-09-25T04:58:00Z",
-  "status": "in-progress",
+  "status": "complete",
   "steps": [
     {
       "step": "diagnose",
@@ -37,6 +37,11 @@
       "step": "orchestrator-browser-sweep",
       "status": "complete",
       "note": "Real browser, fix/fluid-layout build: 12 routes covering every template at 320 px; Home/Contact/Privacy/Production Process at 768; Home/Contact at 1440; Contact/Home/Business AI at 2560; Contact at 1920; Home at 1280. All: scrollWidth==clientWidth (o=0), every band full-bleed (band=0), no element past viewport (stick=0), mx-auto containers centred, contact inputs inside card. Developer's WebKit sweep: 31 routes x 19 widths pass."
+    },
+    {
+      "step": "merge",
+      "status": "complete",
+      "note": "15097fc; gate on main pass (703 tests)"
     }
   ]
 }
