@@ -30,7 +30,7 @@
     },
     "G4": {
       "name": "Development",
-      "status": "in-review",
+      "status": "pending",
       "approved_at": null,
       "revision_requests": [
         {
@@ -39,6 +39,11 @@
           "text": "In a real browser the stylesheets do not load. Console: 'Refused to execute a script because its hash, its nonce, or unsafe-inline does not appear in the script-src directive of the Content Security Policy (localhost, line 3216)'. Check that the CSP is set correctly and fix the stylesheet loading.",
           "resolved": "2026-09-23",
           "resolution": "Root cause: Astro 7 applied security.csp under astro dev, blocking Vite's dev-only inline script and injected styles. Fix fix/dev-csp (merge 5b4f849): an inline integration sets security.csp=false only when Astro's command is 'dev'. Production _headers.json byte-identical across build variants; dev verified in a real browser (styles load, no CSP errors). Review APPROVED round 2."
+        },
+        {
+          "id": 2,
+          "raised": "2026-09-24",
+          "text": "Layout is hardcoded to the 1440/1280 px design widths instead of being fluid: section backgrounds do not stretch edge to edge on wide screens and content is not centred with a max-width container (mx-auto); elements overflow (e.g. Contact form inputs extend past their card). Responsive design is not done: at phone widths (320-414 px) headings, text, and buttons overflow and are cut off (e.g. empty CTA pill on Contact). Evidence: user screenshots of the deployed site at ~2000 px and 320/414 px."
         }
       ]
     },
