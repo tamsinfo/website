@@ -21,7 +21,7 @@
             "TASK-003"
           ],
           "branch": "fix/fluid-layout",
-          "status": "returned",
+          "status": "dispatched",
           "commits": 6
         }
       ],
@@ -29,7 +29,7 @@
         {
           "agent": "code-reviewer",
           "branch": "fix/fluid-layout",
-          "status": "dispatched"
+          "status": "APPROVED with 3 medium; author fix round 2 dispatched"
         }
       ]
     },
