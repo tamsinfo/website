@@ -15,7 +15,7 @@ import SectionHeading from "../components/SectionHeading.astro";
 import TextLink from "../components/TextLink.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { DISCOVERY_CALL_HREF, PAGE_ROUTES, PLACEHOLDER_ROUTES, hrefFor } from "../lib/site-routes";
-import { CONTAINER_CLASS } from "../lib/ui-classes";
+import { CONTAINER_CLASS, GUTTER_CLASS } from "../lib/ui-classes";
 
 const heading = "That page has moved, been renamed, or never existed.";
 const intro =
@@ -59,11 +59,9 @@ const wayfinding = [
 
 <BaseLayout heading={heading} description={intro}>
   <section
-    class="relative w-full overflow-clip bg-surface-inverse px-5 py-16 font-sans xl:px-20 xl:py-24"
+    class:list={["relative w-full overflow-clip bg-surface-inverse py-16 font-sans xl:py-24", GUTTER_CLASS]}
   >
-    {/* Offsets from not-found.jsx: desktop left 960 of 1440 at 620 wide, mobile left 150 of
-      390 at 380 wide; both leave the drawing 140px past the right edge (-right-35). */}
-    <HexWatermark class="-top-10 -right-35 size-95 xl:-top-22.5 xl:-right-35 xl:size-155" />
+    <HexWatermark decoration="notFoundWatermark" />
     <div class:list={[CONTAINER_CLASS, "relative flex flex-col gap-6"]}>
       <Eyebrow tone="dark">Page not found</Eyebrow>
       <p

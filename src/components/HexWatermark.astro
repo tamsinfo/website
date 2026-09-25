@@ -5,20 +5,21 @@
  * which must be `relative overflow-clip`.
  *
  * Props:
- *   class?: string   Position and size utilities. Default matches the detail-page
- *                    hero capture: 380px at 35% opacity on Mobile, 620px on Desktop.
+ *   decoration?: "heroWatermark" | "notFoundWatermark"
+ *                    Placement and size from src/lib/decoration-classes.ts. Default
+ *                    "heroWatermark": 380px on Mobile, 620px on Desktop.
  */
+import { DECORATION_CLASSES } from "../lib/decoration-classes";
+
 interface Props {
-  class?: string;
+  decoration?: "heroWatermark" | "notFoundWatermark";
 }
 
-const {
-  class: className = "-top-13.75 -right-38.5 size-95 xl:-top-22.5 xl:-right-45 xl:size-155",
-} = Astro.props;
+const { decoration = "heroWatermark" } = Astro.props;
 ---
 
 <svg
-  class:list={["pointer-events-none absolute opacity-35", className]}
+  class={DECORATION_CLASSES[decoration]}
   viewBox="0 0 620 620"
   fill="none"
   stroke-width="1.5"
