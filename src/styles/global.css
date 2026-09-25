@@ -154,7 +154,9 @@
   --container-narrow: 880px;
   --container-content: 1120px;
   --container-wide: 1280px;
-  --container-full: 1440px;
+  /* Meridian's --container-full (1440px) lives in :root below, not here. In this
+     namespace Tailwind would compile w-full and max-w-full to 1440px instead of
+     100%, which broke every full-width element (G4 revision request 2). */
 
   --spacing-0: 0px;
   --spacing-1: 4px;
@@ -200,6 +202,17 @@
      named --spacing-*, --container-*, --leading-*, or --text-* token wherever
      the value matches one exactly. */
   --spacing: 4px;
+}
+
+/*
+ * Meridian tokens that MUST NOT enter a Tailwind @theme namespace, because their
+ * names collide with a built-in utility (G4 revision request 2).
+ * --container-full: the design's 1440px frame. As --container-full it redefined
+ * w-full, max-w-full, and basis-full. Layout never needs it: sections are
+ * full-bleed and content is capped at --container-wide inside the gutters.
+ */
+:root {
+  --container-full: 1440px;
 }
 
 /*
