@@ -16,6 +16,7 @@
 import Icon from "./Icon.astro";
 import LogoMark from "./LogoMark.astro";
 import { FOOTER_COLUMNS, FOOTER_LEGAL_LINKS } from "../lib/site-routes";
+import { CONTAINER_CLASS } from "../lib/ui-classes";
 
 const contactRows = [
   { icon: "pin", text: "Bengaluru, Karnataka" },
@@ -26,7 +27,7 @@ const contactRows = [
 
 <footer class="w-full overflow-clip bg-surface-inverse font-sans">
   <div class="border-t border-border-inverse px-5 pt-20 pb-12 xl:px-20">
-    <div class="mx-auto flex w-full max-w-wide flex-col items-start gap-6 xl:flex-row xl:gap-16">
+    <div class:list={[CONTAINER_CLASS, "flex flex-col items-start gap-6 xl:flex-row xl:gap-16"]}>
       <div class="flex w-full flex-col gap-5 xl:w-85 xl:shrink-0">
         <p class="flex items-center gap-3">
           <LogoMark class="size-6" />
@@ -76,7 +77,7 @@ const contactRows = [
 
   <div class="border-t border-border-inverse p-5 xl:px-20">
     <div
-      class="mx-auto flex w-full max-w-wide flex-col gap-6 xl:flex-row xl:items-center xl:justify-between xl:gap-10"
+      class:list={[CONTAINER_CLASS, "flex flex-col gap-6 xl:flex-row xl:items-center xl:justify-between xl:gap-10"]}
     >
       <p class="text-13 leading-4 text-slate-500">© 2026 TAMS Infotech Pvt. Ltd.</p>
       <nav aria-label="Legal">
@@ -96,7 +97,7 @@ const contactRows = [
   </div>
 
   <div class="border-t border-border-inverse p-5 xl:px-20">
-    <p class="mx-auto w-full max-w-wide text-12/snug text-slate-600">
+    <p class:list={[CONTAINER_CLASS, "text-12/snug text-slate-600"]}>
       SAP, S/4HANA, RISE with SAP and GROW with SAP are trademarks of SAP SE. TAMS Infotech is an
       independent SAP partner and is not affiliated with SAP SE beyond its partner agreement.
     </p>

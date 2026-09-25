@@ -30,14 +30,28 @@ const BUTTON_SIZES: Record<ButtonSize, string> = {
   xl: "h-14 px-8 text-16 leading-5",
 };
 
+/*
+ * G4 revision request 2: the fluid layout pattern. Every page band is full-bleed
+ * (w-full, background edge to edge) with the design's gutters; its content sits in
+ * this centred wrapper. Desktop (xl) caps content at --container-wide, the 1440 frame
+ * minus 80px gutters. Below xl the Mobile layout (ADR-013) is one column, so on tablet
+ * widths it caps at --container-narrow instead of running text edge to edge.
+ */
+export const CONTAINER_CLASS = "mx-auto w-full max-w-narrow xl:max-w-wide";
+
+/** Full-bleed band gutters: px-5 on Mobile, px-20 on Desktop (design-system section 5). */
+export const GUTTER_CLASS = "px-5 xl:px-20";
+
 export function buttonClasses(variant: ButtonVariant, size: ButtonSize, block: boolean): string {
   return [
-    "inline-flex shrink-0 items-center justify-center gap-2 rounded-full font-sans font-semibold",
+    "inline-flex max-w-full shrink-0 items-center justify-center gap-2 rounded-full text-center font-sans font-semibold",
     "aria-disabled:pointer-events-none aria-disabled:opacity-40",
     BUTTON_VARIANTS[variant],
     BUTTON_SIZES[size],
-    /* Mobile: full-width stacked buttons; Desktop: natural width (design-system section 5). */
-    block ? "w-full xl:w-auto" : "",
+    /* Phones: full-width stacked buttons (design-system section 5). From sm the pill
+       fits its label (w-fit also opts out of flex stretch), so tablet widths do not
+       draw 800px pills. Desktop: natural width. */
+    block ? "w-full sm:w-fit xl:w-auto" : "",
   ]
     .filter(Boolean)
     .join(" ");

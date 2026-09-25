@@ -21,6 +21,7 @@ import Icon from "./Icon.astro";
 import LogoMark from "./LogoMark.astro";
 import MobileNav from "./MobileNav.astro";
 import { DISCOVERY_CALL_HREF, currentNavKey, currentNavLabel } from "../lib/site-routes";
+import { CONTAINER_CLASS } from "../lib/ui-classes";
 
 interface Props {
   pathname: string;
@@ -48,21 +49,32 @@ const badge = currentNavLabel(current);
     </div>
   </div>
 
-  <div class="flex h-16 items-center justify-between gap-3 px-5 xl:hidden">
-    <a href="/" aria-label="TAMS Infotech, home" class="flex shrink-0 items-center gap-2">
-      <LogoMark class="size-6" />
-      <span class="font-display text-17 font-bold leading-5.5 tracking-tight">TAMS Infotech</span>
-    </a>
-    <div class="flex shrink-0 items-center gap-3">
-      {
-        badge !== undefined && (
-          <span class="flex h-6 items-center rounded-full bg-surface-inverse-raised px-2 font-mono text-10 font-medium uppercase leading-3 tracking-label text-accent-inverse">
-            {badge}
-          </span>
-        )
-      }
-      <Icon name="search" class="size-4.5 text-text-inverse" />
-      <MobileNav {current} {pathname} />
+  <div class="px-5 xl:hidden">
+    {/* G4 revision request 2: below about 360px the row cannot hold the brand, the
+      page badge, and both icons. The icon group is a reversed, wrapping flex row, so
+      the badge (last in source order) is the item that wraps to a second line, and
+      overflow-y-clip hides that line. The badge only repeats the current page, so it
+      is the one item that may disappear. py-2.5 plus gap-y-5 put the second line
+      below the 64px row. The menu panel is positioned against <header>, outside
+      this group, so the clipping never touches it. */}
+    <div class:list={[CONTAINER_CLASS, "flex h-16 items-center justify-between gap-3"]}>
+      <a href="/" aria-label="TAMS Infotech, home" class="flex shrink-0 items-center gap-2">
+        <LogoMark class="size-6" />
+        <span class="font-display text-17 font-bold leading-5.5 tracking-tight">TAMS Infotech</span>
+      </a>
+      <div
+        class="flex h-16 min-w-0 flex-row-reverse flex-wrap content-start items-center gap-x-3 gap-y-5 overflow-y-clip py-2.5"
+      >
+        <MobileNav {current} {pathname} />
+        <Icon name="search" class="size-4.5 text-text-inverse" />
+        {
+          badge !== undefined && (
+            <span class="flex h-6 items-center rounded-full bg-surface-inverse-raised px-2 font-mono text-10 font-medium uppercase leading-3 tracking-label whitespace-nowrap text-accent-inverse">
+              {badge}
+            </span>
+          )
+        }
+      </div>
     </div>
   </div>
 </header>

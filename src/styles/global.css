@@ -244,6 +244,9 @@
     color: var(--color-text);
     -webkit-font-smoothing: antialiased;
     font-synthesis: none;
+    /* G4 revision request 2: a word longer than its line (an email address, a URL)
+       breaks instead of widening the page at 320px. Words that fit never break. */
+    overflow-wrap: break-word;
   }
 
   /* design-system.md section 6: uniform focus ring from derived tokens. */

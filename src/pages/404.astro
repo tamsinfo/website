@@ -15,6 +15,7 @@ import SectionHeading from "../components/SectionHeading.astro";
 import TextLink from "../components/TextLink.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { DISCOVERY_CALL_HREF, PAGE_ROUTES, PLACEHOLDER_ROUTES, hrefFor } from "../lib/site-routes";
+import { CONTAINER_CLASS } from "../lib/ui-classes";
 
 const heading = "That page has moved, been renamed, or never existed.";
 const intro =
@@ -63,7 +64,7 @@ const wayfinding = [
     {/* Offsets from not-found.jsx: desktop left 960 of 1440 at 620 wide, mobile left 150 of
       390 at 380 wide; both leave the drawing 140px past the right edge (-right-35). */}
     <HexWatermark class="-top-10 -right-35 size-95 xl:-top-22.5 xl:-right-35 xl:size-155" />
-    <div class="relative mx-auto flex w-full max-w-wide flex-col gap-6">
+    <div class:list={[CONTAINER_CLASS, "relative flex flex-col gap-6"]}>
       <Eyebrow tone="dark">Page not found</Eyebrow>
       <p
         class="font-display text-72/none font-medium tracking-display text-accent-inverse xl:text-186/none"
@@ -77,7 +78,7 @@ const wayfinding = [
         {heading}
       </h1>
       <p class="text-16/body text-text-inverse-muted xl:max-w-160 xl:text-18/body">{intro}</p>
-      <div class="flex flex-col gap-3 xl:flex-row">
+      <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
         <Button href={hrefFor(PAGE_ROUTES.home)} variant="inverse" size="lg" arrow block>
           Go to the homepage
         </Button>

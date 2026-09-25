@@ -26,6 +26,7 @@ import {
 } from "../lib/about-content";
 import { PROCESS_INTRO } from "../lib/process-steps";
 import { PAGE_ROUTES, hrefFor } from "../lib/site-routes";
+import { CONTAINER_CLASS } from "../lib/ui-classes";
 
 const breadcrumb = [
   { label: PAGE_ROUTES.home.label, href: hrefFor(PAGE_ROUTES.home) },
@@ -58,20 +59,26 @@ const breadcrumb = [
     aria-labelledby="focus-heading"
     class="relative w-full overflow-clip bg-surface-inverse px-5 py-16 font-sans xl:px-20 xl:py-32"
   >
-    {/* about.jsx grid band: 1280x180 at top 0 / left 80, 50% opacity; mobile 380x53. */}
-    <svg
-      class="pointer-events-none absolute top-0 left-20 h-13.25 w-95 opacity-50 xl:h-45 xl:w-320"
-      viewBox="0 0 1280 180"
-      fill="none"
-      aria-hidden="true"
-      focusable="false"
-    >
-      <path class="stroke-border-inverse" d="M0 40h1280M0 90h1280M0 140h1280"></path>
-      <path
-        class="stroke-border-inverse-strong"
-        d="M120 20l30 50-30 50M300 20l30 50-30 50M480 20l30 50-30 50"></path>
-    </svg>
-    <div class="relative mx-auto flex w-full max-w-wide flex-col gap-6 xl:gap-10">
+    {/* about.jsx grid band: 1280x180 at top 0 / left 80, 50% opacity; mobile 380x53.
+      On Desktop "left 80" is the content edge, so the band is anchored to the centred
+      container and stays aligned with the text above 1440px (G4 revision request 2).
+      The section clips it, so it never widens the page. */}
+    <div class="pointer-events-none absolute inset-x-0 top-0 xl:px-20" aria-hidden="true">
+      <div class="relative xl:mx-auto xl:max-w-wide">
+        <svg
+          class="absolute top-0 left-20 h-13.25 w-95 opacity-50 xl:left-0 xl:h-45 xl:w-320"
+          viewBox="0 0 1280 180"
+          fill="none"
+          focusable="false"
+        >
+          <path class="stroke-border-inverse" d="M0 40h1280M0 90h1280M0 140h1280"></path>
+          <path
+            class="stroke-border-inverse-strong"
+            d="M120 20l30 50-30 50M300 20l30 50-30 50M480 20l30 50-30 50"></path>
+        </svg>
+      </div>
+    </div>
+    <div class:list={[CONTAINER_CLASS, "relative flex flex-col gap-6 xl:gap-10"]}>
       <Eyebrow tone="dark">{WHY_MANUFACTURING.eyebrow}</Eyebrow>
       <h2
         id="focus-heading"

@@ -47,6 +47,7 @@ import {
   UPDATES_ROWS,
 } from "../lib/privacy-content";
 import { PAGE_ROUTES } from "../lib/site-routes";
+import { CONTAINER_CLASS } from "../lib/ui-classes";
 
 const titleClass = "xl:max-w-190";
 const asideClass = "text-15/body xl:w-105 xl:text-16/body";
@@ -64,7 +65,7 @@ const bodyClass = "text-16/body text-text-muted xl:max-w-215 xl:text-17/body";
     aria-label="Draft notice"
     class="w-full bg-warning-soft px-5 py-12 font-sans xl:px-20 xl:py-24"
   >
-    <div class="mx-auto flex w-full max-w-wide flex-col items-start gap-6 xl:flex-row">
+    <div class:list={[CONTAINER_CLASS, "flex flex-col items-start gap-6 xl:flex-row"]}>
       <Chip variant="warning-strong">{DRAFT_NOTICE.badge}</Chip>
       <p class="text-15/body text-text xl:grow xl:basis-0">{DRAFT_NOTICE.body}</p>
     </div>

@@ -20,7 +20,7 @@ const { href } = Astro.props;
 
 <a
   {href}
-  class="inline-flex h-12 w-full shrink-0 items-center gap-2 rounded-full border border-slate-900 px-6 font-sans text-15 font-semibold leading-4.5 text-text hover:bg-bg-sunk xl:w-auto"
+  class="inline-flex h-12 w-full max-w-full shrink-0 items-center gap-2 rounded-full border border-slate-900 px-6 font-sans text-15 font-semibold leading-4.5 text-text hover:bg-bg-sunk sm:w-fit xl:w-auto"
 >
   <slot />
   <Icon name="arrow-right" class="size-3.75 text-slate-900" />
