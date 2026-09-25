@@ -103,6 +103,10 @@ const CHIP_VARIANTS: Record<ChipVariant, string> = {
 export const TABLE_ROW_CLASS = "border-b border-border last:border-b-0 even:bg-limestone-50";
 export const TABLE_CELL_CLASS = "px-5 py-6 align-middle xl:px-8";
 
+/** DataTable rows and cells stack as blocks below xl (G4 revision request 2). */
+export const STACKED_ROW_CLASS = "block xl:table-row";
+export const STACKED_CELL_CLASS = "block xl:table-cell";
+
 export type TableHeaderTone = "sunk" | "limestone";
 
 export function tableHeaderClass(tone: TableHeaderTone): string {

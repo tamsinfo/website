@@ -8,6 +8,15 @@
  * table needs a coloured second header and an arrow gutter, so it is built here.
  *
  * Props: none. Rows come from src/lib/home-content.ts.
+ *
+ * Below xl each row is the snapshot's flex row (mobile/home.jsx): problem and arrow,
+ * then the outcome, in a 5:6 split (the snapshot's grow 1 : 1.2). Every row shares the
+ * same minimums, so the columns line up like a table: min-w-39.5 = 48px arrow gutter +
+ * 110px for the longest problem word ("disconnected", 109.7px), and min-w-25 = 100px
+ * for the longest outcome word ("organizations,", 99.9px). Together they fit the 284px
+ * row at the 390px design width. Below about 388px flex-wrap drops every outcome under
+ * its problem instead of clipping text (G4 revision request 2).
+ * The explicit ARIA table roles keep the semantics that display:flex removes.
  */
 import Glyph from "./Glyph.astro";
 import { CHALLENGES, CHALLENGES_SECTION } from "../../lib/home-content";
@@ -18,23 +27,47 @@ const headerCell =
 ---
 
 <div class="overflow-clip rounded-lg border border-border bg-surface">
-  <table class="w-full border-collapse text-left font-sans">
+  <table class="block w-full border-collapse text-left font-sans xl:table" role="table">
     <caption class="sr-only">{CHALLENGES_SECTION.title}</caption>
-    <thead class="bg-bg-sunk">
-      <tr class="h-12 border-b border-border">
-        <th scope="col" class:list={[headerCell, "w-5/11 pl-8 text-text-muted"]}>
+    <thead class="block bg-bg-sunk xl:table-header-group" role="rowgroup">
+      <tr
+        class="flex min-h-12 flex-wrap items-center gap-x-6 gap-y-2 border-b border-border px-8 py-2.5 xl:table-row xl:h-12 xl:p-0"
+        role="row"
+      >
+        <th
+          scope="col"
+          role="columnheader"
+          class:list={[
+            headerCell,
+            "block min-w-39.5 grow-5 basis-12 pr-12 text-text-muted xl:table-cell xl:min-w-0 xl:w-5/11 xl:pr-0 xl:pl-8",
+          ]}
+        >
           {CHALLENGES_SECTION.problemColumn}
         </th>
-        <th scope="col" class:list={[headerCell, "pr-8 pl-6 text-primary xl:pl-10"]}>
+        <th
+          scope="col"
+          role="columnheader"
+          class:list={[headerCell, "block min-w-25 grow-6 basis-0 text-primary xl:table-cell xl:min-w-0 xl:pr-8 xl:pl-10"]}
+        >
           {CHALLENGES_SECTION.outcomeColumn}
         </th>
       </tr>
     </thead>
-    <tbody>
+    <tbody class="block xl:table-row-group" role="rowgroup">
       {
         CHALLENGES.map((challenge) => (
-          <tr class={TABLE_ROW_CLASS}>
-            <th scope="row" class="py-6 pl-8 align-middle font-regular">
+          <tr
+            class:list={[
+              TABLE_ROW_CLASS,
+              "flex flex-wrap items-center gap-x-6 gap-y-3 px-8 py-6 xl:table-row xl:p-0",
+            ]}
+            role="row"
+          >
+            <th
+              scope="row"
+              role="rowheader"
+              class="block min-w-39.5 grow-5 basis-12 font-regular xl:table-cell xl:min-w-0 xl:py-6 xl:pl-8 xl:align-middle"
+            >
               <span class="flex items-center gap-6 xl:gap-10">
                 <span class="grow text-17 font-semibold leading-5.5 tracking-snug text-text">
                   {challenge.problem}
@@ -42,7 +75,10 @@ const headerCell =
                 <Glyph name="arrow-right-fine" class="size-6 text-primary" />
               </span>
             </th>
-            <td class="py-6 pr-8 pl-6 align-middle text-15/body text-text-muted xl:pl-10">
+            <td
+              role="cell"
+              class="block min-w-25 grow-6 basis-0 text-15/body text-text-muted xl:table-cell xl:min-w-0 xl:py-6 xl:pr-8 xl:pl-10 xl:align-middle"
+            >
               {challenge.outcome}
             </td>
           </tr>

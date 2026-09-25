@@ -13,13 +13,18 @@
  *   emptyMessage?: string           Rendered as one full-width row when no rows are
  *                                   slotted (SCR-003 empty state: "No openings available").
  *   class?: string
- * Slot: <tr> rows. Use TABLE_ROW_CLASS and TABLE_CELL_CLASS from src/lib/ui-classes.ts
- * so rows alternate surface / limestone-50 with hairline dividers.
+ * Slot: <tr role="row"> rows. Use TABLE_ROW_CLASS with STACKED_ROW_CLASS, and
+ * TABLE_CELL_CLASS with STACKED_CELL_CLASS (role="cell"), from src/lib/ui-classes.ts,
+ * so rows alternate surface / limestone-50 with hairline dividers and stack on Mobile.
  *
- * The wrapper scrolls horizontally on narrow screens and is focusable so keyboard
- * users can scroll it (the page itself never scrolls sideways, NFR-020).
+ * Below xl the table renders stacked (G4 revision request 2): the header labels wrap
+ * as one line of text and each row is a block, so nothing is cut off at 320px and the
+ * page never scrolls sideways (NFR-020). The explicit ARIA table roles keep the table
+ * semantics that display:block would otherwise remove. Desktop is a normal table.
  */
 import {
+  STACKED_CELL_CLASS,
+  STACKED_ROW_CLASS,
   TABLE_CELL_CLASS,
   TABLE_ROW_CLASS,
   tableHeaderClass,
@@ -44,21 +49,24 @@ const hasRows = Astro.slots.has("default");
 ---
 
 <div
-  class:list={["overflow-x-auto rounded-lg border border-border bg-surface", className]}
+  class:list={["overflow-clip rounded-lg border border-border bg-surface", className]}
   role="region"
   aria-label={caption}
-  tabindex="0"
 >
-  <table class="w-full border-collapse text-left font-sans">
+  <table class="block w-full border-collapse text-left font-sans xl:table" role="table">
     <caption class="sr-only">{caption}</caption>
-    <thead class={tableHeaderClass(headerTone)}>
-      <tr class="h-12 border-b border-border">
+    <thead class:list={["block xl:table-header-group", tableHeaderClass(headerTone)]} role="rowgroup">
+      <tr
+        class="flex flex-wrap items-center gap-x-6 gap-y-2 border-b border-border px-5 py-4 xl:table-row xl:h-12 xl:p-0"
+        role="row"
+      >
         {
           columns.map((column) => (
             <th
               scope="col"
+              role="columnheader"
               class:list={[
-                "px-5 font-mono text-11 font-medium uppercase leading-3.5 tracking-label-wide text-text-muted xl:px-8",
+                "block font-mono text-11 font-medium uppercase leading-3.5 tracking-label-wide text-text-muted xl:table-cell xl:px-8",
                 column.class,
               ]}
             >
@@ -68,14 +76,18 @@ const hasRows = Astro.slots.has("default");
         }
       </tr>
     </thead>
-    <tbody>
+    <tbody class="block xl:table-row-group" role="rowgroup">
       {
         hasRows ? (
           <slot />
         ) : (
           emptyMessage !== undefined && (
-            <tr class={TABLE_ROW_CLASS}>
-              <td colspan={columns.length} class:list={[TABLE_CELL_CLASS, "text-15/body text-text-muted"]}>
+            <tr class:list={[TABLE_ROW_CLASS, STACKED_ROW_CLASS]} role="row">
+              <td
+                colspan={columns.length}
+                role="cell"
+                class:list={[TABLE_CELL_CLASS, STACKED_CELL_CLASS, "text-15/body text-text-muted"]}
+              >
                 {emptyMessage}
               </td>
             </tr>
