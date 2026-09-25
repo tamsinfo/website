@@ -111,7 +111,7 @@ const { phonePrefill, callingCodes, siteKey } = Astro.props;
           class={TEXTAREA_CLASS}></textarea>
       </FormField>
       <div class="flex flex-col">
-        {siteKey !== null && <div data-turnstile data-sitekey={siteKey}></div>}
+        {siteKey !== null && <div data-turnstile data-sitekey={siteKey} class="max-w-full"></div>}
         <div class="flex flex-col gap-6 pt-2 xl:flex-row xl:items-center xl:justify-between">
           <p class="grow basis-0 font-sans text-13/snug text-text-subtle">
             Routed straight to the right team. Reply within one working day.

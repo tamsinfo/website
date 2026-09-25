@@ -2,7 +2,8 @@
 /**
  * Section — full-bleed page section with the design's gutters and rhythm
  * (design-system.md section 3). Mobile: px-5, py-12. Desktop (xl): px-20, py-24.
- * Content is centred in --container-wide (1280px), the 1440 frame minus gutters.
+ * The background runs edge to edge at any width; content is centred in
+ * CONTAINER_CLASS (G4 revision request 2).
  *
  * Props:
  *   tone?: "bg" | "sunk" | "surface" | "inverse"   Background. Default "bg".
@@ -16,7 +17,12 @@
  *                         "flex flex-col gap-8 xl:gap-12").
  * Slot: section content.
  */
-import { sectionToneClass, type SectionTone } from "../lib/ui-classes";
+import {
+  CONTAINER_CLASS,
+  GUTTER_CLASS,
+  sectionToneClass,
+  type SectionTone,
+} from "../lib/ui-classes";
 
 interface Props {
   tone?: SectionTone;
@@ -46,9 +52,9 @@ const paddingClass = {
 <section
   {id}
   aria-labelledby={labelledby}
-  class:list={["w-full px-5 font-sans xl:px-20", sectionToneClass(tone), paddingClass, className]}
+  class:list={["w-full font-sans", GUTTER_CLASS, sectionToneClass(tone), paddingClass, className]}
 >
-  <div class:list={["mx-auto w-full max-w-wide", innerClass]}>
+  <div class:list={[CONTAINER_CLASS, innerClass]}>
     <slot />
   </div>
 </section>

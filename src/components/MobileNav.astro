@@ -15,6 +15,7 @@
 import Button from "./Button.astro";
 import Icon from "./Icon.astro";
 import { DISCOVERY_CALL_HREF, PRIMARY_NAV, isCurrentHref, type NavKey } from "../lib/site-routes";
+import { CONTAINER_CLASS, GUTTER_CLASS } from "../lib/ui-classes";
 
 interface Props {
   current?: NavKey | undefined;
@@ -35,62 +36,67 @@ const rowClass =
   </summary>
   <nav
     aria-label="Primary"
-    class="absolute inset-x-0 top-full z-50 min-h-screen border-t border-border-inverse bg-surface-inverse px-5 pt-2 pb-6"
+    class:list={[
+      "absolute inset-x-0 top-full z-50 min-h-screen border-t border-border-inverse bg-surface-inverse pt-2 pb-6",
+      GUTTER_CLASS,
+    ]}
   >
-    <ul class="flex flex-col">
-      {
-        PRIMARY_NAV.map((item) => {
-          const tone = item.key === current ? "text-accent-inverse" : "text-text-inverse";
-          if (item.kind === "link") {
+    <div class={CONTAINER_CLASS}>
+      <ul class="flex flex-col">
+        {
+          PRIMARY_NAV.map((item) => {
+            const tone = item.key === current ? "text-accent-inverse" : "text-text-inverse";
+            if (item.kind === "link") {
+              return (
+                <li class="border-b border-border-inverse">
+                  <a
+                    href={item.href}
+                    class:list={[rowClass, tone]}
+                    aria-current={isCurrentHref(item.href, pathname) ? "page" : undefined}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              );
+            }
             return (
               <li class="border-b border-border-inverse">
-                <a
-                  href={item.href}
-                  class:list={[rowClass, tone]}
-                  aria-current={isCurrentHref(item.href, pathname) ? "page" : undefined}
-                >
-                  {item.label}
-                </a>
+                <details class="group/sub">
+                  <summary class:list={[rowClass, tone]}>
+                    {item.label}
+                    <Icon name="plus" class="size-4.5 text-text-inverse-muted group-open/sub:hidden" />
+                    <Icon
+                      name="minus"
+                      class="hidden size-4.5 text-text-inverse-muted group-open/sub:block"
+                    />
+                  </summary>
+                  <ul class="flex flex-col pb-4">
+                    {item.links.map((link) => (
+                      <li>
+                        <a
+                          href={link.href}
+                          class:list={[
+                            "block py-2 font-sans text-16/snug hover:text-text-inverse",
+                            isCurrentHref(link.href, pathname)
+                              ? "text-accent-inverse"
+                              : "text-text-inverse-muted",
+                          ]}
+                          aria-current={isCurrentHref(link.href, pathname) ? "page" : undefined}
+                        >
+                          {link.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
               </li>
             );
-          }
-          return (
-            <li class="border-b border-border-inverse">
-              <details class="group/sub">
-                <summary class:list={[rowClass, tone]}>
-                  {item.label}
-                  <Icon name="plus" class="size-4.5 text-text-inverse-muted group-open/sub:hidden" />
-                  <Icon
-                    name="minus"
-                    class="hidden size-4.5 text-text-inverse-muted group-open/sub:block"
-                  />
-                </summary>
-                <ul class="flex flex-col pb-4">
-                  {item.links.map((link) => (
-                    <li>
-                      <a
-                        href={link.href}
-                        class:list={[
-                          "block py-2 font-sans text-16/snug hover:text-text-inverse",
-                          isCurrentHref(link.href, pathname)
-                            ? "text-accent-inverse"
-                            : "text-text-inverse-muted",
-                        ]}
-                        aria-current={isCurrentHref(link.href, pathname) ? "page" : undefined}
-                      >
-                        {link.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </details>
-            </li>
-          );
-        })
-      }
-    </ul>
-    <Button href={DISCOVERY_CALL_HREF} variant="inverse" size="lg" block class="mt-4">
-      Contact us
-    </Button>
+          })
+        }
+      </ul>
+      <Button href={DISCOVERY_CALL_HREF} variant="inverse" size="lg" block class="mt-4">
+        Contact us
+      </Button>
+    </div>
   </nav>
 </details>

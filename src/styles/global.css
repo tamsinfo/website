@@ -154,7 +154,9 @@
   --container-narrow: 880px;
   --container-content: 1120px;
   --container-wide: 1280px;
-  --container-full: 1440px;
+  /* Meridian's --container-full (1440px) lives in :root below, not here. In this
+     namespace Tailwind would compile w-full and max-w-full to 1440px instead of
+     100%, which broke every full-width element (G4 revision request 2). */
 
   --spacing-0: 0px;
   --spacing-1: 4px;
@@ -203,6 +205,17 @@
 }
 
 /*
+ * Meridian tokens that MUST NOT enter a Tailwind @theme namespace, because their
+ * names collide with a built-in utility (G4 revision request 2).
+ * --container-full: the design's 1440px frame. As --container-full it redefined
+ * w-full, max-w-full, and basis-full. Layout never needs it: sections are
+ * full-bleed and content is capped at --container-wide inside the gutters.
+ */
+:root {
+  --container-full: 1440px;
+}
+
+/*
  * ADR-012 menu visibility (C-23, C-24). A desktop dropdown panel is a direct child
  * of its [data-menu] list item.
  * - Without JavaScript: the panel shows on :hover and :focus-within.
@@ -231,6 +244,9 @@
     color: var(--color-text);
     -webkit-font-smoothing: antialiased;
     font-synthesis: none;
+    /* G4 revision request 2: a word longer than its line (an email address, a URL)
+       breaks instead of widening the page at 320px. Words that fit never break. */
+    overflow-wrap: break-word;
   }
 
   /* design-system.md section 6: uniform focus ring from derived tokens. */

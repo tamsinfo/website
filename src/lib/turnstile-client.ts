@@ -11,8 +11,28 @@
 export const TURNSTILE_SCRIPT_SRC =
   "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
 
+/** Width in px of Turnstile's "normal" widget. The "compact" widget is 150px wide. */
+export const TURNSTILE_NORMAL_WIDTH = 300;
+
+export type TurnstileSize = "normal" | "compact";
+
+/**
+ * Picks the widget size for the width its container has. The normal widget is a
+ * fixed 300px, which would widen the page on phones narrower than about 390px
+ * (G4 revision request 2). Pure.
+ *
+ * The size is chosen once, from the container's width at render. Turnstile cannot
+ * change the size of a live widget: it would have to be removed and rendered again,
+ * which discards a token the visitor may already have earned. A later rotation or
+ * resize keeps the first size; the container's max-w-full limits any overflow.
+ */
+export function turnstileSizeFor(containerWidth: number): TurnstileSize {
+  return containerWidth < TURNSTILE_NORMAL_WIDTH ? "compact" : "normal";
+}
+
 interface TurnstileRenderOptions {
   readonly sitekey: string;
+  readonly size: TurnstileSize;
   readonly appearance: "interaction-only";
   readonly "refresh-expired": "auto";
   readonly callback: (token: string) => void;
@@ -71,6 +91,7 @@ export function initTurnstile(container: HTMLElement | null): TurnstileHandle {
     widgetId =
       api.render(target, {
         sitekey: key,
+        size: turnstileSizeFor(target.clientWidth),
         appearance: "interaction-only",
         "refresh-expired": "auto",
         callback: tokens.store,

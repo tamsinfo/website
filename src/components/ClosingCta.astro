@@ -9,24 +9,27 @@
 import Button from "./Button.astro";
 import Eyebrow from "./Eyebrow.astro";
 import { DISCOVERY_CALL_HREF } from "../lib/site-routes";
+import { CONTAINER_CLASS, GUTTER_CLASS } from "../lib/ui-classes";
 ---
 
 <section
   aria-labelledby="closing-cta-heading"
-  class="flex w-full flex-col items-center gap-6 bg-surface-inverse px-5 py-32 font-sans xl:px-20"
+  class:list={["w-full bg-surface-inverse py-32 font-sans", GUTTER_CLASS]}
 >
-  <Eyebrow tone="dark">Contact</Eyebrow>
-  <h2
-    id="closing-cta-heading"
-    class="text-center font-display text-32/display font-medium tracking-tighter text-text-inverse xl:max-w-225 xl:text-64/display"
-  >
-    Tell us what is breaking
-  </h2>
-  <p class="text-center text-17/body text-text-inverse-muted xl:max-w-140">
-    Thirty minutes with a consultant who has done this in a plant. No deck, no discovery
-    questionnaire.
-  </p>
-  <Button href={DISCOVERY_CALL_HREF} variant="inverse" size="xl" arrow block>
-    Book a discovery call
-  </Button>
+  <div class:list={[CONTAINER_CLASS, "flex flex-col items-center gap-6"]}>
+    <Eyebrow tone="dark">Contact</Eyebrow>
+    <h2
+      id="closing-cta-heading"
+      class="text-center font-display text-32/display font-medium tracking-tighter text-text-inverse xl:max-w-225 xl:text-64/display"
+    >
+      Tell us what is breaking
+    </h2>
+    <p class="text-center text-17/body text-text-inverse-muted max-w-140">
+      Thirty minutes with a consultant who has done this in a plant. No deck, no discovery
+      questionnaire.
+    </p>
+    <Button href={DISCOVERY_CALL_HREF} variant="inverse" size="xl" arrow block>
+      Book a discovery call
+    </Button>
+  </div>
 </section>

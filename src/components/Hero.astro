@@ -24,6 +24,7 @@ import Button from "./Button.astro";
 import Eyebrow from "./Eyebrow.astro";
 import HexWatermark from "./HexWatermark.astro";
 import { DISCOVERY_CALL_HREF } from "../lib/site-routes";
+import { CONTAINER_CLASS, GUTTER_CLASS } from "../lib/ui-classes";
 
 interface Crumb {
   label: string;
@@ -53,12 +54,13 @@ const hasAside = Astro.slots.has("aside");
 
 <section
   class:list={[
-    "relative w-full overflow-clip bg-surface-inverse px-5 pt-10 pb-12 font-sans text-text-inverse xl:px-20 xl:pt-16 xl:pb-24",
+    "relative w-full overflow-clip bg-surface-inverse pt-10 pb-12 font-sans text-text-inverse xl:pt-16 xl:pb-24",
+    GUTTER_CLASS,
     className,
   ]}
 >
   <HexWatermark />
-  <div class="relative mx-auto flex w-full max-w-wide flex-col gap-8 xl:gap-16">
+  <div class:list={[CONTAINER_CLASS, "relative flex flex-col gap-8 xl:gap-16"]}>
     {breadcrumb !== undefined && <Breadcrumb items={breadcrumb} />}
     <div class="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between xl:gap-20">
       <div class="flex min-w-0 grow basis-0 flex-col gap-6">

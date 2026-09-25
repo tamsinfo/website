@@ -17,6 +17,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { callingCodeFor, listCallingCodes } from "../lib/calling-codes";
 import { readTurnstileSiteKey } from "../lib/runtime-config";
 import { PAGE_ROUTES, hrefFor } from "../lib/site-routes";
+import { CONTAINER_CLASS, GUTTER_CLASS } from "../lib/ui-classes";
 
 // ADR-001: the Phone prefill varies per request by CF-IPCountry (FR-024), and the
 // Turnstile site key is read at request time (NFR-015).
@@ -44,8 +45,8 @@ Astro.response.headers.set("Cache-Control", "private, no-store");
     {intro}
     breadcrumb={[{ label: "Home", href: hrefFor(PAGE_ROUTES.home) }, { label: "Contact Us" }]}
   />
-  <section class="w-full bg-bg px-5 py-12 font-sans xl:px-20 xl:py-24">
-    <div class="mx-auto flex w-full max-w-wide flex-col gap-6 xl:flex-row xl:items-start xl:gap-20">
+  <section class:list={["w-full bg-bg py-12 font-sans xl:py-24", GUTTER_CLASS]}>
+    <div class:list={[CONTAINER_CLASS, "flex flex-col gap-6 xl:flex-row xl:items-start xl:gap-20"]}>
       <OfficeDetails />
       <div id="contact-form" class="flex w-full shrink-0 flex-col xl:w-150">
         <ContactForm {phonePrefill} {callingCodes} {siteKey} />
