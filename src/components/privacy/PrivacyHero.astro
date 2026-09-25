@@ -9,12 +9,12 @@
 import Eyebrow from "../Eyebrow.astro";
 import LegalValueText from "./LegalValueText.astro";
 import { PRIVACY_HERO } from "../../lib/privacy-content";
-import { CONTAINER_CLASS } from "../../lib/ui-classes";
+import { CONTAINER_CLASS, GUTTER_CLASS } from "../../lib/ui-classes";
 ---
 
 <section
   aria-labelledby="privacy-heading"
-  class="w-full bg-surface-inverse px-5 py-16 font-sans xl:p-20"
+  class:list={["w-full bg-surface-inverse py-16 font-sans xl:py-20", GUTTER_CLASS]}
 >
   <div class:list={[CONTAINER_CLASS, "flex flex-col gap-6"]}>
     <Eyebrow tone="dark">{PRIVACY_HERO.eyebrow}</Eyebrow>

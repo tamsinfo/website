@@ -24,7 +24,7 @@ import Button from "./Button.astro";
 import Eyebrow from "./Eyebrow.astro";
 import HexWatermark from "./HexWatermark.astro";
 import { DISCOVERY_CALL_HREF } from "../lib/site-routes";
-import { CONTAINER_CLASS } from "../lib/ui-classes";
+import { CONTAINER_CLASS, GUTTER_CLASS } from "../lib/ui-classes";
 
 interface Crumb {
   label: string;
@@ -54,7 +54,8 @@ const hasAside = Astro.slots.has("aside");
 
 <section
   class:list={[
-    "relative w-full overflow-clip bg-surface-inverse px-5 pt-10 pb-12 font-sans text-text-inverse xl:px-20 xl:pt-16 xl:pb-24",
+    "relative w-full overflow-clip bg-surface-inverse pt-10 pb-12 font-sans text-text-inverse xl:pt-16 xl:pb-24",
+    GUTTER_CLASS,
     className,
   ]}
 >

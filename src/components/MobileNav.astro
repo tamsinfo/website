@@ -15,7 +15,7 @@
 import Button from "./Button.astro";
 import Icon from "./Icon.astro";
 import { DISCOVERY_CALL_HREF, PRIMARY_NAV, isCurrentHref, type NavKey } from "../lib/site-routes";
-import { CONTAINER_CLASS } from "../lib/ui-classes";
+import { CONTAINER_CLASS, GUTTER_CLASS } from "../lib/ui-classes";
 
 interface Props {
   current?: NavKey | undefined;
@@ -36,7 +36,10 @@ const rowClass =
   </summary>
   <nav
     aria-label="Primary"
-    class="absolute inset-x-0 top-full z-50 min-h-screen border-t border-border-inverse bg-surface-inverse px-5 pt-2 pb-6"
+    class:list={[
+      "absolute inset-x-0 top-full z-50 min-h-screen border-t border-border-inverse bg-surface-inverse pt-2 pb-6",
+      GUTTER_CLASS,
+    ]}
   >
     <div class={CONTAINER_CLASS}>
       <ul class="flex flex-col">

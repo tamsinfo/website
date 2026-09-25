@@ -21,7 +21,7 @@ import Icon from "./Icon.astro";
 import LogoMark from "./LogoMark.astro";
 import MobileNav from "./MobileNav.astro";
 import { DISCOVERY_CALL_HREF, currentNavKey, currentNavLabel } from "../lib/site-routes";
-import { CONTAINER_CLASS } from "../lib/ui-classes";
+import { CONTAINER_CLASS, GUTTER_CLASS } from "../lib/ui-classes";
 
 interface Props {
   pathname: string;
@@ -33,8 +33,9 @@ const badge = currentNavLabel(current);
 ---
 
 <header class="relative z-40 w-full bg-surface-inverse font-sans text-text-inverse">
+  {/* KD-004 gutters (px-10, then px-20 from 2xl) differ from GUTTER_CLASS on purpose. */}
   <div class="hidden px-10 xl:block 2xl:px-20">
-    <div class="mx-auto flex h-20 w-full max-w-wide items-center justify-between gap-8 2xl:gap-10">
+    <div class:list={[CONTAINER_CLASS, "flex h-20 items-center justify-between gap-8 2xl:gap-10"]}>
       <div class="flex items-center gap-8 2xl:gap-10">
         <a href="/" aria-label="TAMS Infotech, home" class="flex shrink-0 items-center gap-3">
           <LogoMark class="size-6.5" />
@@ -49,14 +50,16 @@ const badge = currentNavLabel(current);
     </div>
   </div>
 
-  <div class="px-5 xl:hidden">
+  <div class:list={[GUTTER_CLASS, "xl:hidden"]}>
     {/* G4 revision request 2: below about 360px the row cannot hold the brand, the
       page badge, and both icons. The icon group is a reversed, wrapping flex row, so
       the badge (last in source order) is the item that wraps to a second line, and
       overflow-y-clip hides that line. The badge only repeats the current page, so it
       is the one item that may disappear. py-2.5 plus gap-y-5 put the second line
       below the 64px row. The menu panel is positioned against <header>, outside
-      this group, so the clipping never touches it. */}
+      this group, so the clipping never touches it. The reversal puts the menu
+      control first in source order: screen readers reach it before the badge. Tab
+      order is unchanged, because the menu control is the only focusable item. */}
     <div class:list={[CONTAINER_CLASS, "flex h-16 items-center justify-between gap-3"]}>
       <a href="/" aria-label="TAMS Infotech, home" class="flex shrink-0 items-center gap-2">
         <LogoMark class="size-6" />
