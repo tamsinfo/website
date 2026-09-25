@@ -2,7 +2,7 @@
 artifact: review-fix-fluid-layout
 phase: 4
 status: in-review
-version: 1
+version: 2
 updated: 2026-09-24
 owner: code-reviewer
 depends_on:
@@ -238,3 +238,94 @@ layout-tokens test.
 The footer wordmark at `SiteFooter.astro:106-110` is `w-max` and `justify-center` in an
 `overflow-clip` band. At 320px it clips on both sides. It is decorative and aria-hidden,
 and the diff does not change it.
+
+## Round 2 (delta re-review, 2026-09-24)
+
+**Commit range:** `081353d..c8ed821`, 4 commits: `e9f5100` GUTTER_CLASS/CONTAINER_CLASS in
+every band, `d54139a` named decorations in `src/lib/decoration-classes.ts`, `276f909`
+per-breakpoint width guard, `c8ed821` Turnstile doc comment. 15 files, +286 / -97.
+Verified in a fresh scratch export of `c8ed821`. The worktree, its `dist/`, and port 4984
+were not touched.
+
+### Verdict (round 2)
+
+APPROVED
+
+### Disposition of round-1 findings
+
+| Finding | Status | Evidence |
+|---|---|---|
+| MEDIUM-1 named/arbitrary widths | Resolved | `widthPx` in `fixed-width-guard.test.ts` resolves `--container-*`/`--spacing-*` names and `(--var)` widths from global.css. It rejects `[...]` and `w-screen`. |
+| MEDIUM-2 sm/md/lg exemption | Resolved | `BUDGET_PX`: base 280, sm 600, md 728, lg 880, xl 1120, 2xl 1280. `max-*` and state variants keep the base budget. |
+| MEDIUM-3 GUTTER_CLASS unused | Resolved | Every band uses `GUTTER_CLASS`. A new test rejects hand-written `xl:px-20`/`xl:p-20` outside `ui-classes.ts`. The desktop header's `px-10 2xl:px-20` is a documented KD-004 exception. |
+| LOW-1 header container | Resolved | `SiteHeader.astro:38` uses `CONTAINER_CLASS`. |
+| LOW-2 Turnstile size once | Resolved (documented) | `turnstile-client.ts:24-27` explains why the widget is not re-rendered: it would discard a token the visitor already earned. |
+| LOW-3 header reading order | Resolved (documented) | Comment at `SiteHeader.astro:54-62`. |
+| LOW-4 file+token allowlist | Resolved | The allowlist is replaced by `DECORATION_CLASSES`. Only exact strings in that module are exempt. A new test requires each use in `.astro` markup to be on an `aria-hidden="true"` element, and each decoration to be `absolute pointer-events-none`. |
+
+### Planted regressions (scratch copy of c8ed821, all restored afterwards)
+
+Every plant was added to a real component (`home/ProcessRail.astro`, `home/HomeHero.astro`,
+`404.astro`, `about.astro`, `lib/ui-classes.ts`). Every one made
+`tests/unit/fixed-width-guard.test.ts` fail:
+
+* Named widths: `w-narrow`, `w-wide`, `min-w-content`.
+* var and arbitrary widths: `w-(--container-wide)`, `w-[600px]`, `min-w-[20rem]`, and
+  `w-screen`.
+* Breakpoint widths: `sm:w-200`, `md:w-190`, `lg:w-225`, `max-xl:w-150`, `xl:w-300`.
+* Hand-written gutters: `px-5 xl:px-20`, `xl:p-20`.
+* A copied decoration string, as a literal in `404.astro` and as a constant in
+  `ui-classes.ts`.
+* A decoration without `aria-hidden`:
+  * HomeHero's watermark with `aria-hidden` removed.
+  * A new `<div class={DECORATION_CLASSES.aboutGridBand}>` in about.
+  * An alias (`const wm = DECORATION_CLASSES.homeHeroWatermark` in frontmatter, then
+    `class={wm}` with no `aria-hidden`). See LOW-5.
+
+The compiled CSS contains every decoration utility (`left-15`, `-right-38.5`,
+`xl:size-190`, `xl:-right-60`, `xl:w-320`, `size-95`). Tailwind scans the `.ts` module.
+`w-full` and `max-w-full` are still 100%.
+
+Fidelity of the moved decorations:
+* HexWatermark's default and the 404 variant carry the same classes as before.
+* The about band moved from `left-20` on the section to `left-15` inside the 20px
+  gutter. That is still 80px at 390, and 80px (the content edge) at 1440.
+* PrivacyHero `xl:p-20` became `xl:py-20` plus GUTTER_CLASS, which is equivalent.
+* The footer's `p-5 xl:px-20` became `py-5` plus GUTTER_CLASS, which is equivalent.
+
+### New finding
+
+#### [low] LOW-5: the aria-hidden check catches a frontmatter alias only through its use-count floor
+
+**File:** `tests/unit/fixed-width-guard.test.ts` ("uses a decoration only on an aria-hidden element")
+**Requirement:** Accessibility. The decoration contract in `src/lib/decoration-classes.ts:4-5`.
+**Problem:** The check scans only markup after the frontmatter for the literal text
+`DECORATION_CLASSES`. A frontmatter alias (`const wm = DECORATION_CLASSES.x`) used as
+`class={wm}` on a non-hidden element is invisible to that scan. My planted alias failed
+only because it dropped the count of markup uses from 3 to 2, below the
+`toBeGreaterThanOrEqual(3)` floor.
+**Consequence:** Once a fourth decoration use exists, an aliased decoration can be exposed
+to assistive technology without failing CI.
+**Fix:** Optional. Also reject `DECORATION_CLASSES` in `.astro` frontmatter, or pin the
+exact expected use count.
+
+### Gates (round 2, profile order, scratch export of c8ed821)
+
+| Command | Result |
+|---|---|
+| `bun install --frozen-lockfile` | exit 0 |
+| `bunx astro sync` | exit 0 |
+| `bunx oxfmt --check` | exit 0, 72 files formatted |
+| `bunx oxlint --deny-warnings` | exit 0 |
+| `bunx astro check` | exit 0, 0 errors / 0 warnings / 0 hints |
+| `bunx vitest run` | exit 0, 23 files, 703 tests passed |
+| `bunx astro build` | exit 0 |
+| `bun audit --audit-level=high` | exit 0, no vulnerabilities |
+
+Not run: a real-browser pass. The orchestrator is doing that.
+
+### Gate-blind files (round 2)
+
+11 `.astro` files changed. In the added lines I grepped for inline `style=`, arbitrary
+values, hex colours, `any`, `tabindex`, and tab indentation. I found none of them.
+Indentation is consistent.
