@@ -20,6 +20,11 @@ export type TurnstileSize = "normal" | "compact";
  * Picks the widget size for the width its container has. The normal widget is a
  * fixed 300px, which would widen the page on phones narrower than about 390px
  * (G4 revision request 2). Pure.
+ *
+ * The size is chosen once, from the container's width at render. Turnstile cannot
+ * change the size of a live widget: it would have to be removed and rendered again,
+ * which discards a token the visitor may already have earned. A later rotation or
+ * resize keeps the first size; the container's max-w-full limits any overflow.
  */
 export function turnstileSizeFor(containerWidth: number): TurnstileSize {
   return containerWidth < TURNSTILE_NORMAL_WIDTH ? "compact" : "normal";
