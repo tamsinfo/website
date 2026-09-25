@@ -1,44 +1,12 @@
 {
   "schema_version": 1,
-  "run_id": "phase-4-rev1-2026-09-23T16:03:40Z",
+  "run_id": "phase-4-rev2-2026-09-25T04:58:00Z",
   "phase": 4,
-  "command": "/lonewolf:build (G4 revision request 1)",
-  "started": "2026-09-23T16:03:40Z",
-  "status": "complete",
+  "command": "/lonewolf:build (G4 revision request 2)",
+  "started": "2026-09-25T04:58:00Z",
+  "status": "in-progress",
   "steps": [
-    {
-      "step": "diagnose",
-      "status": "complete",
-      "note": "astro dev emits the production CSP header without dev inline hashes; Vite dev inline script (line 3216) and injected <style> blocked. Production build verified clean in a real browser (no console errors on / and /contact)."
-    },
-    {
-      "step": "fix-dev-csp",
-      "status": "complete",
-      "agents": [
-        {
-          "agent": "backend-developer",
-          "tasks": [
-            "TASK-001"
-          ],
-          "branch": "fix/dev-csp",
-          "status": "returned",
-          "commits": 1,
-          "note": "fix round 2"
-        }
-      ],
-      "reviews": [
-        {
-          "agent": "code-reviewer",
-          "branch": "fix/dev-csp",
-          "status": "APPROVED (round 2)"
-        }
-      ],
-      "merged": "5b4f849"
-    },
-    {
-      "step": "browser-verify",
-      "status": "complete",
-      "note": "astro dev on 4988: styled, console only [vite] debug lines, no CSP errors"
-    }
+    { "step": "diagnose", "status": "complete", "note": "Meridian token --container-full: 1440px lives in Tailwind's --container-* namespace, so Tailwind 4 resolves w-full / max-w-full to 1440px instead of 100%. Measured in browser: at 2000px viewport header/sections/footer are 1440px wide and contact inputs are 1440px (page scrollWidth 2508); at 390px page scrollWidth 1545 with 96 overflowing elements, mostly w-full. Process gap: no review measured rendered widths." },
+    { "step": "fix-fluid-layout", "status": "in-progress", "agents": [ { "agent": "frontend-developer", "tasks": ["TASK-003"], "branch": "fix/fluid-layout", "status": "dispatched" } ] }
   ]
 }
