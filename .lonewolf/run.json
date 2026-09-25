@@ -6,7 +6,37 @@
   "started": "2026-09-25T04:58:00Z",
   "status": "in-progress",
   "steps": [
-    { "step": "diagnose", "status": "complete", "note": "Meridian token --container-full: 1440px lives in Tailwind's --container-* namespace, so Tailwind 4 resolves w-full / max-w-full to 1440px instead of 100%. Measured in browser: at 2000px viewport header/sections/footer are 1440px wide and contact inputs are 1440px (page scrollWidth 2508); at 390px page scrollWidth 1545 with 96 overflowing elements, mostly w-full. Process gap: no review measured rendered widths." },
-    { "step": "fix-fluid-layout", "status": "in-progress", "agents": [ { "agent": "frontend-developer", "tasks": ["TASK-003"], "branch": "fix/fluid-layout", "status": "dispatched" } ] }
+    {
+      "step": "diagnose",
+      "status": "complete",
+      "note": "Meridian token --container-full: 1440px lives in Tailwind's --container-* namespace, so Tailwind 4 resolves w-full / max-w-full to 1440px instead of 100%. Measured in browser: at 2000px viewport header/sections/footer are 1440px wide and contact inputs are 1440px (page scrollWidth 2508); at 390px page scrollWidth 1545 with 96 overflowing elements, mostly w-full. Process gap: no review measured rendered widths."
+    },
+    {
+      "step": "fix-fluid-layout",
+      "status": "in-progress",
+      "agents": [
+        {
+          "agent": "frontend-developer",
+          "tasks": [
+            "TASK-003"
+          ],
+          "branch": "fix/fluid-layout",
+          "status": "returned",
+          "commits": 6
+        }
+      ],
+      "reviews": [
+        {
+          "agent": "code-reviewer",
+          "branch": "fix/fluid-layout",
+          "status": "dispatched"
+        }
+      ]
+    },
+    {
+      "step": "orchestrator-browser-sweep",
+      "status": "complete",
+      "note": "Real browser, fix/fluid-layout build: 12 routes covering every template at 320 px; Home/Contact/Privacy/Production Process at 768; Home/Contact at 1440; Contact/Home/Business AI at 2560; Contact at 1920; Home at 1280. All: scrollWidth==clientWidth (o=0), every band full-bleed (band=0), no element past viewport (stick=0), mx-auto containers centred, contact inputs inside card. Developer's WebKit sweep: 31 routes x 19 widths pass."
+    }
   ]
 }
