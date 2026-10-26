@@ -38,6 +38,24 @@ The contact form posts JSON to `VITE_CONTACT_ENDPOINT` when that variable is set
 the form runs in demo mode with a simulated success. Add `?form=fail` to the URL to see the
 error state.
 
+## Deploy (Docker / Coolify)
+
+`deploy/Dockerfile` builds the app with Node and serves `dist/` with nginx on **port 4321**
+(`deploy/nginx.conf`: SPA fallback for client routes, long-cache hashed assets). Build context
+is the repository root.
+
+```bash
+docker build -f deploy/Dockerfile -t tams-web .
+```
+
+```bash
+docker run -p 4321:4321 tams-web
+```
+
+In Coolify, set the Dockerfile location to `/deploy/Dockerfile` and the exposed port to 4321.
+To connect the contact form, add `VITE_CONTACT_ENDPOINT` as a build argument (Vite bakes it in
+at build time).
+
 ## Stack
 
 Vite, React 19, TypeScript, React Router. three.js with `postprocessing`, `troika-three-text`
