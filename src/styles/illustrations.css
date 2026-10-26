@@ -1,0 +1,170 @@
+/* ==================== Illustration kit classes (SVG) ==================== */
+.ill {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  overflow: visible;
+}
+.i-s {
+  stroke: var(--ill-stroke);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.i-s {
+  fill: none; /* fill classes below (same specificity, later) override */
+}
+.i-thick {
+  stroke-width: 3;
+}
+.i-xthick {
+  stroke-width: 5;
+}
+.i-white {
+  fill: var(--ill-white);
+}
+.i-light {
+  fill: var(--ill-light);
+}
+.i-mid {
+  fill: var(--ill-mid);
+}
+.i-grey {
+  fill: var(--ill-grey);
+}
+.i-blue {
+  fill: var(--ill-blue);
+}
+.i-blue2 {
+  fill: var(--ill-blue-2);
+}
+.i-blue3 {
+  fill: var(--ill-blue-3);
+}
+.i-shadow {
+  fill: var(--ill-shadow);
+}
+.i-bl {
+  fill: none;
+  stroke: var(--ill-blue);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.i-bl.i-thick {
+  stroke-width: 3;
+}
+.i-bl.i-xthick {
+  stroke-width: 5;
+}
+.i-soft {
+  fill: none;
+  stroke: #c6d2e1;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.i-soft.i-thick {
+  stroke-width: 4;
+}
+.i-dash {
+  fill: none;
+  stroke: var(--ill-blue);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 2 8;
+}
+.i-dash-light {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 4 20;
+}
+.i-grid {
+  stroke: rgb(255 255 255 / 0.85);
+  stroke-width: 1.5;
+}
+.i-grid-soft {
+  stroke: #edf1f7;
+  stroke-width: 1.5;
+}
+.i-check {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.i-lens {
+  fill: rgb(201 218 251 / 0.45);
+}
+.i-band {
+  fill: rgb(11 87 208 / 0.08);
+}
+.i-pill-white {
+  fill: #fff;
+  stroke: var(--line-strong);
+  stroke-width: 1.5;
+}
+.i-pill-blue {
+  fill: var(--ill-blue);
+}
+.i-pill-amber {
+  fill: var(--amber-tint);
+}
+.i-label {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  fill: var(--ink);
+}
+.i-label-white {
+  fill: #fff;
+}
+.i-label-blue {
+  fill: #fff;
+}
+.i-label-amber {
+  fill: var(--amber);
+}
+.i-label-muted {
+  fill: var(--ink-2);
+  font-weight: 500;
+}
+/* isometric faces */
+.i-iso-t-white {
+  fill: #ffffff;
+}
+.i-iso-l-white {
+  fill: #e8eef6;
+}
+.i-iso-r-white {
+  fill: #d7e0ec;
+}
+.i-iso-t-light {
+  fill: #f6f8fc;
+}
+.i-iso-l-light {
+  fill: #e9eef6;
+}
+.i-iso-r-light {
+  fill: #dce4ef;
+}
+.i-iso-t-mid {
+  fill: #e3e9f2;
+}
+.i-iso-l-mid {
+  fill: #cdd7e5;
+}
+.i-iso-r-mid {
+  fill: #b9c6d8;
+}
+.i-iso-t-blue {
+  fill: #5b8def;
+}
+.i-iso-l-blue {
+  fill: #0b57d0;
+}
+.i-iso-r-blue {
+  fill: #0a47ab;
+}

@@ -1,0 +1,72 @@
+/* ==========================================================================
+   TAMS design tokens — "The plant that builds itself" (docs/ART_DIRECTION.md)
+   A luminous warm-white industrial studio, ink type, one deep brand blue, one
+   saturated signal accent. The footer is the only dark surface.
+   ========================================================================== */
+
+:root {
+  /* ---- Surfaces ---- */
+  --paper: #f2eee7; /* the environment, page background */
+  --porcelain: #fbf9f5; /* matte ceramic, form fields */
+  --paper-2: #e8e2d8; /* hairlines, spatial type */
+  --navy: #0a1633; /* footer only */
+  --navy-2: #172650;
+
+  /* ---- Text (contrast on --paper) ---- */
+  --ink: #101826; /* 15.9:1 */
+  --ink-2: #3f4757; /* 7.6:1 */
+  --ink-3: #5d6574; /* 5.0:1 — 14px+ only */
+  --on-blue: #f4f6ff; /* 7.4:1 on --blue */
+  --on-navy: #e7ebf7; /* 14.9:1 */
+  --on-navy-2: #a8b3cf; /* 7.9:1 */
+
+  /* ---- Brand ---- */
+  --blue: #1638d8; /* 6.7:1 on paper; the flood */
+  --blue-deep: #0b1e78;
+  --blue-tint: #dfe5fb;
+  --signal: #ff5a1f; /* status lights and the In-production tag dot only */
+  --signal-ink: #8f2d06; /* 6.6:1 on paper, for tag text */
+  --danger: #b42318;
+  --success: #1d7a46;
+
+  /* ---- Type ---- */
+  --font-display: "Big Shoulders Display Variable", "Big Shoulders Display", "Arial Narrow", sans-serif;
+  --font-body: "Instrument Sans Variable", "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --t-xxl: clamp(7rem, 2rem + 24vw, 26rem);
+  --t-xl: clamp(3.4rem, 1rem + 7.4vw, 10rem);
+  --t-l: clamp(2.8rem, 1rem + 5.4vw, 7rem);
+  --t-m: clamp(2rem, 1rem + 3vw, 4rem);
+  --t-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --t-small: 0.875rem;
+
+  /* ---- Layout ---- */
+  --gutter: clamp(20px, 4.5vw, 72px);
+  --measure: 34rem;
+
+  /* ---- Motion ---- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+
+  /* ---- Illustration kit (static fallback) ---- */
+  --ill-stroke: #23395b;
+  --ill-white: #ffffff;
+  --ill-light: #eef1f7;
+  --ill-mid: #d5dbe8;
+  --ill-grey: #aeb7c8;
+  --ill-blue: #1638d8;
+  --ill-blue-2: #5b77ee;
+  --ill-blue-3: #c8d2fa;
+  --ill-shadow: rgb(16 24 38 / 0.07);
+  --line: #e1dbd1;
+  --line-strong: #cfc7ba;
+  --amber: #a35b00;
+  --amber-tint: #fff1dc;
+
+  --focus: #1638d8;
+  --z-canvas: 0;
+  --z-content: 1;
+  --z-header: 20;
+  --z-overlay: 40;
+  --z-pre: 60;
+  --z-cursor: 70;
+}
