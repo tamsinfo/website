@@ -10,4 +10,6 @@ export default defineConfig({
     options: { typeAware: true, typeCheck: true },
   },
   plugins: lazyPlugins(() => [svelte()]),
+  // three.js lives in its own lazily loaded chunk; it is expected to be large
+  build: { chunkSizeWarningLimit: 700 },
 });

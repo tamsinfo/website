@@ -4,9 +4,38 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>website</title>
+    <meta name="theme-color" content="#1638d8" />
+    <title>TAMS Infotech · SAP S/4HANA, BTP and connected manufacturing</title>
+    <meta
+      name="description"
+      content="TAMS Infotech implements, supports and extends SAP S/4HANA, and builds the applications that connect gates, machines, suppliers and shipments to it."
+    />
+    <style>
+      #boot {
+        position: fixed;
+        inset: 0;
+        z-index: 102;
+        background: linear-gradient(180deg, #1536d0, #0e2490);
+      }
+    </style>
   </head>
   <body>
+    <div id="boot" aria-hidden="true"></div>
+    <noscript>
+      <style>
+        #boot {
+          display: none;
+        }
+      </style>
+      <div style="max-width: 720px; margin: 64px auto; padding: 0 24px; font-family: system-ui, sans-serif; color: #101826; line-height: 1.6">
+        <h1>TAMS Infotech</h1>
+        <p>
+          We implement, support and extend SAP S/4HANA, and build the applications that connect gates, machines,
+          suppliers and shipments to it. This site needs JavaScript to show its full content.
+        </p>
+        <p>Call +91 80 4130 1039 or email <a href="mailto:info@tamsinfotech.com">info@tamsinfotech.com</a>.</p>
+      </div>
+    </noscript>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>

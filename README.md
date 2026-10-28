@@ -1,47 +1,62 @@
-# Svelte + TS + Vite
+# TAMS Infotech website
 
-This template should help get you started developing with Svelte and TypeScript in Vite.
+Marketing site for TAMS Infotech: SAP S/4HANA services, SAP solutions, TAMS products and
+industry pages, told through one continuous 3D studio that the camera never leaves.
 
-## Recommended IDE Setup
+## Run it
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
-
-## Need an official Svelte framework?
-
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
-
-## Technical considerations
-
-**Why use this over SvelteKit?**
-
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
-
-This template contains as little as possible to get started with Vite + TypeScript + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
-
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
-
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
-
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
-
-**Why include `.vscode/extensions.json`?**
-
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
-
-**Why enable `allowJs` in the TS template?**
-
-While `allowJs: false` would indeed prevent the use of `.js` files in the project, it does not prevent the use of JavaScript syntax in `.svelte` files. In addition, it would force `checkJs: false`, bringing the worst of both worlds: not being able to guarantee the entire codebase is TypeScript, and also having worse typechecking for the existing JavaScript. In addition, there are valid use cases in which a mixed codebase may be relevant.
-
-**Why is HMR not preserving my local component state?**
-
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/rixo/svelte-hmr#svelte-hmr).
-
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
-
-```ts
-// store.ts
-// An extremely simple external store
-import { writable } from "svelte/store";
-export default writable(0);
+```sh
+bun install
+bun run dev        # http://localhost:5173
+bun run build      # production build in dist/
+bun run preview    # serve dist/
+bun run check      # svelte-check + tsc
 ```
+
+The site is a single-page app. Any static host works as long as unknown paths fall back to
+`index.html` (for example `/products/exim` must serve `index.html`).
+
+Optional: set `VITE_CONTACT_ENDPOINT` to an endpoint that accepts a JSON `POST` for the contact
+form. Without it the form opens the visitor's email app with the enquiry written out.
+
+## How it fits together
+
+- **Svelte 5 + TypeScript** on Vite+, routing with **sv-router** (`src/router.ts`). Inner
+  pages are code-split.
+- **Content** lives in `src/lib/content/` as typed data: services, SAP solutions, products,
+  industries, diagrams and cross-links. Pages are templates over it. `CONTENT-REVIEW.md` lists
+  every claim that still needs confirmation.
+- **The world** (`src/lib/world/`) is one Three.js renderer for the whole site, loaded lazily.
+  Each route asks for a room and a view (`scene()` in `src/lib/state.svelte.ts`):
+  - `plant`: the home story. Native scroll drives a chapter ledger: billets become gears,
+    gears dock at machines, data lines connect them, the S/4HANA core rises, night turns to
+    daylight.
+  - `workshop` (services), `core` (SAP solutions, the blue room), `gallery` (products),
+    `bays` (industries), `studio` (about, contact, 404).
+  - `flow.ts` is the cursor flow-field pass; `flood.ts` is the brand-blue liquid used for
+    the preloader and route changes.
+- **Route transitions** (`src/lib/transition.ts`) are sv-router hooks: flood the lens,
+  swap the page and move the camera underneath, drain.
+- **Motion**: GSAP + ScrollTrigger for reveals (`src/lib/motion/reveal.ts`), Lenis as the
+  only smooth-scroll engine (`src/lib/motion/scroll.ts`).
+- **Sound** (`src/lib/audio/engine.ts`) is synthesised with Web Audio, so there are no audio
+  files to license. Ambience and music toggle separately and are off by default.
+- **Icons**: Solar Duotone Bold by 480 Design (CC BY 4.0). `bun scripts/icons.ts` extracts
+  only the icons in use into `src/lib/icons/solar.ts`.
+
+## Accessibility and fallbacks
+
+- `prefers-reduced-motion`: no Lenis, no scrubbed camera (it snaps to the nearest chapter), no
+  cursor effects, and a plain fade instead of the flood.
+- Without WebGL, or if the scene fails or loses its context, pages show composed colour
+  fields in place of the world and everything else works.
+- The preloader reports completed loading steps, caps at 8 seconds, can be skipped, and is
+  dismissed by Tab or Escape. The full dive plays once per session.
+- 3D hotspots are pointer conveniences; every one is mirrored by a real link in the chapter
+  copy.
+
+## Palette
+
+Paper `#F2EEE7` · Porcelain `#FBF9F5` · Ink `#101826` · Brand blue `#1638D8` ·
+Blue deep `#0B1E78` · Signal `#FF5A1F` · Footer navy `#0A1633`. Type is Mona Sans (display)
+and IBM Plex Sans (body), self-hosted through Fontsource.

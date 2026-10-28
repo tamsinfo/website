@@ -1,89 +1,102 @@
-<script>
-  import svelteLogo from './assets/svelte.svg'
-  import viteLogo from './assets/vite.svg'
-  import heroImg from './assets/hero.png'
-  import Counter from './lib/Counter.svelte'
+<script lang="ts">
+  import { onMount } from "svelte";
+  import { Router } from "sv-router";
+  import "./router";
+  import Cursor from "./components/Cursor.svelte";
+  import Footer from "./components/Footer.svelte";
+  import Nav from "./components/Nav.svelte";
+  import Preloader from "./components/Preloader.svelte";
+  import { runBoot } from "./lib/boot.svelte";
+  import { initScroll } from "./lib/motion/scroll";
+  import { forceReduced, ui } from "./lib/state.svelte";
+  import { setFlood } from "./lib/transition";
+  import { createFlood, type Flood } from "./lib/world/flood";
+
+  let worldCanvas: HTMLCanvasElement;
+  let floodCanvas: HTMLCanvasElement;
+  let flood: Flood | null = null;
+
+  onMount(() => {
+    flood = createFlood(floodCanvas, { reducedMotion: ui.reducedMotion });
+    setFlood(flood);
+    initScroll(ui.reducedMotion);
+    void runBoot(worldCanvas);
+
+    const mqMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const mqPointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const onMotion = () => (ui.reducedMotion = mqMotion.matches || forceReduced);
+    const onPointer = () => (ui.finePointer = mqPointer.matches);
+    mqMotion.addEventListener("change", onMotion);
+    mqPointer.addEventListener("change", onPointer);
+    return () => {
+      mqMotion.removeEventListener("change", onMotion);
+      mqPointer.removeEventListener("change", onPointer);
+      flood?.destroy();
+    };
+  });
+
+  $effect(() => {
+    document.documentElement.classList.toggle("no-world", ui.world === "failed");
+    document.documentElement.classList.toggle("world-ready", ui.world === "ready");
+  });
 </script>
 
-<section id="center">
-  <div class="hero">
-    <img src={heroImg} class="base" width="170" height="179" alt="" />
-    <img src={svelteLogo} class="framework" alt="Svelte logo" />
-    <img src={viteLogo} class="vite" alt="Vite logo" />
-  </div>
-  <div>
-    <h1>Get started</h1>
-    <p>Edit <code>src/App.svelte</code> and save to test <code>HMR</code></p>
-  </div>
-  <Counter />
-</section>
+<a class="skip-link" href="#main">Skip to content</a>
 
-<div class="ticks"></div>
+<div class="stage" aria-hidden="true">
+  <canvas class="world" bind:this={worldCanvas}></canvas>
+</div>
 
-<section id="next-steps">
-  <div id="docs">
-    <svg class="icon" role="presentation" aria-hidden="true">
-      <use href="/icons.svg#documentation-icon"></use>
-    </svg>
-    <h2>Documentation</h2>
-    <p>Your questions, answered</p>
-    <ul>
-      <li>
-        <a href="https://vite.dev/" target="_blank" rel="noreferrer">
-          <img class="logo" src={viteLogo} alt="" />
-          Explore Vite
-        </a>
-      </li>
-      <li>
-        <a href="https://svelte.dev/" target="_blank" rel="noreferrer">
-          <img class="button-icon" src={svelteLogo} alt="" />
-          Learn more
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div id="social">
-    <svg class="icon" role="presentation" aria-hidden="true">
-      <use href="/icons.svg#social-icon"></use>
-    </svg>
-    <h2>Connect with us</h2>
-    <p>Join the Vite community</p>
-    <ul>
-      <li>
-        <a href="https://github.com/vitejs/vite" target="_blank" rel="noreferrer">
-          <svg class="button-icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#github-icon"></use>
-          </svg>
-          GitHub
-        </a>
-      </li>
-      <li>
-        <a href="https://chat.vite.dev/" target="_blank" rel="noreferrer">
-          <svg class="button-icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#discord-icon"></use>
-          </svg>
-          Discord
-        </a>
-      </li>
-      <li>
-        <a href="https://x.com/vite_js" target="_blank" rel="noreferrer">
-          <svg class="button-icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#x-icon"></use>
-          </svg>
-          X.com
-        </a>
-      </li>
-      <li>
-        <a href="https://bsky.app/profile/vite.dev" target="_blank" rel="noreferrer">
-          <svg class="button-icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#bluesky-icon"></use>
-          </svg>
-          Bluesky
-        </a>
-      </li>
-    </ul>
-  </div>
-</section>
+<Nav />
 
-<div class="ticks"></div>
-<section id="spacer"></section>
+<main id="main" tabindex="-1">
+  <Router />
+</main>
+
+<Footer />
+<Cursor />
+
+<canvas class="flood" bind:this={floodCanvas} aria-hidden="true"></canvas>
+<Preloader flood={() => flood} />
+<div id="route-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+
+<style>
+  .stage {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .world {
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 600ms var(--ease-out);
+  }
+  :global(html.world-ready) .world {
+    opacity: 1;
+  }
+  main {
+    position: relative;
+    z-index: 1;
+    outline: none;
+    /* clip decorative bleed (scrims, word masks) without creating a scroll container,
+       so sticky chapter copy keeps working */
+    overflow-x: clip;
+  }
+  .flood {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    pointer-events: none;
+  }
+  :global(.flood--fallback) {
+    background: linear-gradient(180deg, #1536d0, #0e2490);
+  }
+  :global(footer) {
+    position: relative;
+    z-index: 1;
+  }
+</style>

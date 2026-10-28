@@ -1,0 +1,360 @@
+import type { Solution } from "./types";
+
+export const solutions: Solution[] = [
+  {
+    slug: "rise-with-sap",
+    name: "RISE with SAP",
+    tagline: "S/4HANA Cloud as one managed subscription.",
+    icon: "cloud-storage",
+    summary: "SAP's subscription offering for moving to S/4HANA Cloud, most often Private Edition, with infrastructure and technical operations run by SAP.",
+    lede: "RISE with SAP bundles S/4HANA Cloud, its hosting and its technical operation into a single SAP contract. It changes who runs the servers. It doesn't decide how your processes, data and integrations make the move. That part is ours.",
+    fromSap: [
+      "S/4HANA Cloud, most commonly Private Edition, under one subscription",
+      "Infrastructure on a hyperscaler, operated by SAP",
+      "Technical managed services: system operations, backups, technical upgrades",
+      "Additional SAP services and tools included according to the contract",
+    ],
+    fromTams: [
+      "Transformation roadmap: greenfield, system conversion or selective transition",
+      "Process redesign and fit-to-standard workshops",
+      "Custom-code analysis and remediation toward a clean core",
+      "Data migration, integrations, testing and cutover",
+      "Application support after go-live",
+    ],
+    covers: [
+      {
+        title: "Transformation planning",
+        body: "A roadmap that sets the transition approach, sequence of entities and plants, and the decommissioning plan for what you leave behind.",
+      },
+      {
+        title: "S/4HANA Cloud adoption",
+        body: "Configuration, extension and rollout of S/4HANA Cloud with SAP running the technical layer underneath.",
+      },
+      {
+        title: "Technical and application migration",
+        body: "Readiness checks, custom-code scans, simplification items and data-volume planning for moves from SAP ECC or another ERP.",
+      },
+      {
+        title: "Integration and extension requirements",
+        body: "An inventory of every interface and custom object, each assigned a future: retire, replace with standard, rebuild on BTP, or keep.",
+      },
+      {
+        title: "Implementation and post-go-live support",
+        body: "Delivery through SAP Activate, then application management on top of SAP's technical operations.",
+      },
+    ],
+    fit: {
+      suits: [
+        "Companies on SAP ECC planning their move to S/4HANA",
+        "Complex manufacturing that needs the full functional depth of S/4HANA",
+        "Organisations that want SAP to run infrastructure and technical operations",
+      ],
+      consider: [
+        "The scope of SAP's technical services, and what stays with you or a partner",
+        "How much legacy custom code is worth carrying forward",
+      ],
+    },
+    diagram: "rise",
+    caveat: "RISE with SAP is an SAP offering. Its components and terms are set in your contract with SAP; TAMS provides the implementation and application services around it.",
+    related: {
+      services: ["s4hana-cloud-implementation", "license-procurement", "s4hana-managed-services"],
+      solutions: ["grow-with-sap", "sap-btp"],
+    },
+  },
+  {
+    slug: "grow-with-sap",
+    name: "GROW with SAP",
+    tagline: "Public cloud S/4HANA with best-practice processes.",
+    icon: "graph-new-up",
+    summary: "SAP's offering for adopting S/4HANA Cloud Public Edition: standard processes, fast deployment and upgrades delivered by SAP.",
+    lede: "GROW with SAP packages S/4HANA Cloud Public Edition for companies willing to run on SAP's best-practice processes. Done well, it is the fastest route to a modern ERP. Done badly, it is a fight with the standard.",
+    fromSap: [
+      "S/4HANA Cloud Public Edition as SaaS",
+      "Preconfigured best-practice processes",
+      "Regular functional releases delivered by SAP",
+      "Access to SAP BTP and SAP's learning and community resources",
+    ],
+    fromTams: [
+      "Fit-to-standard workshops that decide where you adopt and where you extend",
+      "Configuration, master data and migration",
+      "Extensions and integrations built outside the core",
+      "Regression testing for every SAP release",
+      "Adoption support and ongoing optimisation",
+    ],
+    covers: [
+      {
+        title: "Standardised business processes",
+        body: "Order-to-cash, procure-to-pay, plan-to-produce and record-to-report adopted largely as SAP designed them.",
+      },
+      {
+        title: "Fit-to-standard implementation",
+        body: "Workshops walk real scenarios through the standard system so gaps surface in the first weeks, not in testing.",
+      },
+      {
+        title: "Cloud ERP deployment",
+        body: "A deployment rhythm that matches SAP's release cadence, so your project and SAP's upgrades don't collide.",
+      },
+      {
+        title: "Appropriate extensions and integrations",
+        body: "Key-user and developer extensibility inside the system, BTP for anything larger, and integrations through released APIs.",
+      },
+      {
+        title: "Adoption and optimisation",
+        body: "Post-go-live reviews that switch on new release functionality where it replaces a workaround.",
+      },
+    ],
+    fit: {
+      suits: [
+        "New ERP implementations, including first-time SAP customers",
+        "Subsidiaries and new plants joining a group template",
+        "Businesses whose processes sit close to industry practice",
+      ],
+      consider: [
+        "Processes that genuinely differentiate you and can't move to standard",
+        "Heavy industry-specific requirements better served by Private Edition",
+      ],
+    },
+    diagram: "grow",
+    caveat: "GROW with SAP is an SAP offering, and Public Edition isn't the right edition for every organisation. We recommend it only after a fit-to-standard assessment.",
+    related: {
+      services: ["s4hana-cloud-implementation", "custom-application-build"],
+      solutions: ["rise-with-sap", "sap-btp"],
+    },
+  },
+  {
+    slug: "sap-btp",
+    name: "SAP Business Technology Platform",
+    tagline: "Extend and integrate without touching the core.",
+    icon: "widget-add",
+    summary: "SAP's platform for building extensions, integrating systems, automating workflows and managing APIs alongside S/4HANA.",
+    lede: "SAP BTP is where the things S/4HANA shouldn't carry live: plant-specific apps, partner portals, integrations and automation, connected to the ERP through released interfaces so the core stays upgradeable.",
+    fromSap: [
+      "Runtime environments: Cloud Foundry, Kyma and the ABAP environment",
+      "SAP HANA Cloud for application data",
+      "SAP Integration Suite, API management and event services",
+      "Identity, authorisation and connectivity services, including SAP Cloud Connector for on-premise",
+    ],
+    fromTams: [
+      "Extension architecture and the choice of where each requirement lives",
+      "Applications built with CAP, RAP, SAPUI5 and React",
+      "Integration flows and API design",
+      "Deployment pipelines, environments and operations runbooks",
+    ],
+    covers: [
+      {
+        title: "SAP and third-party integration",
+        body: "S/4HANA connected to MES, WMS, logistics partners, banks and government portals through managed integration flows.",
+      },
+      {
+        title: "Application extensions",
+        body: "Side-by-side apps that read and write S/4HANA business objects through OData APIs and react to business events.",
+      },
+      {
+        title: "API management and connectivity",
+        body: "APIs published, secured and monitored centrally; on-premise systems reached through SAP Cloud Connector.",
+      },
+      {
+        title: "Workflow and process automation",
+        body: "Approvals and hand-offs that span S/4HANA and other systems, modelled as workflows rather than email chains.",
+      },
+      {
+        title: "Side-by-side development",
+        body: "Business logic on its own lifecycle: deployable, testable and scalable without a transport into the ERP.",
+      },
+      {
+        title: "Lifecycle considerations",
+        body: "Environments, transport management, monitoring and cost visibility planned before the first app goes live.",
+      },
+    ],
+    diagram: "btp",
+    caveat: "SAP BTP services are licensed from SAP and availability varies by region and contract. We design within the services your entitlement includes.",
+    related: {
+      services: ["custom-application-build", "s4hana-managed-services"],
+      solutions: ["integration-suite", "automation-workflow"],
+      products: ["gate-entry", "exim", "vendor-portal"],
+    },
+  },
+  {
+    slug: "sap-business-ai",
+    name: "SAP Business AI",
+    tagline: "AI inside the processes you already run.",
+    icon: "magic-stick-3",
+    summary: "SAP's AI capabilities embedded in S/4HANA and BTP, plus custom AI applications where the standard doesn't reach.",
+    lede: "SAP Business AI puts AI into the transactions and apps people already use, rather than into a separate tool. We help you find the scenarios worth switching on, and build custom ones where your data and process call for it.",
+    fromSap: [
+      "AI scenarios embedded in S/4HANA and other SAP applications",
+      "Joule, SAP's AI assistant, where available for your products and release",
+      "AI services on SAP BTP for building custom scenarios",
+    ],
+    fromTams: [
+      "Use-case assessment against your processes and data quality",
+      "Activation and configuration of embedded scenarios",
+      "Custom AI applications on BTP, grounded in your SAP data",
+      "Controls: human review, logging and fallbacks for every AI step",
+    ],
+    covers: [
+      {
+        title: "Assistance with routine tasks",
+        body: "Drafting, summarising and looking things up inside SAP apps instead of across exports and inboxes.",
+      },
+      {
+        title: "Intelligent processing of business information",
+        body: "Classifying and extracting data from incoming documents so people review exceptions instead of keying every field.",
+      },
+      {
+        title: "Workflow assistance",
+        body: "Suggested next steps and routing in approval and exception workflows, with the decision left to a person.",
+      },
+      {
+        title: "Business process insights",
+        body: "Patterns in delays, rework and exceptions surfaced from transaction data.",
+      },
+      {
+        title: "AI-enabled applications",
+        body: "Custom applications such as TAMS Digital Manufacturing & AI that apply models to production data.",
+      },
+    ],
+    diagram: "ai",
+    caveat: "Embedded SAP AI capabilities depend on your SAP product, edition, release and subscription; not every capability is available in every deployment. Custom AI built by TAMS is described as such.",
+    related: {
+      solutions: ["analytics-reporting", "automation-workflow", "sap-btp"],
+      products: ["digital-manufacturing-ai"],
+      services: ["custom-application-build"],
+    },
+  },
+  {
+    slug: "industry-solutions",
+    name: "Industry-Specific Solutions",
+    tagline: "Processes shaped for manufacturing.",
+    icon: "buildings-2",
+    summary: "SAP workflows adapted to how specific manufacturing sectors plan, produce, trace and ship.",
+    lede: "A steel plant, a pharmaceutical line and an auto-components supplier all run production in SAP, and almost nothing else about their processes is the same. We start from the sector's process, then decide what standard SAP covers and what needs an application or integration.",
+    fromSap: [
+      "Production planning, MRP and production orders",
+      "Batch management with classification, and quality management",
+      "Inventory, warehouse and logistics execution",
+      "Industry-specific functionality within S/4HANA",
+    ],
+    fromTams: [
+      "Sector process templates and fit-to-standard against them",
+      "TAMS applications for gate, production, factory and export workflows",
+      "Integrations to plant systems and partner networks",
+      "Industry experience across metals, auto components, pharma and engineering",
+    ],
+    covers: [
+      { title: "Production planning", body: "MRP, capacity and scheduling configured to how your plant actually releases work." },
+      { title: "Material management", body: "Procurement, receipts and stock categories that match your physical flows." },
+      { title: "Inventory", body: "Stock by plant, storage location, batch and special stock, visible to the people who move it." },
+      { title: "Quality", body: "Inspection points, results recording and usage decisions tied to batches and orders." },
+      { title: "Traceability", body: "Where-used and where-from answers for any batch, across production stages." },
+      { title: "Supplier coordination", body: "Orders, schedules and documents shared with suppliers without a spreadsheet in between." },
+    ],
+    diagram: "industry",
+    caveat: "Which capabilities are standard SAP and which need an additional application or integration is stated on each industry page.",
+    related: {
+      industries: ["automotive", "metals-steel", "mill-products", "pharmaceuticals", "engineering-fabrication", "consumer-durables"],
+      products: ["production-process", "connected-factory"],
+    },
+  },
+  {
+    slug: "analytics-reporting",
+    name: "Analytics and Reporting",
+    tagline: "Numbers you can act on today.",
+    icon: "chart-2",
+    summary: "Operational reporting, dashboards, KPIs and planning on S/4HANA data, with SAP Analytics Cloud where it fits.",
+    lede: "When reports are built from exports, every meeting starts with an argument about whose number is right. Reporting on S/4HANA data directly shortens that argument to nothing and leaves the meeting for the decision.",
+    fromSap: [
+      "Embedded analytics in S/4HANA, built on CDS views",
+      "SAP Analytics Cloud for dashboards, planning and predictive analysis",
+      "Data services on BTP for combining SAP and non-SAP data",
+    ],
+    fromTams: [
+      "KPI definitions agreed with the business before any dashboard is drawn",
+      "Analytical data models on S/4HANA",
+      "Dashboards and stories for plant, finance and management audiences",
+      "Data integration from systems outside SAP",
+    ],
+    covers: [
+      { title: "Business reporting", body: "Financial and operational reports that run on live transactional data instead of overnight extracts." },
+      { title: "Operational dashboards", body: "Plant, warehouse and dispatch views built for the shift supervisor, not only the boardroom." },
+      { title: "Performance indicators", body: "Each KPI defined once, with its formula and source, so it means the same thing everywhere." },
+      { title: "Data integration and consolidation", body: "Data from MES, spreadsheets or other ERPs brought alongside SAP data with clear lineage." },
+      { title: "Planning and analytics", body: "Budgets, forecasts and what-if scenarios in SAP Analytics Cloud, connected to actuals." },
+      { title: "Exceptions and trends", body: "Thresholds and alerts that point people at the orders, batches or suppliers that need attention." },
+    ],
+    diagram: "analytics",
+    caveat: "We recommend SAP Analytics Cloud only where planning or cross-system dashboards justify it; much operational reporting is covered by S/4HANA's embedded analytics.",
+    related: {
+      products: ["digital-manufacturing-ai", "production-process"],
+      solutions: ["sap-business-ai", "integration-suite"],
+      services: ["s4hana-managed-services"],
+    },
+  },
+  {
+    slug: "integration-suite",
+    name: "Integration Suite",
+    tagline: "Connect SAP to portals, partners and plants.",
+    icon: "transfer-horizontal",
+    summary: "Integration architecture and implementation on SAP Integration Suite: APIs, partner integrations, plant connectivity and event-driven flows.",
+    lede: "Most landscapes are held together by point-to-point scripts nobody wants to touch. SAP Integration Suite gives those connections one place to be built, monitored and changed. We design the architecture and build the flows.",
+    fromSap: [
+      "Cloud Integration for message-based integration flows",
+      "API Management for publishing and securing APIs",
+      "Prebuilt integration content for SAP and common third-party systems",
+      "Event services for event-driven integration",
+    ],
+    fromTams: [
+      "Integration architecture: patterns, naming, error handling and monitoring",
+      "Flows to partner, supplier, logistics and government systems",
+      "Plant and operational system connectivity design",
+      "Migration of legacy middleware and point-to-point interfaces",
+    ],
+    covers: [
+      { title: "Application and API integration", body: "S/4HANA connected to the applications around it through governed APIs and flows." },
+      { title: "SAP-to-third-party connectivity", body: "CRM, e-commerce, banking, tax and logistics systems connected with retry, alerting and logs." },
+      { title: "Partner and supplier integration", body: "Orders, confirmations, ASNs and invoices exchanged with partners in the formats they use." },
+      { title: "Plant connectivity", body: "Production confirmations and machine events from operational systems mapped to SAP documents." },
+      { title: "Data exchange and orchestration", body: "Multi-step processes coordinated across systems, with a single monitoring view when something fails." },
+    ],
+    diagram: "integration",
+    caveat: "SAP Integration Suite is an SAP product licensed from SAP. TAMS provides integration architecture and implementation services.",
+    related: {
+      products: ["connected-factory", "vendor-portal", "exim"],
+      solutions: ["sap-btp", "automation-workflow"],
+      services: ["custom-application-build"],
+    },
+  },
+  {
+    slug: "automation-workflow",
+    name: "Automation and Workflow",
+    tagline: "Approvals that move without chasing.",
+    icon: "checklist",
+    summary: "Approval workflows, document routing and process automation across S/4HANA and the systems around it.",
+    lede: "An approval that waits in someone's inbox holds up a truck, a payment or a production order. Workflow puts each step in front of the right person with what they need to decide, and records what they decided.",
+    fromSap: [
+      "Flexible workflow for standard S/4HANA documents such as purchase requisitions and orders",
+      "Workflow and automation services on SAP BTP, subject to your subscription",
+    ],
+    fromTams: [
+      "Process mapping: who approves what, at which threshold, with which fallback",
+      "Workflow configuration in S/4HANA",
+      "Custom approval flows inside TAMS applications and BTP extensions",
+      "Integration-triggered automation between systems",
+    ],
+    covers: [
+      { title: "Approval workflows", body: "Rule-based routing by document type, value, plant or process, with delegation and escalation." },
+      { title: "Document routing", body: "Incoming documents sent to the team that owns them, with status visible to everyone involved." },
+      { title: "Business process automation", body: "Repetitive steps such as notifications and status updates triggered by system events instead of people." },
+      { title: "Exception handling", body: "Failures and mismatches raised as tasks with context, not buried in logs." },
+      { title: "Cross-department coordination", body: "Hand-offs between stores, quality, production and finance tracked as one process." },
+      { title: "Integration-driven automation", body: "An event in one system, such as a weighment or a goods receipt, starts the next step in another." },
+    ],
+    diagram: "workflow",
+    caveat: "We name specific SAP automation products only where they are part of your landscape and our engagement. Gate Entry's configurable approval rules are one example of workflow we ship in our own applications.",
+    related: {
+      products: ["gate-entry", "digital-signature", "vendor-portal"],
+      solutions: ["sap-btp", "sap-business-ai"],
+      services: ["custom-application-build"],
+    },
+  },
+];
